@@ -433,6 +433,9 @@ table { border-collapse: collapse; width: 100%; }
   color: var(--ink-dim);
   line-height: 1.5;
 }
+
+/* --- Hide legacy static methodology panel on testing view -- */
+#testingView > .methodology { display: none; }
 </style>
 </head>
 <body>
@@ -498,7 +501,7 @@ table { border-collapse: collapse; width: 100%; }
 
   <!-- TESTING VIEW -->
   <div id="testingView">
-    <div id="testStats" class="stats-bar"></div>
+    <div id="testStats"></div>
     <div class="methodology">
       <div class="m-tabs" id="mTabs">
         <button class="m-tab active" data-mtab="aa">Agent Accessibility</button>
@@ -3461,12 +3464,13 @@ function renderTesting() {
     }
   });
 
+  document.getElementById('testStats').className = 't-stats';
   document.getElementById('testStats').innerHTML = `
-    <div class="stat-card"><div class="label">Agent Accessibility</div><div class="value">${aa.avg}</div><div class="detail">avg grade across ${aa.count} tested · ${aa.best} A/B</div></div>
-    <div class="stat-card"><div class="label">CLI / MCP</div><div class="value">${cli.avg}</div><div class="detail">avg grade across ${cli.count} tested · ${cli.best} A/B</div></div>
-    <div class="stat-card"><div class="label">Skill</div><div class="value">${skill.avg}</div><div class="detail">avg grade across ${skill.count} tested · ${skill.best} A/B</div></div>
-    <div class="stat-card"><div class="label">Frameworks</div><div class="value">${fwProduction}/${fwTested}</div><div class="detail">Production-grade${fwUsable ? ` · ${fwUsable} Usable` : ''}</div></div>
-  `;
+  <div class="t-stat"><div class="t-stat-label">agent accessibility</div><div class="t-stat-value mono">${aa.avg}</div><div class="t-stat-detail">avg grade · ${aa.count} tested · ${aa.best} a/b</div></div>
+  <div class="t-stat"><div class="t-stat-label">cli / mcp</div><div class="t-stat-value mono">${cli.avg}</div><div class="t-stat-detail">avg grade · ${cli.count} tested · ${cli.best} a/b</div></div>
+  <div class="t-stat"><div class="t-stat-label">skill</div><div class="t-stat-value mono">${skill.avg}</div><div class="t-stat-detail">avg grade · ${skill.count} tested · ${skill.best} a/b</div></div>
+  <div class="t-stat"><div class="t-stat-label">frameworks</div><div class="t-stat-value mono">${fwProduction}/${fwTested}</div><div class="t-stat-detail">production-grade${fwUsable ? ' · ' + fwUsable + ' usable' : ''}</div></div>
+`;
 
   document.getElementById('testResultsCount').textContent = `${total} decentralized & play-money PMs with dev tools`;
 
