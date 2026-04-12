@@ -747,7 +747,85 @@ const Sort = {
   }
 };
 
-window.addEventListener('DOMContentLoaded',()=>{Theme.init();render();initViewNav();});
+// === Router ==================================================
+const Router = {
+  parse() {
+    const hash = (location.hash || '').replace(/^#\/?/, '');
+    const [pathPart, queryPart] = hash.split('?');
+    const segments = pathPart.split('/').filter(Boolean);
+    const view = segments[0] || 'landscape';
+    const pmSlug = segments[1] || null;
+    const params = new URLSearchParams(queryPart || '');
+    return {
+      view: (view === 'testing') ? 'testing' : 'landscape',
+      pm: pmSlug,
+      cat: params.get('cat') || null,
+      has: params.get('has') || null,
+      q:   params.get('q')   || '',
+      sort: params.get('sort') || null,
+      dir:  params.get('dir')  === 'desc' ? 'desc' : 'asc',
+    };
+  },
+  write(state) {
+    const params = new URLSearchParams();
+    if (state.cat) params.set('cat', state.cat);
+    if (state.has) params.set('has', state.has);
+    if (state.q)   params.set('q', state.q);
+    if (state.sort){ params.set('sort', state.sort); params.set('dir', state.dir); }
+    const path = state.view + (state.pm ? '/' + state.pm : '');
+    const qs = params.toString();
+    const next = '#/' + path + (qs ? '?' + qs : '');
+    if (next !== location.hash) history.replaceState(null, '', next);
+  },
+  slug(name) { return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); },
+  init() {
+    window.addEventListener('hashchange', () => this.applyToState());
+    this.applyToState();
+  },
+  applyToState() {
+    const s = this.parse();
+    if (typeof catFilter !== 'undefined') catFilter = s.cat;
+    if (typeof toolFilter !== 'undefined') toolFilter = s.has;
+    if (typeof searchQ !== 'undefined') searchQ = s.q;
+    const sb = document.getElementById('searchBox');
+    if (sb && sb.value !== s.q) sb.value = s.q;
+    Sort.state.key = s.sort;
+    Sort.state.dir = s.dir;
+    const targetView = s.view;
+    if (typeof currentView !== 'undefined' && currentView !== targetView) {
+      const tab = document.querySelector(`.t-tab[data-view="${targetView}"]`);
+      if (tab) tab.click();
+      else (targetView === 'landscape' ? render() : renderTesting());
+    } else {
+      (targetView === 'landscape' ? render() : renderTesting());
+    }
+    if (s.pm) setTimeout(() => this.scrollToAndExpand(s.pm), 0);
+  },
+  scrollToAndExpand(slug) {
+    const rows = document.querySelectorAll('#tableBody .t-row');
+    for (const row of rows) {
+      if (this.slug(row.dataset.pm || '') === slug) {
+        if (!row.classList.contains('expanded')) row.click();
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        break;
+      }
+    }
+  },
+  currentState() {
+    return {
+      view: (typeof currentView !== 'undefined') ? currentView : 'landscape',
+      pm: null,
+      cat: (typeof catFilter !== 'undefined') ? catFilter : null,
+      has: (typeof toolFilter !== 'undefined') ? toolFilter : null,
+      q:   (typeof searchQ !== 'undefined') ? searchQ : '',
+      sort: Sort.state.key,
+      dir:  Sort.state.dir,
+    };
+  },
+  push() { this.write(this.currentState()); }
+};
+
+window.addEventListener('DOMContentLoaded',()=>{Theme.init();initViewNav();Router.init();});
 
 const DATA = [
   {
@@ -1639,6 +1717,7 @@ let sortDir = -1;
 let catFilter = null;
 let toolFilter = null;
 let searchQuery = '';
+let searchQ = '';
 
 // --- Helpers ---
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -1687,8 +1766,8 @@ function getFiltered() {
     if (toolFilter === 'hasDevTools' && pm.coreTools.length === 0) return false;
     if (toolFilter === 'hasAiTools' && pm.aiTools.length === 0) return false;
     if (toolFilter === 'noTools' && (pm.coreTools.length > 0 || pm.aiTools.length > 0)) return false;
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+    if (searchQ) {
+      const q = searchQ.toLowerCase();
       const hay = (pm.name + ' ' + pm.description + ' ' + pm.chain + ' ' + pm.category).toLowerCase();
       if (!hay.includes(q)) return false;
     }
@@ -1763,6 +1842,7 @@ function render() {
     th.addEventListener('click', () => {
       Sort.cycle(th.dataset.sort);
       render();
+      Router.push();
     });
   });
 
@@ -1930,6 +2010,7 @@ function bindEvents() {
       const c = btn.dataset.cat;
       catFilter = c || null;
       render();
+      Router.push();
     });
   });
 
@@ -1939,14 +2020,16 @@ function bindEvents() {
       const t = btn.dataset.tool;
       toolFilter = toolFilter === t ? null : t;
       render();
+      Router.push();
     });
   });
 
   // Search
-  document.getElementById('searchBox').value = searchQuery;
+  document.getElementById('searchBox').value = searchQ;
   document.getElementById('searchBox').addEventListener('input', e => {
-    searchQuery = e.target.value;
+    searchQ = e.target.value;
     render();
+    Router.push();
   });
 }
 
@@ -1987,6 +2070,7 @@ function initViewNav() {
         if (th) th.style.display = '';
         renderTesting();
       }
+      Router.push();
     });
   });
 }
