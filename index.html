@@ -236,6 +236,54 @@ table { border-collapse: collapse; width: 100%; }
   color: var(--ink-dim);
   margin-top: 2px;
 }
+
+/* --- Filters ---------------------------------------------- */
+.t-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0;
+}
+.t-filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+.t-filter-sep { width: 1px; height: 18px; background: var(--line); margin: 0 4px; }
+.t-filter-spacer { flex: 1; }
+.t-chip {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-dim);
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  letter-spacing: 0.2px;
+  text-transform: lowercase;
+  transition: color 0.1s, border-color 0.1s, background 0.1s;
+}
+.t-chip:hover { color: var(--ink); border-color: var(--line-2); }
+.t-chip.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+.t-search {
+  flex: 0 0 280px;
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  padding: 6px 10px;
+  font-size: 11.5px;
+  outline: none;
+}
+.t-search:focus { border-color: var(--line-2); }
+.t-search::placeholder { color: var(--ink-muted); }
+.t-results-count {
+  font-size: 11px;
+  color: var(--ink-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.4px;
+  margin: 14px 0 8px;
+}
 </style>
 </head>
 <body>
@@ -283,13 +331,14 @@ table { border-collapse: collapse; width: 100%; }
   <!-- LANDSCAPE VIEW -->
   <div id="landscapeView">
     <div id="stats" class="stats-bar"></div>
-    <div class="filters-bar" id="filters">
-      <div class="filter-group" id="catFilters"></div>
-      <div class="filter-sep"></div>
-      <div class="filter-group" id="toolFilters"></div>
-      <input type="text" class="search-box" id="searchBox" placeholder="Search PMs...">
+    <div class="t-filters" id="filters">
+      <div class="t-filter-group" id="catFilters"></div>
+      <div class="t-filter-sep"></div>
+      <div class="t-filter-group" id="toolFilters"></div>
+      <div class="t-filter-spacer"></div>
+      <input type="text" class="t-search mono" id="searchBox" placeholder="/ search 28 markets…">
     </div>
-    <div class="results-count" id="resultsCount"></div>
+    <div class="t-results-count mono" id="resultsCount"></div>
     <div class="pm-table-wrap">
       <table class="pm-table">
         <thead id="tableHead"></thead>
@@ -1485,9 +1534,11 @@ function render() {
 
   // Category filters
   const cats = ['Decentralized', 'Regulated/CeFi', 'Play Money'];
-  document.getElementById('catFilters').innerHTML = cats.map(c =>
-    `<button class="filter-btn${catFilter === c ? ' active' : ''}" data-cat="${c}">${c}</button>`
-  ).join('');
+  document.getElementById('catFilters').innerHTML =
+    `<button class="t-chip${catFilter === null ? ' active' : ''}" data-cat="">all</button>` +
+    cats.map(c =>
+      `<button class="t-chip${catFilter === c ? ' active' : ''}" data-cat="${c}">${c.toLowerCase()}</button>`
+    ).join('');
 
   // Tool filters
   const tfs = [
@@ -1496,7 +1547,7 @@ function render() {
     { key: 'noTools', label: 'No Tools' }
   ];
   document.getElementById('toolFilters').innerHTML = tfs.map(t =>
-    `<button class="filter-btn${toolFilter === t.key ? ' active' : ''}" data-tool="${t.key}">${t.label}</button>`
+    `<button class="t-chip${toolFilter === t.key ? ' active' : ''}" data-tool="${t.key}">${t.label.toLowerCase()}</button>`
   ).join('');
 
   // Table head
@@ -1657,16 +1708,16 @@ function bindEvents() {
   });
 
   // Category filters
-  document.querySelectorAll('#catFilters .filter-btn').forEach(btn => {
+  document.querySelectorAll('#catFilters .filter-btn, #catFilters .t-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       const c = btn.dataset.cat;
-      catFilter = catFilter === c ? null : c;
+      catFilter = c || null;
       render();
     });
   });
 
   // Tool filters
-  document.querySelectorAll('#toolFilters .filter-btn').forEach(btn => {
+  document.querySelectorAll('#toolFilters .filter-btn, #toolFilters .t-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       const t = btn.dataset.tool;
       toolFilter = toolFilter === t ? null : t;
