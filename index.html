@@ -15,7 +15,7 @@
 
   /* Gate */
   #gate { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  #dashboard { display: none; }
+  #dashboard { display: block; }
   .gate-box { background: #13171e; border: 1px solid rgba(48,54,61,0.6); border-radius: 12px; padding: 40px; width: 360px; text-align: center; }
   .gate-box h1 { font-size: 18px; color: #f0f6fc; margin-bottom: 20px; }
   .gate-box form { display: flex; gap: 8px; }
@@ -269,26 +269,15 @@
 </style>
 </head>
 <body>
-<div id="gate">
-  <div class="gate-box">
-    <h1>Prediction Markets Landscape</h1>
-    <form id="loginForm">
-      <input type="password" id="pw" placeholder="Password" autocomplete="off" autofocus>
-      <button type="submit">Unlock</button>
-    </form>
-    <div class="error-msg" id="errorMsg">Incorrect password.</div>
-  </div>
-</div>
 <div id="dashboard">
 <div class="container">
   <div class="header">
     <h1>Prediction Markets Landscape</h1>
-    <div class="subtitle">29 verified prediction markets &mdash; v3, March 2026</div>
+    <div class="subtitle" id="subtitle">&mdash; April 2026</div>
   </div>
   <div class="view-nav">
     <button class="view-tab active" data-view="landscape">Landscape</button>
     <button class="view-tab testing-tab" data-view="testing">Testing Dashboard &rarr;</button>
-    <span class="version-tag" id="versionTag"></span>
   </div>
 
   <!-- LANDSCAPE VIEW -->
@@ -507,13 +496,8 @@
 </div>
 </div>
 <script>
-const HASH = '2d17354afee1b7fa9eea1141261e584f88dfe7a5c5bc6d09ca303ed4fe5800a8';
-async function sha256(s){const b=new TextEncoder().encode(s);const h=await crypto.subtle.digest('SHA-256',b);return Array.from(new Uint8Array(h)).map(x=>x.toString(16).padStart(2,'0')).join('');}
 const PAGE_VERSION = 'v6.0';
-function showDashboard(){document.getElementById('gate').style.display='none';document.getElementById('dashboard').style.display='block';render();initViewNav();}
-async function tryUnlock(p){const h=await sha256(p);if(h===HASH){sessionStorage.setItem('_pt',p);showDashboard();return true;}return false;}
-(async()=>{const s=sessionStorage.getItem('_pt');if(s) await tryUnlock(s);})();
-document.getElementById('loginForm').addEventListener('submit',async e=>{e.preventDefault();const p=document.getElementById('pw').value;if(!await tryUnlock(p)){document.getElementById('errorMsg').style.display='block';document.getElementById('pw').value='';}});
+window.addEventListener('DOMContentLoaded',()=>{render();initViewNav();});
 
 const DATA = [
   {
@@ -660,6 +644,14 @@ const DATA = [
         "githubUrl": "https://github.com/limitless-labs-group/limitless-cli",
         "features": ["browse markets", "place orders", "manage positions"],
         "techDescription": "Rust binary, installs via cargo. Terminal interface for trading."
+      },
+      {
+        "name": "@iqai/mcp-limitless",
+        "type": "MCP",
+        "description": "Community MCP server wrapping Limitless for AI agents",
+        "npmUrl": "https://www.npmjs.com/package/@iqai/mcp-limitless",
+        "features": ["market discovery", "trading", "positions"],
+        "techDescription": "Community-maintained MCP server (v0.0.5) by IQ AI."
       }
     ]
   },
@@ -702,7 +694,7 @@ const DATA = [
     "name": "Myriad",
     "website": "https://myriad.markets",
     "twitter": "https://x.com/MyriadMarkets",
-    "description": "Decentralized PM with browser extension for contextual trading from news/social content. $MYR token. 511K+ users, $385M volume.",
+    "description": "Decentralized PM with browser extension for contextual trading from news/social content. Points system today; $MYR token planned at future TGE (no date announced). Markets settle in USDC. 511K+ users, $385M cumulative volume.",
     "chain": "Multi-EVM (Abstract, Linea, Celo, Arbitrum, BNB)",
     "status": "Live",
     "volumeEstimate": "$385M cumulative",
@@ -744,7 +736,7 @@ const DATA = [
     "aiTools": [
       {
         "name": "@myriadmarkets/cli",
-        "type": "MCP",
+        "type": "CLI",
         "description": "CLI and MCP server for AI agents — market discovery, AMM + orderbook trading, wallet management",
         "docsUrl": "https://docs.myriad.markets/builders/ai-agents-and-llms",
         "npmUrl": "https://www.npmjs.com/package/@myriadmarkets/cli",
@@ -918,7 +910,7 @@ const DATA = [
         "techDescription": "Install via: claude mcp add context-markets -- npx context-markets-mcp. 25 tools. Guided onboarding for wallet setup."
       },
       {
-        "name": "CLI (35+ commands)",
+        "name": "context-markets-cli",
         "type": "CLI",
         "description": "Command-line interface with interactive shell mode and JSON output",
         "githubUrl": "https://github.com/contextwtf/context-cli",
@@ -1248,11 +1240,11 @@ const DATA = [
     "name": "OG (by Crypto.com)",
     "website": "https://og.com",
     "twitter": "https://x.com/cryptocom",
-    "description": "CFTC-regulated standalone prediction markets app by Crypto.com. Spun out after 40x growth. Margin/leverage trading. $17B+ monthly volume (pre-Super Bowl). 49 US states.",
+    "description": "CFTC-regulated standalone prediction markets app spun out from Crypto.com in Feb 2026 ahead of Super Bowl LX. Margin/leverage trading, 49 US states. Crypto.com reported 40x growth in its internal event-contracts business in the six months pre-launch (absolute volume undisclosed).",
     "chain": "CeFi",
     "status": "Live",
-    "volumeEstimate": "$17B+/month peak",
-    "volumeNumeric": 17000000000,
+    "volumeEstimate": "Undisclosed",
+    "volumeNumeric": 0,
     "category": "Regulated/CeFi",
     "coreTools": [],
     "aiTools": []
@@ -1455,7 +1447,7 @@ function render() {
   const play = DATA.filter(p => p.category === 'Play Money').length;
 
   document.getElementById('stats').innerHTML = `
-    <div class="stat-card"><div class="label">Total PMs</div><div class="value">${total}</div><div class="detail">Verified live, March 2026</div></div>
+    <div class="stat-card"><div class="label">Total PMs</div><div class="value">${total}</div><div class="detail">Verified live, April 2026</div></div>
     <div class="stat-card"><div class="label">With Dev Tools</div><div class="value">${withDev}</div><div class="detail">API, SDK, or WebSocket</div></div>
     <div class="stat-card"><div class="label">With AI Tools</div><div class="value">${withAi}</div><div class="detail">MCP, CLI, Framework, Skill</div></div>
     <div class="stat-card"><div class="label">Categories</div><div class="value">${decen}/${cefi}/${play}</div><div class="detail">Decentralized / CeFi / Play</div></div>
@@ -1663,9 +1655,18 @@ function bindEvents() {
 // === VIEW NAV ===
 let currentView = 'landscape';
 
+function setSubtitle(view) {
+  const el = document.getElementById('subtitle');
+  if (!el) return;
+  if (view === 'testing') {
+    el.textContent = `${getTestablePMs().length} decentralized & play-money PMs with dev tools — April 2026`;
+  } else {
+    el.textContent = `${DATA.length} verified prediction markets — April 2026`;
+  }
+}
 function initViewNav() {
-  document.getElementById('versionTag').textContent = PAGE_VERSION;
-  document.getElementById('footerVersion').textContent = PAGE_VERSION + ' — March 2026';
+  document.getElementById('footerVersion').textContent = 'April 2026';
+  setSubtitle('landscape');
   document.querySelectorAll('.view-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const view = tab.dataset.view;
@@ -1673,6 +1674,7 @@ function initViewNav() {
       currentView = view;
       document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
+      setSubtitle(view);
       if (view === 'landscape') {
         document.getElementById('landscapeView').classList.remove('hidden');
         document.getElementById('testingView').classList.remove('active');
@@ -3043,34 +3045,46 @@ function renderTesting() {
   const pms = getTestablePMs();
   const total = pms.length;
 
-  // Stats
-  let totalTools = 0, testedTools = 0;
+  // Results-oriented stats
+  const gradeVal = {A:4,B:3,C:2,D:1,F:0};
+  const gradeFromVal = v => v >= 3.5 ? 'A' : v >= 2.5 ? 'B' : v >= 1.5 ? 'C' : v >= 0.5 ? 'D' : 'F';
+  const summarizeGrade = keyFn => {
+    const grades = [];
+    pms.forEach(pm => { const g = keyFn(pm); if (g) grades.push(g); });
+    if (!grades.length) return { avg: '—', count: 0, best: 0 };
+    const avg = grades.reduce((a,g)=>a+(gradeVal[g]||0),0) / grades.length;
+    const best = grades.filter(g => g === 'A' || g === 'B').length;
+    return { avg: gradeFromVal(avg), count: grades.length, best };
+  };
+  const aa   = summarizeGrade(pm => (AA_RESULTS[pm.name] || {}).grade);
+  const cli  = summarizeGrade(pm => ((TEST_RESULTS[pm.name] || {}).cliMcp || {}).grade);
+  const skill= summarizeGrade(pm => ((TEST_RESULTS[pm.name] || {}).skill  || {}).grade);
+  // Framework is categorical (Production/Usable/Experimental)
+  let fwProduction = 0, fwUsable = 0, fwTested = 0;
   pms.forEach(pm => {
-    const cols = pmToolsByCol(pm);
-    TEST_COLS.forEach(c => {
-      if (cols[c.key].length > 0) {
-        totalTools++;
-        const res = TEST_RESULTS[pm.name];
-        if (res && res[c.key] && res[c.key].status !== 'untested') testedTools++;
-      }
-    });
+    const fw = ((TEST_RESULTS[pm.name] || {}).framework || {});
+    if (fw.grade) {
+      fwTested++;
+      if (fw.grade === 'Production') fwProduction++;
+      else if (fw.grade === 'Usable') fwUsable++;
+    }
   });
-  const aaTested = pms.filter(pm => AA_RESULTS[pm.name]).length;
 
   document.getElementById('testStats').innerHTML = `
-    <div class="stat-card"><div class="label">PMs to Test</div><div class="value">${total}</div><div class="detail">Decentralized + Play Money with tools</div></div>
-    <div class="stat-card"><div class="label">Agent Accessibility</div><div class="value">${aaTested}/${total}</div><div class="detail">${total - aaTested} remaining</div></div>
-    <div class="stat-card"><div class="label">Tool Tests</div><div class="value">${testedTools}/${totalTools}</div><div class="detail">Individual tool category tests</div></div>
-    <div class="stat-card"><div class="label">Progress</div><div class="value">${(totalTools + total) > 0 ? Math.round((testedTools + aaTested) / (totalTools + total) * 100) : 0}%</div><div class="detail">Overall coverage</div></div>
+    <div class="stat-card"><div class="label">Agent Accessibility</div><div class="value">${aa.avg}</div><div class="detail">avg grade across ${aa.count} tested · ${aa.best} A/B</div></div>
+    <div class="stat-card"><div class="label">CLI / MCP</div><div class="value">${cli.avg}</div><div class="detail">avg grade across ${cli.count} tested · ${cli.best} A/B</div></div>
+    <div class="stat-card"><div class="label">Skill</div><div class="value">${skill.avg}</div><div class="detail">avg grade across ${skill.count} tested · ${skill.best} A/B</div></div>
+    <div class="stat-card"><div class="label">Frameworks</div><div class="value">${fwProduction}/${fwTested}</div><div class="detail">Production-grade${fwUsable ? ` · ${fwUsable} Usable` : ''}</div></div>
   `;
 
-  document.getElementById('testResultsCount').textContent = `${total} prediction markets queued for testing`;
+  document.getElementById('testResultsCount').textContent = `${total} decentralized & play-money PMs with dev tools`;
 
-  // Table head — AA column first, then tool columns
-  const colSpan = 3 + 1 + TEST_COLS.length + 1; // chevron + PM + category + AA + tools + overall
-  let headHtml = '<tr><th style="width:28px"></th><th>PM</th><th>Category</th><th>Agent Access.</th>';
-  TEST_COLS.forEach(c => { headHtml += `<th>${c.label}</th>`; });
-  headHtml += '<th>Overall</th></tr>';
+  // Table head — PM · Category · Dev Tools · Agent Access · CLI/MCP · Skill · Framework
+  const toolCols = TEST_COLS.filter(c => c.key !== 'devTools');
+  const colSpan = 1 /*chevron*/ + 2 /*pm+cat*/ + 1 /*devtools*/ + 1 /*aa*/ + toolCols.length;
+  let headHtml = '<tr><th style="width:28px"></th><th>PM</th><th>Category</th><th>Dev Tools</th><th>Agent Access.</th>';
+  toolCols.forEach(c => { headHtml += `<th>${c.label}</th>`; });
+  headHtml += '</tr>';
   document.getElementById('testTableHead').innerHTML = headHtml;
 
   // Table body
@@ -3078,34 +3092,27 @@ function renderTesting() {
   pms.forEach((pm, i) => {
     const cols = pmToolsByCol(pm);
     const res = TEST_RESULTS[pm.name] || {};
-    const aa = AA_RESULTS[pm.name];
-
-    // Overall from tested tool results
-    let testedCount = 0, gradeSum = 0;
-    const gradeVal = {A:4,B:3,C:2,D:1,F:0};
-    TEST_COLS.forEach(c => {
-      if (res[c.key] && res[c.key].status === 'tested' && c.key !== 'framework') {
-        testedCount++;
-        gradeSum += (gradeVal[res[c.key].grade] || 0);
-      }
-    });
+    const aaRes = AA_RESULTS[pm.name];
+    const devToolCount = pm.coreTools.length;
 
     bodyHtml += `<tr class="test-pm-row" data-tidx="${i}">`;
     bodyHtml += `<td><span class="chevron" id="tchev-${i}">&#9654;</span></td>`;
     bodyHtml += `<td><div class="pm-name-cell"><a href="${esc(pm.website)}" target="_blank" onclick="event.stopPropagation()">${esc(pm.name)}</a></div></td>`;
     bodyHtml += `<td><span class="badge ${catBadgeClass(pm.category)}">${esc(pm.category)}</span></td>`;
 
-    // AA column
-    if (aa) {
-      const gClass = 'grade-' + aa.grade.toLowerCase();
-      const reachDot = aa.reachability ? `<span class="reach-dot ${aa.reachability}" title="${aa.reachability}"></span>` : '';
-      bodyHtml += `<td><div class="test-cell">${reachDot}<span class="test-badge ${gClass}">${aa.grade}</span><span class="test-cell-tools">${aa.score}/${AA_TOTAL_CHECKS}</span></div></td>`;
+    // Dev Tools column (count)
+    bodyHtml += `<td><span class="test-cell-tools">${devToolCount}</span></td>`;
+
+    // AA column (no reach dot)
+    if (aaRes) {
+      const gClass = 'grade-' + aaRes.grade.toLowerCase();
+      bodyHtml += `<td><div class="test-cell"><span class="test-badge ${gClass}">${aaRes.grade}</span><span class="test-cell-tools">${aaRes.score}/${AA_TOTAL_CHECKS}</span></div></td>`;
     } else {
       bodyHtml += `<td><span class="test-badge untested">Untested</span></td>`;
     }
 
-    // Tool columns
-    TEST_COLS.forEach(c => {
+    // Tool columns (CLI/MCP, Skill, Framework — devTools already rendered above)
+    toolCols.forEach(c => {
       const tools = cols[c.key] || [];
       const result = res[c.key];
       if (tools.length === 0 && !result) {
@@ -3122,15 +3129,6 @@ function renderTesting() {
         bodyHtml += `<td><span class="test-badge untested">${tools.length} tool${tools.length > 1 ? 's' : ''}</span></td>`;
       }
     });
-
-    // Overall
-    if (testedCount > 0) {
-      const avg = gradeSum / testedCount;
-      const oGrade = avg >= 3.5 ? 'A' : avg >= 2.5 ? 'B' : avg >= 1.5 ? 'C' : avg >= 0.5 ? 'D' : 'F';
-      bodyHtml += `<td><span class="test-badge overall-badge grade-${oGrade.toLowerCase()}">${oGrade}</span></td>`;
-    } else {
-      bodyHtml += `<td><span class="test-badge untested">—</span></td>`;
-    }
     bodyHtml += `</tr>`;
 
     // Detail row
@@ -3160,7 +3158,7 @@ function renderTesting() {
     const toolTests = res._tools || [];
     const skillTests = res._skillTools || [];
     const fwTests = res._frameworkTools || [];
-    const hasAA = !!aa;
+    const hasAA = !!aaRes;
     const hasCli = toolTests.length > 0;
     const hasSkill = skillTests.length > 0;
     const hasFw = fwTests.length > 0;
@@ -3182,12 +3180,12 @@ function renderTesting() {
       if (hasAA) {
         const statusColor = {true:'#3fb950',false:'#f85149'};
         bodyHtml += `<div class="methodology-content${firstTab==='aa'?' open':''}" id="${uid}-aa">`;
-        bodyHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span class="test-badge grade-${aa.grade.toLowerCase()}">${aa.grade}</span><span style="font-size:12px; color:#8b949e;">${aa.score}/${AA_TOTAL_CHECKS} checks passed</span></div>`;
+        bodyHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span class="test-badge grade-${aaRes.grade.toLowerCase()}">${aaRes.grade}</span><span style="font-size:12px; color:#8b949e;">${aaRes.score}/${AA_TOTAL_CHECKS} checks passed</span></div>`;
         bodyHtml += `<div class="m-checks-list">`;
         AA_DIMS.forEach(dim => {
           bodyHtml += `<div class="m-dim-block"><div class="m-dim-label">${dim.label}</div>`;
           dim.checks.forEach(chk => {
-            const r = aa.checks[chk.id];
+            const r = aaRes.checks[chk.id];
             const pass = r && r.pass;
             const col = pass ? '#3fb950' : '#f85149';
             const icon = pass ? '&#10003;' : '&#10007;';
