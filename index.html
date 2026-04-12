@@ -502,6 +502,13 @@ table { border-collapse: collapse; width: 100%; }
   <!-- TESTING VIEW -->
   <div id="testingView">
     <div id="testStats"></div>
+    <div class="t-filters" id="testFilters">
+      <div class="t-filter-group" id="testCatFilters"></div>
+      <div class="t-filter-sep"></div>
+      <div class="t-filter-group" id="testHasFilters"></div>
+      <div class="t-filter-spacer"></div>
+      <input type="text" class="t-search mono" id="testSearchBox" placeholder="/ search…">
+    </div>
     <div class="methodology">
       <div class="m-tabs" id="mTabs">
         <button class="m-tab active" data-mtab="aa">Agent Accessibility</button>
@@ -1721,6 +1728,9 @@ let catFilter = null;
 let toolFilter = null;
 let searchQuery = '';
 let searchQ = '';
+let testCatFilter = null;
+let testHasFilter = null;
+let testSearchQ = '';
 
 // --- Helpers ---
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -3437,6 +3447,46 @@ document.querySelectorAll('#mTabs .m-tab').forEach(tab => {
 
 function renderTesting() {
   const pms = getTestablePMs();
+
+  const tcats = ['Decentralized', 'Play Money'];
+  document.getElementById('testCatFilters').innerHTML =
+    `<button class="t-chip${testCatFilter === null ? ' active' : ''}" data-tcat="">all</button>` +
+    tcats.map(c => `<button class="t-chip${testCatFilter === c ? ' active' : ''}" data-tcat="${c}">${c.toLowerCase()}</button>`).join('');
+  document.getElementById('testHasFilters').innerHTML = [
+    { key: 'aa', label: 'has agent access' },
+    { key: 'cli', label: 'has cli/mcp' },
+    { key: 'skill', label: 'has skill' },
+  ].map(t => `<button class="t-chip${testHasFilter === t.key ? ' active' : ''}" data-thas="${t.key}">${t.label}</button>`).join('');
+  const tsb = document.getElementById('testSearchBox');
+  if (tsb) tsb.value = testSearchQ;
+
+  document.querySelectorAll('#testCatFilters .t-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      testCatFilter = chip.dataset.tcat || null;
+      renderTesting();
+    });
+  });
+  document.querySelectorAll('#testHasFilters .t-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      testHasFilter = (testHasFilter === chip.dataset.thas) ? null : chip.dataset.thas;
+      renderTesting();
+    });
+  });
+  document.getElementById('testSearchBox').addEventListener('input', e => {
+    testSearchQ = e.target.value;
+    renderTesting();
+  });
+
+  let displayed = pms;
+  if (testCatFilter) displayed = displayed.filter(p => p.category === testCatFilter);
+  if (testHasFilter === 'aa') displayed = displayed.filter(p => AA_RESULTS[p.name]);
+  if (testHasFilter === 'cli') displayed = displayed.filter(p => (TEST_RESULTS[p.name]||{}).cliMcp);
+  if (testHasFilter === 'skill') displayed = displayed.filter(p => (TEST_RESULTS[p.name]||{}).skill);
+  if (testSearchQ) {
+    const q = testSearchQ.toLowerCase();
+    displayed = displayed.filter(p => p.name.toLowerCase().includes(q) || (p.chain || '').toLowerCase().includes(q));
+  }
+
   const total = pms.length;
 
   // Results-oriented stats
@@ -3484,7 +3534,7 @@ function renderTesting() {
 
   // Table body
   let bodyHtml = '';
-  pms.forEach((pm, i) => {
+  displayed.forEach((pm, i) => {
     const cols = pmToolsByCol(pm);
     const res = TEST_RESULTS[pm.name] || {};
     const aaRes = AA_RESULTS[pm.name];
