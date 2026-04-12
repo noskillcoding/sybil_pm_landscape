@@ -984,6 +984,19 @@ const Router = {
   push() { this.write(this.currentState()); }
 };
 
+// === Keyboard shortcuts =====================================
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    const sb = document.getElementById('searchBox');
+    if (sb && sb.offsetParent) sb.focus();
+  }
+  if (e.key === 'Escape' && document.activeElement.tagName === 'INPUT') {
+    document.activeElement.value = '';
+    document.activeElement.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+});
+
 window.addEventListener('DOMContentLoaded',()=>{Theme.init();initViewNav();Router.init();});
 
 const DATA = [
