@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mock A — Terminal Density</title>
+<style>
+  :root {
+    --bg: #000;
+    --bg-1: #07090c;
+    --bg-2: #0c1015;
+    --line: #1a1f27;
+    --line-2: #242a33;
+    --ink: #e6e8eb;
+    --ink-dim: #8a919b;
+    --ink-muted: #5a626c;
+    --accent: #4ade80;
+    --accent-2: #22d3ee;
+    --warn: #f59e0b;
+    --red: #ef4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); color: var(--ink); font-family: -apple-system, 'Inter', sans-serif; font-size: 13px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'JetBrains Mono', 'SF Mono', 'IBM Plex Mono', Menlo, monospace; font-feature-settings: 'ss01','cv11'; }
+  .shell { max-width: 1440px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* Topbar */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  .brand { display: flex; align-items: baseline; gap: 14px; }
+  .brand .prompt { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .brand h1 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .brand .sep { color: var(--ink-muted); }
+  .brand .tag { color: var(--ink-dim); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+  .topbar .right { display: flex; gap: 16px; align-items: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-dim); }
+  .topbar .right .dot { display: inline-block; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; margin-right: 6px; box-shadow: 0 0 8px var(--accent); }
+
+  /* Hero */
+  .hero { margin-bottom: 32px; }
+  .hero .kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px; }
+  .hero h2 { font-size: 34px; line-height: 1.15; letter-spacing: -1px; font-weight: 700; max-width: 820px; margin-bottom: 10px; }
+  .hero h2 em { font-style: normal; color: var(--ink-muted); font-weight: 500; }
+  .hero p { color: var(--ink-dim); max-width: 720px; font-size: 13.5px; }
+  .caveat { margin-top: 18px; display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border: 1px solid var(--line-2); background: #0a0d11; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-dim); }
+  .caveat b { color: var(--warn); font-weight: 500; }
+
+  /* Stats */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--line); margin-bottom: 28px; }
+  .stat { padding: 16px 20px; border-right: 1px solid var(--line); }
+  .stat:last-child { border-right: 0; }
+  .stat .l { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .stat .v { font-family: 'JetBrains Mono', monospace; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; }
+  .stat .d { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
+
+  /* Filters */
+  .filters { display: flex; gap: 6px; align-items: center; padding: 10px 0 20px; border-bottom: 1px solid var(--line); margin-bottom: 0; }
+  .chip { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-dim); padding: 5px 10px; border: 1px solid var(--line); background: transparent; cursor: pointer; letter-spacing: 0.2px; }
+  .chip:hover { color: var(--ink); border-color: var(--line-2); }
+  .chip.active { color: var(--accent); border-color: var(--accent); background: #4ade8010; }
+  .filters .sep { width: 1px; height: 18px; background: var(--line); margin: 0 8px; }
+  .filters .spacer { flex: 1; }
+  .filters .search { flex: 0 0 260px; background: transparent; border: 1px solid var(--line); color: var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 6px 10px; outline: none; }
+  .filters .search::placeholder { color: var(--ink-muted); }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  thead th { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 1px; padding: 14px 12px 10px; text-align: left; border-bottom: 1px solid var(--line); font-weight: 500; }
+  thead th.num { text-align: right; }
+  tbody tr { border-bottom: 1px solid var(--line); transition: background 0.1s; }
+  tbody tr:hover { background: var(--bg-1); }
+  tbody td { padding: 14px 12px; vertical-align: middle; }
+  .pm { display: flex; align-items: center; gap: 12px; }
+  .pm .glyph { width: 24px; height: 24px; border: 1px solid var(--line-2); font-family: 'JetBrains Mono', monospace; font-size: 11px; display: grid; place-items: center; color: var(--ink-dim); }
+  .pm .name { font-weight: 500; color: var(--ink); }
+  .pm .meta { font-size: 11px; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; }
+  .cat { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-dim); text-transform: uppercase; letter-spacing: 1px; padding: 3px 8px; border: 1px solid var(--line-2); display: inline-block; }
+  .cat.dec { color: var(--accent); border-color: #2a5039; }
+  .cat.cefi { color: var(--warn); border-color: #503d1e; }
+  .cat.play { color: var(--accent-2); border-color: #1e4a52; }
+  .vol { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; text-align: right; color: var(--ink); }
+  .vol.muted { color: var(--ink-muted); font-style: italic; font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .tools { display: flex; gap: 5px; flex-wrap: wrap; }
+  .tool-pill { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 2px 7px; border: 1px solid var(--line-2); color: var(--ink-dim); letter-spacing: 0.3px; }
+  .tool-pill.api { color: #93c5fd; border-color: #1e3a5f; }
+  .tool-pill.sdk { color: #c4b5fd; border-color: #3a2d5f; }
+  .tool-pill.cli { color: var(--accent); border-color: #2a5039; }
+  .tool-pill.mcp { color: #f0abfc; border-color: #5a1e5f; }
+  .tool-pill.skill { color: var(--accent-2); border-color: #1e4a52; }
+  .tool-pill.fw { color: var(--warn); border-color: #503d1e; }
+  td.chev { width: 22px; color: var(--ink-muted); font-family: 'JetBrains Mono', monospace; cursor: pointer; }
+
+  /* Expanded row */
+  tr.expanded { background: var(--bg-1) !important; }
+  tr.detail td { padding: 0; border-bottom: 1px solid var(--line); background: var(--bg-1); }
+  .detail-inner { padding: 20px 24px 24px 58px; display: grid; grid-template-columns: 2fr 3fr; gap: 32px; }
+  .detail-inner h4 { font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--ink-muted); margin-bottom: 10px; }
+  .detail-inner p { font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
+  .detail-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .detail-tool { border-left: 2px solid var(--line-2); padding: 6px 0 6px 12px; }
+  .detail-tool .n { font-size: 12px; color: var(--ink); font-weight: 500; }
+  .detail-tool .t { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
+  .detail-tool .d { font-size: 11.5px; color: var(--ink-dim); }
+
+  /* Footer */
+  footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-muted); display: flex; justify-content: space-between; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="prompt">$</span>
+      <h1>sybil.pm_landscape</h1>
+      <span class="sep mono">//</span>
+      <span class="tag">v4 · apr 2026</span>
+    </div>
+    <div class="right">
+      <span><span class="dot"></span>live</span>
+      <span>28 markets indexed</span>
+      <span>dark · [l]ight</span>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="kicker">The landscape · 2026</div>
+    <h2>Prediction markets, <em>ranked by how well an AI agent can actually use them.</em></h2>
+    <p>28 live prediction markets surveyed across volume, chain, developer surface, and AI-agent tooling. The full dataset below is the source for our cli/mcp, skill, and framework benchmarks.</p>
+    <div class="caveat"><span>⚠</span> <span><b>agent-generated research</b> — every test run, score, and summary on this site was produced by autonomous coding agents. treat findings accordingly.</span></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="l">markets</div><div class="v">28</div><div class="d">verified live</div></div>
+    <div class="stat"><div class="l">with dev tools</div><div class="v">19</div><div class="d">api / sdk / ws</div></div>
+    <div class="stat"><div class="l">with agent tools</div><div class="v">13</div><div class="d">cli / mcp / skill / fw</div></div>
+    <div class="stat"><div class="l">decen · cefi · play</div><div class="v">19/7/2</div><div class="d">category mix</div></div>
+  </div>
+
+  <div class="filters">
+    <button class="chip active">all</button>
+    <button class="chip">decentralized</button>
+    <button class="chip">regulated/cefi</button>
+    <button class="chip">play money</button>
+    <div class="sep"></div>
+    <button class="chip">has dev tools</button>
+    <button class="chip">has agent tools</button>
+    <div class="spacer"></div>
+    <input class="search" placeholder="/ search 28 markets…">
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:22px"></th>
+        <th>Market</th>
+        <th>Category</th>
+        <th>Chain</th>
+        <th class="num">Volume</th>
+        <th>Dev tools</th>
+        <th>Agent tools</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="expanded">
+        <td class="chev">▼</td>
+        <td><div class="pm"><div class="glyph">P</div><div><div class="name">Polymarket</div><div class="meta">polymarket.com</div></div></div></td>
+        <td><span class="cat dec">decentralized</span></td>
+        <td class="mono" style="color:var(--ink-dim)">Polygon</td>
+        <td class="vol">$52.5B</td>
+        <td><div class="tools"><span class="tool-pill api">API</span><span class="tool-pill sdk">SDK</span><span class="tool-pill api">WS</span></div></td>
+        <td><div class="tools"><span class="tool-pill cli">CLI</span><span class="tool-pill fw">FW</span><span class="tool-pill skill">SKILL</span></div></td>
+      </tr>
+      <tr class="detail">
+        <td colspan="7">
+          <div class="detail-inner">
+            <div>
+              <h4>About</h4>
+              <p>World's largest decentralized PM. Binary/categorical markets on politics, sports, crypto, economics on Polygon. CLOB REST API + Gamma API, official SDKs in Python / TypeScript / Rust, and a maintained SKILL.md for agent use.</p>
+            </div>
+            <div>
+              <h4>Toolchain (6)</h4>
+              <div class="detail-tools">
+                <div class="detail-tool"><div class="t">api</div><div class="n">CLOB + Gamma API</div><div class="d">Orders, markets, positions, WS for live data.</div></div>
+                <div class="detail-tool"><div class="t">sdk</div><div class="n">py-clob-client + ts + rs</div><div class="d">Type-safe wrappers, EIP-712 auth, order signing.</div></div>
+                <div class="detail-tool"><div class="t">cli</div><div class="n">Polymarket CLI</div><div class="d">Community-maintained terminal client.</div></div>
+                <div class="detail-tool"><div class="t">framework</div><div class="n">Polymarket Agents</div><div class="d">Official open-source trading agent framework.</div></div>
+                <div class="detail-tool"><div class="t">skill</div><div class="n">SKILL.md</div><div class="d">Progressive-disclosure agent skill, ~200 lines.</div></div>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">K</div><div><div class="name">Kalshi</div><div class="meta">kalshi.com</div></div></div></td>
+        <td><span class="cat cefi">regulated/cefi</span></td>
+        <td class="mono" style="color:var(--ink-dim)">CeFi</td>
+        <td class="vol">~$2B/mo</td>
+        <td><div class="tools"><span class="tool-pill api">API</span><span class="tool-pill sdk">SDK</span><span class="tool-pill api">WS+FIX</span></div></td>
+        <td><div class="tools"><span class="tool-pill" style="color:var(--ink-muted)">—</span></div></td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">L</div><div><div class="name">Limitless</div><div class="meta">limitless.exchange</div></div></div></td>
+        <td><span class="cat dec">decentralized</span></td>
+        <td class="mono" style="color:var(--ink-dim)">Base</td>
+        <td class="vol">$1.2B</td>
+        <td><div class="tools"><span class="tool-pill api">API</span><span class="tool-pill sdk">SDK</span><span class="tool-pill api">WS</span></div></td>
+        <td><div class="tools"><span class="tool-pill cli">CLI</span><span class="tool-pill mcp">MCP</span></div></td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">M</div><div><div class="name">Myriad</div><div class="meta">myriad.markets</div></div></div></td>
+        <td><span class="cat dec">decentralized</span></td>
+        <td class="mono" style="color:var(--ink-dim)">Multi-EVM</td>
+        <td class="vol">$385M</td>
+        <td><div class="tools"><span class="tool-pill api">API×2</span><span class="tool-pill sdk">SDK×2</span></div></td>
+        <td><div class="tools"><span class="tool-pill cli">CLI</span></div></td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">S</div><div><div class="name">Sapience</div><div class="meta">sapience.xyz</div></div></div></td>
+        <td><span class="cat dec">decentralized</span></td>
+        <td class="mono" style="color:var(--ink-dim)">Base</td>
+        <td class="vol muted">undisclosed</td>
+        <td><div class="tools"><span class="tool-pill api">GQL</span><span class="tool-pill sdk">SDK</span><span class="tool-pill api">WS</span></div></td>
+        <td><div class="tools"><span class="tool-pill skill">SKILL×2</span><span class="tool-pill fw">FW</span></div></td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">M</div><div><div class="name">Manifold</div><div class="meta">manifold.markets</div></div></div></td>
+        <td><span class="cat play">play money</span></td>
+        <td class="mono" style="color:var(--ink-dim)">—</td>
+        <td class="vol muted">play-money</td>
+        <td><div class="tools"><span class="tool-pill api">API</span><span class="tool-pill sdk">SDK×2</span></div></td>
+        <td><div class="tools"><span class="tool-pill mcp">MCP</span></div></td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">M</div><div><div class="name">Metaculus</div><div class="meta">metaculus.com</div></div></div></td>
+        <td><span class="cat play">play money</span></td>
+        <td class="mono" style="color:var(--ink-dim)">—</td>
+        <td class="vol muted">forecasting</td>
+        <td><div class="tools"><span class="tool-pill api">API</span></div></td>
+        <td><div class="tools"><span class="tool-pill fw">forecasting-tools</span></div></td>
+      </tr>
+      <tr>
+        <td class="chev">▶</td>
+        <td><div class="pm"><div class="glyph">O</div><div><div class="name">OG <span style="color:var(--ink-muted);font-weight:400">(crypto.com)</span></div><div class="meta">og.com</div></div></div></td>
+        <td><span class="cat cefi">regulated/cefi</span></td>
+        <td class="mono" style="color:var(--ink-dim)">CeFi</td>
+        <td class="vol muted">undisclosed</td>
+        <td><div class="tools"><span class="tool-pill" style="color:var(--ink-muted)">—</span></div></td>
+        <td><div class="tools"><span class="tool-pill" style="color:var(--ink-muted)">—</span></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <footer>
+    <div>sybil_pm_landscape · agent-authored · apr 2026</div>
+    <div>methodology · source · x</div>
+  </footer>
+
+</div>
+</body>
+</html>
