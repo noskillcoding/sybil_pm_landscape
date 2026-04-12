@@ -631,7 +631,7 @@ table { border-collapse: collapse; width: 100%; }
 
   <!-- LANDSCAPE VIEW -->
   <div id="landscapeView">
-    <div id="stats" class="stats-bar"></div>
+    <div id="stats"></div>
     <div class="t-filters" id="filters">
       <div class="t-filter-group" id="catFilters"></div>
       <div class="t-filter-sep"></div>
@@ -2179,7 +2179,7 @@ function bindEvents() {
   });
 
   // Category filters
-  document.querySelectorAll('#catFilters .filter-btn, #catFilters .t-chip').forEach(btn => {
+  document.querySelectorAll('#catFilters .t-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       const c = btn.dataset.cat;
       catFilter = c || null;
@@ -2189,7 +2189,7 @@ function bindEvents() {
   });
 
   // Tool filters
-  document.querySelectorAll('#toolFilters .filter-btn, #toolFilters .t-chip').forEach(btn => {
+  document.querySelectorAll('#toolFilters .t-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       const t = btn.dataset.tool;
       toolFilter = toolFilter === t ? null : t;
@@ -2222,12 +2222,12 @@ function setSubtitle(view) {
 function initViewNav() {
   document.getElementById('footerVersion').textContent = 'April 2026';
   setSubtitle('landscape');
-  document.querySelectorAll('.view-tab, .t-tab').forEach(tab => {
+  document.querySelectorAll('.t-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const view = tab.dataset.view;
       if (view === currentView) return;
       currentView = view;
-      document.querySelectorAll('.view-tab, .t-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.t-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       setSubtitle(view);
       const lh = document.getElementById('landscapeHero');
