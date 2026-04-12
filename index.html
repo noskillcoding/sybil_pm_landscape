@@ -722,6 +722,31 @@ const Theme = {
     this.set(this.current); // refresh icon on load
   }
 };
+
+// === Sort ====================================================
+const Sort = {
+  state: { key: null, dir: 'asc' }, // dir: 'asc' | 'desc'
+  comparators: {
+    name:     (a, b) => a.name.localeCompare(b.name),
+    category: (a, b) => (a.category || '').localeCompare(b.category || ''),
+    chain:    (a, b) => (a.chain || '').localeCompare(b.chain || ''),
+    volume:   (a, b) => (a.volumeNumeric || 0) - (b.volumeNumeric || 0),
+  },
+  apply(rows) {
+    if (!this.state.key) return rows;
+    const cmp = this.comparators[this.state.key];
+    if (!cmp) return rows;
+    const sorted = rows.slice().sort(cmp);
+    if (this.state.dir === 'desc') sorted.reverse();
+    return sorted;
+  },
+  cycle(key) {
+    if (this.state.key !== key) { this.state.key = key; this.state.dir = 'asc'; }
+    else if (this.state.dir === 'asc') { this.state.dir = 'desc'; }
+    else { this.state.key = null; this.state.dir = 'asc'; }
+  }
+};
+
 window.addEventListener('DOMContentLoaded',()=>{Theme.init();render();initViewNav();});
 
 const DATA = [
@@ -1719,20 +1744,31 @@ function render() {
   ).join('');
 
   // Table head
+  const arrow = key => {
+    if (Sort.state.key !== key) return '';
+    return `<span class="t-sort-arrow mono">${Sort.state.dir === 'asc' ? '↑' : '↓'}</span>`;
+  };
   document.getElementById('tableHead').innerHTML = `
-  <tr>
-    <th style="width:22px"></th>
-    <th class="sortable" data-sort="name">Market</th>
-    <th class="sortable" data-sort="category">Category</th>
-    <th class="sortable" data-sort="chain">Chain</th>
-    <th class="num sortable" data-sort="volume">Volume</th>
-    <th>Dev tools</th>
-    <th>Agent tools</th>
-  </tr>
-`;
+    <tr>
+      <th style="width:22px"></th>
+      <th class="sortable" data-sort="name">Market${arrow('name')}</th>
+      <th class="sortable" data-sort="category">Category${arrow('category')}</th>
+      <th class="sortable" data-sort="chain">Chain${arrow('chain')}</th>
+      <th class="num sortable" data-sort="volume">Volume${arrow('volume')}</th>
+      <th>Dev tools</th>
+      <th>Agent tools</th>
+    </tr>
+  `;
+  document.querySelectorAll('#tableHead th.sortable').forEach(th => {
+    th.addEventListener('click', () => {
+      Sort.cycle(th.dataset.sort);
+      render();
+    });
+  });
 
   // Table body
-  const filtered = getFiltered();
+  let filtered = getFiltered();
+  filtered = Sort.apply(filtered);
   document.getElementById('resultsCount').textContent = `Showing ${filtered.length} of ${total} prediction markets`;
 
   let html = '';
@@ -1885,16 +1921,6 @@ function bindEvents() {
         row.classList.add('expanded');
         chev.classList.add('open');
       }
-    });
-  });
-
-  // Sort
-  document.querySelectorAll('th[data-sort]').forEach(th => {
-    th.addEventListener('click', () => {
-      const col = th.dataset.sort;
-      if (sortCol === col) sortDir *= -1;
-      else { sortCol = col; sortDir = col === 'name' || col === 'chain' || col === 'category' ? 1 : -1; }
-      render();
     });
   });
 
