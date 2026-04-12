@@ -1931,6 +1931,9 @@ function render() {
         detail.classList.toggle('open', isOpen);
       }
       row.querySelector('.t-chev').textContent = isOpen ? '▼' : '▶';
+      const state = Router.currentState();
+      state.pm = isOpen ? Router.slug(row.dataset.pm) : null;
+      Router.write(state);
     });
   });
 
