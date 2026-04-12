@@ -284,6 +284,75 @@ table { border-collapse: collapse; width: 100%; }
   letter-spacing: 0.4px;
   margin: 14px 0 8px;
 }
+
+/* --- Table base ------------------------------------------- */
+.t-table-wrap { overflow-x: auto; }
+.t-table { font-size: 12.5px; }
+.t-table thead th {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 14px 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  user-select: none;
+}
+.t-table thead th.num { text-align: right; }
+.t-table thead th.sortable { cursor: pointer; }
+.t-table thead th.sortable:hover { color: var(--ink-dim); }
+.t-table thead th .t-sort-arrow { margin-left: 4px; color: var(--accent); display: inline-block; width: 8px; }
+.t-table tbody tr {
+  border-bottom: 1px solid var(--line);
+  transition: background 0.08s;
+  cursor: pointer;
+}
+.t-table tbody tr:hover { background: var(--bg-1); }
+.t-table tbody td { padding: 14px 12px; vertical-align: middle; }
+.t-chev {
+  width: 22px;
+  color: var(--ink-muted);
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+}
+
+/* PM cell */
+.t-pm { display: flex; align-items: center; gap: 12px; }
+.t-pm-glyph {
+  width: 24px; height: 24px;
+  border: 1px solid var(--line-2);
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  display: grid;
+  place-items: center;
+  color: var(--ink-dim);
+  flex-shrink: 0;
+}
+.t-pm-name { font-weight: 500; color: var(--ink); font-size: 13px; }
+.t-pm-meta { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-muted); }
+
+/* Category badge */
+.t-cat {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: lowercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border: 1px solid var(--line-2);
+  display: inline-block;
+  color: var(--ink-dim);
+}
+.t-cat-dec { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+.t-cat-cefi { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+.t-cat-play { color: var(--cyan); border-color: color-mix(in srgb, var(--cyan) 35%, transparent); }
+
+/* Chain and volume */
+.t-chain { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-dim); }
+.t-vol { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); text-align: right; }
+.t-vol-muted { color: var(--ink-muted); font-style: italic; font-size: 11px; }
 </style>
 </head>
 <body>
@@ -339,8 +408,8 @@ table { border-collapse: collapse; width: 100%; }
       <input type="text" class="t-search mono" id="searchBox" placeholder="/ search 28 markets…">
     </div>
     <div class="t-results-count mono" id="resultsCount"></div>
-    <div class="pm-table-wrap">
-      <table class="pm-table">
+    <div class="t-table-wrap">
+      <table class="t-table" id="pmTable">
         <thead id="tableHead"></thead>
         <tbody id="tableBody"></tbody>
       </table>
@@ -1551,22 +1620,17 @@ function render() {
   ).join('');
 
   // Table head
-  const cols = [
-    { key: '', label: '' },
-    { key: 'name', label: 'Name' },
-    { key: '', label: 'Description' },
-    { key: 'chain', label: 'Chain' },
-    { key: 'volumeNumeric', label: 'Volume' },
-    { key: 'category', label: 'Category' },
-    { key: 'coreTools', label: 'Dev Tools' },
-    { key: 'aiTools', label: 'AI Tools' },
-    { key: '', label: 'Links' }
-  ];
-  document.getElementById('tableHead').innerHTML = '<tr>' + cols.map(c => {
-    const sorted = sortCol === c.key;
-    const arrow = c.key ? `<span class="sort-arrow">${sorted ? (sortDir === 1 ? '\u25B2' : '\u25BC') : '\u25B2'}</span>` : '';
-    return `<th${c.key ? ` data-sort="${c.key}"` : ''}${sorted ? ' class="sorted"' : ''}>${c.label}${arrow}</th>`;
-  }).join('') + '</tr>';
+  document.getElementById('tableHead').innerHTML = `
+  <tr>
+    <th style="width:22px"></th>
+    <th class="sortable" data-sort="name">Market</th>
+    <th class="sortable" data-sort="category">Category</th>
+    <th class="sortable" data-sort="chain">Chain</th>
+    <th class="num sortable" data-sort="volume">Volume</th>
+    <th>Dev tools</th>
+    <th>Agent tools</th>
+  </tr>
+`;
 
   // Table body
   const filtered = getFiltered();
@@ -1574,56 +1638,34 @@ function render() {
 
   let html = '';
   filtered.forEach((pm, i) => {
-    const coreCount = pm.coreTools.length;
-    const aiCount = pm.aiTools.length;
-    const hasAnyTools = coreCount > 0 || aiCount > 0;
+    const initial = (pm.name[0] || '?').toUpperCase();
+    const catClass = pm.category === 'Decentralized' ? 't-cat-dec'
+                   : pm.category === 'Regulated/CeFi' ? 't-cat-cefi'
+                   : 't-cat-play';
+    const volDisplay = (pm.volumeNumeric > 0)
+      ? esc(pm.volumeEstimate || '—')
+      : `<span class="t-vol-muted">${esc(pm.volumeEstimate || 'undisclosed')}</span>`;
 
-    // Links
-    let links = '';
-    if (pm.website) links += `<a href="${esc(pm.website)}" target="_blank">Web</a>`;
-    if (pm.twitter) links += `<a href="${esc(pm.twitter)}" target="_blank">X</a>`;
-
-    html += `<tr data-idx="${i}" class="pm-row">
-      <td><span class="chevron" id="chev-${i}">\u25B6</span></td>
-      <td><div class="pm-name-cell"><a href="${esc(pm.website)}" target="_blank" onclick="event.stopPropagation()">${esc(pm.name)}</a></div></td>
-      <td><div class="pm-desc" title="${esc(pm.description)}">${esc(pm.description)}</div></td>
-      <td><span class="chain-tag">${esc(pm.chain)}</span></td>
-      <td><span class="vol-cell">${esc(pm.volumeEstimate)}</span></td>
-      <td><span class="badge ${catBadgeClass(pm.category)}">${esc(pm.category)}</span></td>
-      <td><span class="tools-count ${coreCount ? 'has-tools' : 'no-tools'}">${coreCount}</span></td>
-      <td><span class="ai-tools-count ${aiCount ? 'has-tools' : 'no-tools'}">${aiCount}</span></td>
-      <td><div class="link-icons">${links}</div></td>
-    </tr>`;
-
-    // Detail row
-    html += `<tr class="detail-row" id="detail-${i}"><td colspan="9"><div class="detail-content">`;
-    html += `<div class="detail-desc">${esc(pm.description)}</div>`;
-
-    // Core tools section
-    if (coreCount > 0) {
-      html += `<div class="tools-section"><div class="tools-section-title">Core Developer Tools (${coreCount})</div>`;
-      pm.coreTools.forEach(tool => {
-        html += renderToolCard(tool, 'core-tool');
-      });
-      html += `</div>`;
-    }
-
-    // AI tools section
-    if (aiCount > 0) {
-      html += `<div class="tools-section" style="margin-top:16px"><div class="tools-section-title ai-section">AI &amp; Agent Tools (${aiCount})</div>`;
-      pm.aiTools.forEach(tool => {
-        html += renderToolCard(tool, 'ai-tool');
-      });
-      html += `</div>`;
-    } else if (coreCount > 0) {
-      html += `<div class="no-ai-msg">No AI-specific tools</div>`;
-    }
-
-    if (!hasAnyTools) {
-      html += `<div class="no-tools-msg">No developer tools found</div>`;
-    }
-
-    html += `</div></td></tr>`;
+    const rowHtml = `
+  <tr class="t-row" data-pm="${esc(pm.name)}">
+    <td class="t-chev">▶</td>
+    <td>
+      <div class="t-pm">
+        <div class="t-pm-glyph">${initial}</div>
+        <div>
+          <div class="t-pm-name">${esc(pm.name)}</div>
+          <div class="t-pm-meta">${esc((pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}</div>
+        </div>
+      </div>
+    </td>
+    <td><span class="t-cat ${catClass}">${esc(pm.category)}</span></td>
+    <td class="t-chain">${esc(pm.chain || '—')}</td>
+    <td class="t-vol">${volDisplay}</td>
+    <td><!-- dev tools cell - filled by Task 9 --></td>
+    <td><!-- agent tools cell - filled by Task 9 --></td>
+  </tr>
+`;
+    html += rowHtml;
   });
   document.getElementById('tableBody').innerHTML = html;
 
