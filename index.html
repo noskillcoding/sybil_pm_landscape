@@ -436,6 +436,29 @@ table { border-collapse: collapse; width: 100%; }
 
 /* --- Hide legacy static methodology panel on testing view -- */
 #testingView > .methodology { display: none; }
+
+/* --- Testing grade badges --------------------------------- */
+.t-grade {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border: 1px solid var(--line-2);
+  display: inline-block;
+  color: var(--ink-dim);
+  letter-spacing: 0.4px;
+}
+.t-grade-a { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.t-grade-b { color: var(--cyan);   border-color: color-mix(in srgb, var(--cyan)   40%, transparent); }
+.t-grade-c { color: #c084fc;       border-color: #4a2a6f; }
+.t-grade-d { color: var(--warn);   border-color: color-mix(in srgb, var(--warn)   40%, transparent); }
+.t-grade-f { color: var(--red);    border-color: color-mix(in srgb, var(--red)    40%, transparent); }
+.t-grade-na { color: var(--ink-muted); border-color: var(--line); border-style: dashed; }
+.t-grade-fwprod   { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.t-grade-fwusable { color: var(--cyan);   border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
+.t-grade-fwexp    { color: var(--warn);   border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+.t-cell-tools { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink-muted); margin-left: 6px; }
+.t-cell { display: inline-flex; align-items: center; gap: 4px; }
 </style>
 </head>
 <body>
@@ -691,9 +714,9 @@ table { border-collapse: collapse; width: 100%; }
       </div>
 
     </div>
-    <div class="results-count" id="testResultsCount"></div>
-    <div class="test-table-wrap">
-      <table class="test-table">
+    <div class="t-results-count mono" id="testResultsCount"></div>
+    <div class="t-table-wrap">
+      <table class="t-table" id="testTable">
         <thead id="testTableHead"></thead>
         <tbody id="testTableBody"></tbody>
       </table>
@@ -1735,6 +1758,15 @@ let testSearchQ = '';
 // --- Helpers ---
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
+function gradeClass(grade) {
+  if (!grade) return 't-grade t-grade-na';
+  const g = grade.toLowerCase();
+  if (g === 'a' || g === 'b' || g === 'c' || g === 'd' || g === 'f') return 't-grade t-grade-' + g;
+  if (g === 'production')   return 't-grade t-grade-fwprod';
+  if (g === 'usable')       return 't-grade t-grade-fwusable';
+  if (g === 'experimental') return 't-grade t-grade-fwexp';
+  return 't-grade t-grade-na';
+}
 function toolPillClass(type) {
   switch ((type || '').toLowerCase()) {
     case 'api':       return 't-pill t-pill-api';
@@ -3524,13 +3556,21 @@ function renderTesting() {
 
   document.getElementById('testResultsCount').textContent = `${total} decentralized & play-money PMs with dev tools`;
 
-  // Table head — PM · Category · Dev Tools · Agent Access · CLI/MCP · Skill · Framework
+  // Table head
   const toolCols = TEST_COLS.filter(c => c.key !== 'devTools');
-  const colSpan = 1 /*chevron*/ + 2 /*pm+cat*/ + 1 /*devtools*/ + 1 /*aa*/ + toolCols.length;
-  let headHtml = '<tr><th style="width:28px"></th><th>PM</th><th>Category</th><th>Dev Tools</th><th>Agent Access.</th>';
-  toolCols.forEach(c => { headHtml += `<th>${c.label}</th>`; });
-  headHtml += '</tr>';
-  document.getElementById('testTableHead').innerHTML = headHtml;
+  const colSpan = 8;
+  document.getElementById('testTableHead').innerHTML = `
+  <tr>
+    <th style="width:22px"></th>
+    <th class="sortable" data-tsort="name">Market</th>
+    <th class="sortable" data-tsort="category">Category</th>
+    <th class="num sortable" data-tsort="devcount">Dev tools</th>
+    <th class="sortable" data-tsort="aa">Agent Access</th>
+    <th class="sortable" data-tsort="cli">CLI / MCP</th>
+    <th class="sortable" data-tsort="skill">Skill</th>
+    <th class="sortable" data-tsort="framework">Framework</th>
+  </tr>
+`;
 
   // Table body
   let bodyHtml = '';
@@ -3540,41 +3580,40 @@ function renderTesting() {
     const aaRes = AA_RESULTS[pm.name];
     const devToolCount = pm.coreTools.length;
 
-    bodyHtml += `<tr class="test-pm-row" data-tidx="${i}">`;
-    bodyHtml += `<td><span class="chevron" id="tchev-${i}">&#9654;</span></td>`;
-    bodyHtml += `<td><div class="pm-name-cell"><a href="${esc(pm.website)}" target="_blank" onclick="event.stopPropagation()">${esc(pm.name)}</a></div></td>`;
-    bodyHtml += `<td><span class="badge ${catBadgeClass(pm.category)}">${esc(pm.category)}</span></td>`;
+    const initial = (pm.name[0] || '?').toUpperCase();
+    const catClass = pm.category === 'Decentralized' ? 't-cat-dec'
+                   : pm.category === 'Regulated/CeFi' ? 't-cat-cefi'
+                   : 't-cat-play';
 
-    // Dev Tools column (count)
-    bodyHtml += `<td><span class="test-cell-tools">${devToolCount}</span></td>`;
+    const aaCell = aaRes
+      ? `<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span><span class="t-cell-tools">${aaRes.score}/${AA_TOTAL_CHECKS}</span>`
+      : `<span class="${gradeClass(null)}">untested</span>`;
+    const tcell = key => {
+      const r = res[key];
+      if (!r || !r.grade) return `<span class="${gradeClass(null)}">—</span>`;
+      return `<span class="${gradeClass(r.grade)}">${r.grade}</span>`;
+    };
 
-    // AA column (no reach dot)
-    if (aaRes) {
-      const gClass = 'grade-' + aaRes.grade.toLowerCase();
-      bodyHtml += `<td><div class="test-cell"><span class="test-badge ${gClass}">${aaRes.grade}</span><span class="test-cell-tools">${aaRes.score}/${AA_TOTAL_CHECKS}</span></div></td>`;
-    } else {
-      bodyHtml += `<td><span class="test-badge untested">Untested</span></td>`;
-    }
-
-    // Tool columns (CLI/MCP, Skill, Framework — devTools already rendered above)
-    toolCols.forEach(c => {
-      const tools = cols[c.key] || [];
-      const result = res[c.key];
-      if (tools.length === 0 && !result) {
-        bodyHtml += `<td><span class="test-badge na">&mdash;</span></td>`;
-      } else if (result) {
-        const isFw = c.key === 'framework';
-        const fwGradeMap = {'Production':'fw-production','Usable':'fw-usable','Experimental':'fw-experimental','N/A':'fw-na'};
-        const gradeClass = result.status === 'ghost' ? 'ghost' : isFw ? (fwGradeMap[result.grade] || 'untested') : 'grade-' + result.grade.toLowerCase();
-        const label = result.status === 'ghost' ? 'Ghost' : result.grade;
-        bodyHtml += `<td><div class="test-cell"><span class="test-badge ${gradeClass}">${label}</span>`;
-        if (result.grade && !isFw) bodyHtml += `<span class="test-cell-tools">${result.grade}</span>`;
-        bodyHtml += `</div></td>`;
-      } else {
-        bodyHtml += `<td><span class="test-badge untested">${tools.length} tool${tools.length > 1 ? 's' : ''}</span></td>`;
-      }
-    });
-    bodyHtml += `</tr>`;
+    bodyHtml += `
+  <tr class="t-row" data-pm="${esc(pm.name)}">
+    <td class="t-chev">▶</td>
+    <td>
+      <div class="t-pm">
+        <div class="t-pm-glyph">${initial}</div>
+        <div>
+          <div class="t-pm-name">${esc(pm.name)}</div>
+          <div class="t-pm-meta">${esc((pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}</div>
+        </div>
+      </div>
+    </td>
+    <td><span class="t-cat ${catClass}">${esc(pm.category)}</span></td>
+    <td class="t-vol">${devToolCount}</td>
+    <td><span class="t-cell">${aaCell}</span></td>
+    <td>${tcell('cliMcp')}</td>
+    <td>${tcell('skill')}</td>
+    <td>${tcell('framework')}</td>
+  </tr>
+`;
 
     // Detail row
     bodyHtml += `<tr class="test-detail-row" id="tdetail-${i}"><td colspan="${colSpan}"><div class="test-detail-content">`;
