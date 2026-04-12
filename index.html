@@ -353,6 +353,26 @@ table { border-collapse: collapse; width: 100%; }
 .t-chain { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-dim); }
 .t-vol { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); text-align: right; }
 .t-vol-muted { color: var(--ink-muted); font-style: italic; font-size: 11px; }
+
+/* --- Tool pills ------------------------------------------- */
+.t-tools { display: flex; gap: 5px; flex-wrap: wrap; }
+.t-pill {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border: 1px solid var(--line-2);
+  color: var(--ink-dim);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+.t-pill-api    { color: var(--pill-api);   border-color: var(--pill-api-bd); }
+.t-pill-sdk    { color: var(--pill-sdk);   border-color: var(--pill-sdk-bd); }
+.t-pill-cli    { color: var(--pill-cli);   border-color: var(--pill-cli-bd); }
+.t-pill-mcp    { color: var(--pill-mcp);   border-color: var(--pill-mcp-bd); }
+.t-pill-skill  { color: var(--pill-skill); border-color: var(--pill-skill-bd); }
+.t-pill-fw     { color: var(--pill-fw);    border-color: var(--pill-fw-bd); }
+.t-pill-ws     { color: var(--pill-api);   border-color: var(--pill-api-bd); }
+.t-pill-none   { color: var(--ink-muted); border-color: transparent; padding-left: 0; }
 </style>
 </head>
 <body>
@@ -1538,6 +1558,25 @@ let searchQuery = '';
 // --- Helpers ---
 function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
+function toolPillClass(type) {
+  switch ((type || '').toLowerCase()) {
+    case 'api':       return 't-pill t-pill-api';
+    case 'sdk':       return 't-pill t-pill-sdk';
+    case 'websocket': return 't-pill t-pill-ws';
+    case 'cli':       return 't-pill t-pill-cli';
+    case 'mcp':       return 't-pill t-pill-mcp';
+    case 'skill':     return 't-pill t-pill-skill';
+    case 'framework': return 't-pill t-pill-fw';
+    default:          return 't-pill';
+  }
+}
+function toolPillLabel(type) {
+  const t = (type || '').toLowerCase();
+  if (t === 'websocket') return 'WS';
+  if (t === 'framework') return 'FW';
+  return (type || '').toUpperCase();
+}
+
 function catBadgeClass(cat) {
   if (cat === 'Decentralized') return 'badge-decentralized';
   if (cat === 'Regulated/CeFi') return 'badge-regulated';
@@ -1646,6 +1685,13 @@ function render() {
       ? esc(pm.volumeEstimate || '—')
       : `<span class="t-vol-muted">${esc(pm.volumeEstimate || 'undisclosed')}</span>`;
 
+    const devToolsHtml = pm.coreTools.length
+      ? `<div class="t-tools">${pm.coreTools.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
+      : `<span class="t-pill t-pill-none">—</span>`;
+    const aiToolsHtml = pm.aiTools.length
+      ? `<div class="t-tools">${pm.aiTools.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
+      : `<span class="t-pill t-pill-none">—</span>`;
+
     const rowHtml = `
   <tr class="t-row" data-pm="${esc(pm.name)}">
     <td class="t-chev">▶</td>
@@ -1661,8 +1707,8 @@ function render() {
     <td><span class="t-cat ${catClass}">${esc(pm.category)}</span></td>
     <td class="t-chain">${esc(pm.chain || '—')}</td>
     <td class="t-vol">${volDisplay}</td>
-    <td><!-- dev tools cell - filled by Task 9 --></td>
-    <td><!-- agent tools cell - filled by Task 9 --></td>
+    <td>${devToolsHtml}</td>
+    <td>${aiToolsHtml}</td>
   </tr>
 `;
     html += rowHtml;
