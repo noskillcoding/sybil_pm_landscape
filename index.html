@@ -373,6 +373,66 @@ table { border-collapse: collapse; width: 100%; }
 .t-pill-fw     { color: var(--pill-fw);    border-color: var(--pill-fw-bd); }
 .t-pill-ws     { color: var(--pill-api);   border-color: var(--pill-api-bd); }
 .t-pill-none   { color: var(--ink-muted); border-color: transparent; padding-left: 0; }
+
+/* --- Expanded detail row (Landscape) ---------------------- */
+.t-detail { display: none; }
+.t-detail.open { display: table-row; }
+.t-row.expanded { background: var(--bg-1) !important; }
+.t-row.expanded .t-chev { color: var(--accent); }
+.t-detail td { padding: 0; background: var(--bg-1); border-bottom: 1px solid var(--line); }
+.t-detail-inner {
+  padding: 20px 24px 24px 58px;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 32px;
+}
+.t-detail-h {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+}
+.t-detail-h::before { content: "// "; }
+.t-detail-about p {
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.65;
+}
+.t-detail-links {
+  margin-top: 16px;
+  display: flex;
+  gap: 14px;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+}
+.t-detail-links a { color: var(--ink-dim); border-bottom: 1px solid transparent; }
+.t-detail-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.t-detail-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.t-detail-tool {
+  border-left: 2px solid var(--line-2);
+  padding: 6px 0 6px 12px;
+}
+.t-detail-tool .t-dt-type {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--ink-muted);
+  margin-bottom: 2px;
+}
+.t-detail-tool .t-dt-name {
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.t-detail-tool .t-dt-desc {
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
 </style>
 </head>
 <body>
@@ -1711,9 +1771,52 @@ function render() {
     <td>${aiToolsHtml}</td>
   </tr>
 `;
-    html += rowHtml;
+    const allTools = [...pm.coreTools, ...pm.aiTools];
+    const detailToolsHtml = allTools.map(t => `
+  <div class="t-detail-tool">
+    <div class="t-dt-type">${esc((t.type || '').toLowerCase())}</div>
+    <div class="t-dt-name">${esc(t.name)}</div>
+    <div class="t-dt-desc">${esc(t.description || '')}</div>
+  </div>
+`).join('');
+
+    const linksHtml = [
+      pm.website ? `<a href="${esc(pm.website)}" target="_blank">website</a>` : '',
+      pm.twitter ? `<a href="${esc(pm.twitter)}" target="_blank">twitter</a>` : ''
+    ].filter(Boolean).join('');
+
+    const detailHtml = `
+  <tr class="t-detail" data-pm="${esc(pm.name)}">
+    <td colspan="7">
+      <div class="t-detail-inner">
+        <div class="t-detail-about">
+          <div class="t-detail-h">about</div>
+          <p>${esc(pm.description || '')}</p>
+          <div class="t-detail-links">${linksHtml}</div>
+        </div>
+        <div>
+          <div class="t-detail-h">toolchain · ${allTools.length}</div>
+          <div class="t-detail-tools-grid">${detailToolsHtml}</div>
+        </div>
+      </div>
+    </td>
+  </tr>
+`;
+    html += rowHtml + detailHtml;
   });
   document.getElementById('tableBody').innerHTML = html;
+
+  // Expand/collapse detail rows
+  document.querySelectorAll('#tableBody .t-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const isOpen = row.classList.toggle('expanded');
+      const detail = row.nextElementSibling;
+      if (detail && detail.classList.contains('t-detail')) {
+        detail.classList.toggle('open', isOpen);
+      }
+      row.querySelector('.t-chev').textContent = isOpen ? '▼' : '▶';
+    });
+  });
 
   // Event listeners
   bindEvents();
