@@ -459,6 +459,61 @@ table { border-collapse: collapse; width: 100%; }
 .t-grade-fwexp    { color: var(--warn);   border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
 .t-cell-tools { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink-muted); margin-left: 6px; }
 .t-cell { display: inline-flex; align-items: center; gap: 4px; }
+
+/* --- Testing detail row ----------------------------------- */
+.t-detail .methodology { margin-top: 0; padding-top: 0; border-top: 0; }
+.t-detail .m-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.t-detail .m-tab {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-dim);
+  text-transform: lowercase;
+  letter-spacing: 0.4px;
+  padding: 6px 14px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+.t-detail .m-tab:hover { color: var(--ink); }
+.t-detail .m-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.t-detail .methodology-content { display: none; }
+.t-detail .methodology-content.open { display: block; }
+
+.t-detail .m-checks-list,
+.t-detail .m-dim-block,
+.t-detail .m-check-item {
+  color: var(--ink-dim);
+  font-size: 12px;
+}
+.t-detail .m-dim-label {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-muted);
+  margin: 12px 0 6px;
+}
+.t-detail .m-check-num { color: var(--ink-muted); margin-right: 8px; }
+.t-detail .m-check-name { color: var(--ink); }
+.t-detail .m-check-why { color: var(--ink-dim); display: none; margin-left: 8px; }
+.t-detail .m-check-why.visible { display: inline; }
+.t-detail .m-show-more {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+.t-detail .m-show-more:hover { color: var(--ink); border-color: var(--line-2); }
 </style>
 </head>
 <body>
@@ -3616,7 +3671,7 @@ function renderTesting() {
 `;
 
     // Detail row
-    bodyHtml += `<tr class="test-detail-row" id="tdetail-${i}"><td colspan="${colSpan}"><div class="test-detail-content">`;
+    bodyHtml += `<tr class="t-detail" data-pm="${esc(pm.name)}"><td colspan="8"><div class="t-detail-inner" style="grid-template-columns: 1fr;">`;
 
     // Dev tools list
     const allTools = [...pm.coreTools, ...pm.aiTools];
@@ -3878,20 +3933,14 @@ function renderTesting() {
   document.getElementById('testTableBody').innerHTML = bodyHtml;
 
   // Bind expand/collapse
-  document.querySelectorAll('.test-pm-row').forEach(row => {
+  document.querySelectorAll('#testTableBody .t-row').forEach(row => {
     row.addEventListener('click', () => {
-      const idx = row.dataset.tidx;
-      const detail = document.getElementById('tdetail-' + idx);
-      const chev = document.getElementById('tchev-' + idx);
-      const isOpen = detail.classList.contains('open');
-      document.querySelectorAll('.test-detail-row.open').forEach(d => d.classList.remove('open'));
-      document.querySelectorAll('.test-pm-row.expanded').forEach(r => r.classList.remove('expanded'));
-      document.querySelectorAll('#testingView .chevron.open').forEach(c => c.classList.remove('open'));
-      if (!isOpen) {
-        detail.classList.add('open');
-        row.classList.add('expanded');
-        chev.classList.add('open');
+      const isOpen = row.classList.toggle('expanded');
+      const detail = row.nextElementSibling;
+      if (detail && detail.classList.contains('t-detail')) {
+        detail.classList.toggle('open', isOpen);
       }
+      row.querySelector('.t-chev').textContent = isOpen ? '▼' : '▶';
     });
   });
 }
