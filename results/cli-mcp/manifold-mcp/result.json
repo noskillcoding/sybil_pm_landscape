@@ -1,0 +1,97 @@
+{
+  "pm": "Manifold",
+  "tool": "manifold-mcp-server",
+  "toolType": "MCP",
+  "version": "0.1.0",
+  "chain": "None (play money)",
+  "currency": "Mana",
+  "testedAt": "2026-04-08",
+  "checklistVersion": "unified-v1",
+  "sections": {
+    "setup": {
+      "S1_initialize": "PASS",
+      "S2_list_tools": "PASS",
+      "S3_auth": "PASS",
+      "S4_balance": "PASS",
+      "score": "4/4"
+    },
+    "discovery": {
+      "D1_list_markets": "PASS",
+      "D2_market_detail": "PASS",
+      "D3_data_quality": "PASS",
+      "D4_keyword_search": "PASS",
+      "D5_schema_consistency": "PASS",
+      "score": "5/5"
+    },
+    "trading": {
+      "T1_preview_cost": "FAIL",
+      "T2_place_bet": "PASS",
+      "T3_check_position": "PASS",
+      "T4_sell_position": "PASS",
+      "T5_balance_roundtrip": "PASS",
+      "score": "4/5"
+    },
+    "errorHandling": {
+      "E1_over_balance": "PASS",
+      "E2_invalid_inputs": "PASS",
+      "E3_nonexistent_market": "PASS",
+      "E4_recovery": "PASS",
+      "score": "4/4"
+    }
+  },
+  "score": {
+    "passed": 17,
+    "total": 18
+  },
+  "grade": "A",
+  "metadata": {
+    "toolCount": 9,
+    "tools": [
+      "search_markets",
+      "get_market",
+      "get_user",
+      "place_bet",
+      "cancel_bet",
+      "sell_shares",
+      "add_liquidity",
+      "get_positions",
+      "send_mana"
+    ],
+    "protocolVersion": "2024-11-05",
+    "serverName": "manifold-markets",
+    "mechanism": "cpmm-1 (AMM)",
+    "marketUsedForTrading": {
+      "id": "lCdu8E6ySc",
+      "question": "Will I think all AI hell broke loose in 2026?",
+      "creator": "EliezerYudkowsky",
+      "probability": 0.20
+    },
+    "preTradeBalance": 1100.0,
+    "postTradeBalance": 1100.0,
+    "roundTripDelta": 0.0,
+    "betAmount": 10,
+    "sharesReceived": 49.53,
+    "feesOnTrade": 0
+  },
+  "keyFindings": [
+    "Full buy/sell cycle works with zero fees and negligible slippage on small bets",
+    "9 tools implemented covering search, market detail, user info, betting, selling, positions, liquidity, and mana transfer",
+    "No preview/cost estimation tool — only failure. Agent must calculate expected cost from pool state (CPMM formula is deterministic)",
+    "sell_shares requires explicit 'outcome' param despite schema listing it as optional — minor API bug",
+    "Error messages are structured JSON-RPC but sometimes vague ('Forbidden' for insufficient balance instead of descriptive message)",
+    "Supports limit orders via limitProb parameter on place_bet, and cancel_bet for limit order cancellation",
+    "Server recovers cleanly after errors with no state corruption"
+  ],
+  "blockers": [],
+  "agentReadiness": {
+    "canDiscoverMarkets": true,
+    "canReadProbabilities": true,
+    "canPlaceBets": true,
+    "canSellPositions": true,
+    "canCheckBalance": true,
+    "canCheckPositions": true,
+    "canEstimateCost": false,
+    "canHandleErrors": true,
+    "verdict": "Ready for AI trading agent use. All core operations (discover, bet, sell, monitor) work reliably. The missing cost preview is a minor gap — an agent can compute expected cost from the CPMM pool state returned by get_market."
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "pm": "Polymarket",
+  "tool": "polymarket-cli",
+  "toolType": "CLI",
+  "version": "0.1.5",
+  "chain": "Polygon",
+  "currency": "USDCe",
+  "testedAt": "2026-04-10",
+  "checklistVersion": "unified-v1",
+  "sections": {
+    "setup": {
+      "checks": {
+        "S1": {
+          "id": "S1",
+          "name": "Install + version",
+          "status": "PASS",
+          "command": "/tmp/poly --version",
+          "output": "polymarket 0.1.5",
+          "evidence": "Clean version string returned"
+        },
+        "S2": {
+          "id": "S2",
+          "name": "Help / list commands",
+          "status": "PASS",
+          "command": "/tmp/poly --help",
+          "output": "18 top-level commands: setup, shell, markets, events, tags, series, comments, profiles, sports, approve, clob, ctf, data, bridge, wallet, status, upgrade, help",
+          "evidence": "Rich command set with -o json global flag, --private-key and --signature-type options"
+        },
+        "S3": {
+          "id": "S3",
+          "name": "Auth",
+          "status": "PASS",
+          "command": "/tmp/poly wallet show -o json",
+          "output": "{\"address\":\"0x165E...661b\",\"configured\":true,\"proxy_address\":\"0x7026...0107\",\"signature_type\":\"eoa\",\"source\":\"--private-key flag\"}",
+          "evidence": "Private key via env var works. Shows EOA and proxy addresses, config path, key source."
+        },
+        "S4": {
+          "id": "S4",
+          "name": "Balance",
+          "status": "PASS",
+          "command": "/tmp/poly clob balance --asset-type collateral -o json",
+          "output": "{\"balance\":\"4.257798\",\"allowances\":{\"CTF\":\"max\",\"NegRisk\":\"max\",\"NegRiskAdapter\":\"max\"}}",
+          "evidence": "Returns structured JSON with per-contract allowances and balance. Requires --signature-type eoa for EOA funds."
+        }
+      }
+    },
+    "discovery": {
+      "checks": {
+        "D1": {
+          "id": "D1",
+          "name": "List markets",
+          "status": "PASS",
+          "command": "/tmp/poly markets list --limit 5 -o json",
+          "output": "5 markets returned with 156 fields each. Supports --limit, --offset, --closed filters.",
+          "evidence": "Each market has id, question, slug, conditionId, clobTokenIds, outcomes, outcomePrices, volume, liquidity, active, closed, endDate, etc."
+        },
+        "D2": {
+          "id": "D2",
+          "name": "Market detail",
+          "status": "PASS",
+          "command": "/tmp/poly markets get \"russia-ukraine-ceasefire-before-gta-vi-554\" -o json",
+          "output": "Full market object with nested events, clobRewards, resolution details. Same 156-key schema.",
+          "evidence": "Accepts slug as positional arg. Returns complete market data with event grouping."
+        },
+        "D3": {
+          "id": "D3",
+          "name": "Orderbook quality",
+          "status": "PASS",
+          "command": "/tmp/poly clob book <TOKEN_ID> -o json",
+          "output": "47 bid levels (0.01-0.51), 30 ask levels (0.53-0.99), includes tick_size, min_order_size, last_trade_price",
+          "evidence": "Deep, well-structured orderbook. Note: token ID is positional arg, not --token flag despite help text."
+        },
+        "D4": {
+          "id": "D4",
+          "name": "Search",
+          "status": "FAIL",
+          "command": "/tmp/poly events search \"bitcoin\" -o json",
+          "output": "error: unrecognized subcommand 'search'",
+          "evidence": "No search command exists. Only tag-based filtering via events list --tag. Agent cannot search by keyword."
+        },
+        "D5": {
+          "id": "D5",
+          "name": "Schema consistency",
+          "status": "PASS",
+          "command": "/tmp/poly markets list --limit 5 -o json (compare schemas)",
+          "output": "156 common keys across 5 markets, 0 extra keys per market",
+          "evidence": "Perfectly consistent 156-field schema across all markets tested."
+        }
+      }
+    },
+    "trading": {
+      "checks": {
+        "T1": {
+          "id": "T1",
+          "name": "Preview / dry-run",
+          "status": "FAIL",
+          "command": "/tmp/poly clob create-order --help",
+          "output": "No --dry-run, --preview, or --simulate flag on any order command",
+          "evidence": "All orders are live-only. No way to preview cost, fees, or expected fill before submission."
+        },
+        "T2": {
+          "id": "T2",
+          "name": "Limit order + verify",
+          "status": "PASS",
+          "command": "/tmp/poly clob create-order --token <TOKEN> --side buy --price 0.01 --size 10 --order-type GTC -o json",
+          "output": "{\"success\":true,\"status\":\"LIVE\",\"order_id\":\"0x7fd2...\"}",
+          "evidence": "GTC limit order placed at 0.01 (far from mid ~0.52). Verified via clob orders: status=LIVE, size_matched=0, order_type=GTC."
+        },
+        "T3": {
+          "id": "T3",
+          "name": "Cancel + verify",
+          "status": "PASS",
+          "command": "/tmp/poly clob cancel <ORDER_ID> -o json",
+          "output": "{\"canceled\":[\"0x7fd2...\"],\"not_canceled\":{}}",
+          "evidence": "Cancel succeeded on first attempt. Verified via clob orders: 0 open orders remaining."
+        },
+        "T4": {
+          "id": "T4",
+          "name": "Market buy + position",
+          "status": "PASS",
+          "command": "/tmp/poly clob market-order --token <TOKEN> --side buy --amount 1 -o json",
+          "output": "{\"success\":true,\"status\":\"MATCHED\",\"making_amount\":\"0.999999\",\"taking_amount\":\"1.886791\",\"transaction_hashes\":[\"0x7f80...\"]}",
+          "evidence": "Filled instantly. Spent $1, received ~1.89 YES shares at ~$0.53. Position confirmed via data positions: size=1.8966."
+        },
+        "T5": {
+          "id": "T5",
+          "name": "Sell + balance delta",
+          "status": "PASS",
+          "command": "/tmp/poly clob market-order --token <TOKEN> --side sell --amount 1.89 -o json",
+          "output": "{\"success\":true,\"status\":\"MATCHED\",\"making_amount\":\"1.89\",\"taking_amount\":\"0.9639\"}",
+          "evidence": "Sold 1.89 shares at ~$0.51. Pre-trade: 4.2578, Post-buy: 3.2578, Post-sell: 4.2217. Net loss: $0.036 (0.85%). Position fully closed. Within 5% tolerance."
+        }
+      }
+    },
+    "errors": {
+      "checks": {
+        "E1": {
+          "id": "E1",
+          "name": "Insufficient balance",
+          "status": "PASS",
+          "command": "/tmp/poly clob create-order --token <TOKEN> --side buy --price 0.01 --size 10000 -o json",
+          "output": "{\"error\":\"not enough balance / allowance: balance: 0, order amount: 100000000\"}",
+          "evidence": "Structured JSON error with actual balance and required amount. Clear message. HTTP 400."
+        },
+        "E2": {
+          "id": "E2",
+          "name": "Invalid inputs",
+          "status": "FAIL",
+          "command": "size=0, size=-1, price=-1",
+          "output": "size=0: JSON error (good). size=-1: arg parser plain-text error (bad). price=-1: same (bad).",
+          "evidence": "1/3 return JSON. Negative values parsed as CLI flags by arg parser, producing non-JSON error. Agent-hostile for boundary inputs."
+        },
+        "E3": {
+          "id": "E3",
+          "name": "Resolved market",
+          "status": "PASS",
+          "command": "/tmp/poly clob create-order (with closed market token) -o json",
+          "output": "{\"error\":\"fee rate not found for market\"}",
+          "evidence": "Server rejects order on closed market. Error is JSON but indirect — 'fee rate not found' instead of 'market closed'."
+        },
+        "E4": {
+          "id": "E4",
+          "name": "Error recovery",
+          "status": "PASS",
+          "command": "/tmp/poly markets get nonexistent-slug -o json && /tmp/poly markets get <valid-slug> -o json",
+          "output": "404 error, then valid response",
+          "evidence": "Stateless CLI. No state corruption after error. Subsequent commands work normally."
+        }
+      }
+    }
+  },
+  "score": {
+    "passed": 14,
+    "total": 18
+  },
+  "grade": "B",
+  "gradeReason": "14/18 checks passed. Failures: D4 (no keyword search), T1 (no preview/dry-run), E2 (negative inputs break JSON output). All trading operations (limit, cancel, market buy, sell) work flawlessly in EOA mode. Deep orderbook data, consistent 156-field schemas, and 42 CLOB subcommands make this the most feature-rich PM CLI tested.",
+  "metadata": {
+    "walletEOA": "0x165E392409f3C0bA092Ae9Aa290B6AE57B1b661b",
+    "walletProxy": "0x70262b80988E317A2a32f963A99A9aD03dC3F107",
+    "signatureType": "eoa",
+    "topLevelCommands": 18,
+    "clobSubcommands": 42,
+    "marketSchemaFields": 156,
+    "orderbookBidLevels": 47,
+    "orderbookAskLevels": 30,
+    "preTradeBalance": 4.257798,
+    "postTradeBalance": 4.221699,
+    "roundTripDelta": -0.036,
+    "roundTripDeltaPct": -0.85,
+    "marketUsedForTrading": {
+      "slug": "russia-ukraine-ceasefire-before-gta-vi-554",
+      "question": "Russia-Ukraine Ceasefire before GTA VI?",
+      "probability": 0.525,
+      "volume": 1454816
+    },
+    "betAmount": 1.0,
+    "sharesReceived": 1.887,
+    "sellAmount": 1.89,
+    "sellProceeds": 0.964,
+    "feesOnTrade": "included in spread"
+  },
+  "keyFindings": [
+    "Most feature-rich PM CLI: 42 CLOB subcommands covering trading, rewards, notifications, API keys, batch operations",
+    "156-field market schema is perfectly consistent — excellent for programmatic parsing",
+    "Full trading lifecycle works in EOA mode: limit order, cancel, market buy, market sell all succeed on first attempt",
+    "Deep orderbook data (47 bids, 30 asks) with tick size, min order size, last trade price metadata",
+    "Proxy mode (default) traps funds: CLOB balance shows 0 even with USDCe on EOA — must use --signature-type eoa",
+    "No keyword search — only tag-based filtering via events list --tag. Agent must iterate paginated lists",
+    "No dry-run/preview for orders — all submissions are live, no cost estimation",
+    "Negative input values (-1) break JSON output — arg parser treats them as flags, emits plain text",
+    "Closed market rejection error is indirect: 'fee rate not found' instead of 'market closed/resolved'",
+    "Geoblock enforcement active — requires VPN from non-restricted country (tested via Japan)"
+  ],
+  "blockers": [
+    "Proxy mode (CLI default) requires external tooling to fund proxy wallet. An agent must know to set --signature-type eoa for direct EOA trading, or use cast/web UI to transfer funds to proxy.",
+    "No text search for market discovery — only tag-based filtering. Agent must know exact tags or iterate all markets.",
+    "No order preview/simulation — agent cannot estimate costs before committing real funds."
+  ]
+}

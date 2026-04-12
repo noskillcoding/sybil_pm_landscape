@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["pm", "tool", "toolType", "version", "chain", "testedAt", "sections", "score", "grade"],
+  "properties": {
+    "pm": { "type": "string" },
+    "tool": { "type": "string" },
+    "toolType": { "type": "string", "enum": ["CLI", "MCP"] },
+    "version": { "type": "string" },
+    "chain": { "type": "string" },
+    "currency": { "type": "string" },
+    "testedAt": { "type": "string", "format": "date" },
+    "checklistVersion": { "type": "string", "const": "unified-v1" },
+    "sections": {
+      "type": "object",
+      "properties": {
+        "setup": { "$ref": "#/$defs/section" },
+        "discovery": { "$ref": "#/$defs/section" },
+        "trading": { "$ref": "#/$defs/section" },
+        "errors": { "$ref": "#/$defs/section" }
+      }
+    },
+    "score": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "integer" },
+        "total": { "type": "integer", "const": 18 }
+      }
+    },
+    "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+    "gradeReason": { "type": "string" },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "auth": { "type": "string", "enum": ["none", "env_var", "wallet_sign", "browser", "kyc"] },
+        "outputQuality": { "type": "string", "enum": ["json", "text", "mixed"] },
+        "hasPreview": { "type": "boolean" },
+        "hasFeeInfo": { "type": "boolean" }
+      }
+    },
+    "keyFindings": { "type": "array", "items": { "type": "string" } },
+    "blockers": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "properties": {
+        "checks": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/check" }
+        }
+      }
+    },
+    "check": {
+      "type": "object",
+      "required": ["id", "name", "status"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string", "enum": ["PASS", "FAIL", "SKIP", "BLOCKED"] },
+        "command": { "type": "string" },
+        "output": { "type": "string", "description": "First 300 chars" },
+        "evidence": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "pm": "Myriad",
+  "slug": "myriad",
+  "website": "https://myriad.markets",
+  "reachability": "cf-blocked",
+  "score": 12,
+  "grade": "B",
+  "checks": {
+    "1.1": { "pass": false, "note": "Both myriad.markets/llms.txt and docs.myriad.markets/llms.txt return 404" },
+    "1.2": { "pass": false, "note": "Accept: text/markdown returns HTML, no markdown negotiation" },
+    "1.3": { "pass": true, "note": "meta name=description: 'Trade predictions on Myriad'" },
+    "2.1": { "pass": true, "note": "SSR HTML with market titles, text content without JS" },
+    "2.2": { "pass": true, "note": "nav (3), main (1), header (2), footer (1) = 4 semantic tags" },
+    "2.3": { "pass": true, "note": "e.g. /markets/will-donald-trump-visit-china-before-may-2026" },
+    "2.4": { "pass": false, "note": "/sitemap.xml returns 404" },
+    "2.5": { "pass": true, "note": "/this-does-not-exist-xyz123 returns HTTP 404" },
+    "3.1": { "pass": true, "note": "docs.myriad.markets has full docs: trading, builders, API, SDK" },
+    "3.2": { "pass": true, "note": "Footer links to docs.myriad.markets from homepage" },
+    "3.3": { "pass": true, "note": "REST API endpoints, JS SDK (polkamarkets-js), CLI documented" },
+    "3.4": { "pass": true, "note": "Standard <a href> links for markets, topics, external pages" },
+    "4.1": { "pass": true, "note": "robots.txt only disallows /profile; AI crawlers not blocked" },
+    "4.2": { "pass": true, "note": "No CAPTCHA/challenge in HTML (CF present but not blocking)" },
+    "4.3": { "pass": true, "note": "AI Agents & LLMs page with CLI, MCP tools, npm package docs" }
+  },
+  "tested": "2026-03-31"
+}

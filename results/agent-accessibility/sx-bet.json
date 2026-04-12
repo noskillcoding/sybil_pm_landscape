@@ -1,0 +1,26 @@
+{
+  "pm": "SX Bet",
+  "slug": "sx-bet",
+  "website": "https://sx.bet",
+  "reachability": "cf-blocked",
+  "score": 8,
+  "grade": "C",
+  "checks": {
+    "1.1": { "pass": true, "note": "docs.sx.bet/llms.txt exists, starts with # SX Bet Documentation" },
+    "1.2": { "pass": false, "note": "CF blocks non-browser requests; docs.sx.bet returns HTML not markdown" },
+    "1.3": { "pass": true, "note": "meta description present with platform summary" },
+    "2.1": { "pass": false, "note": "CF challenge page only; no real content without JS/browser" },
+    "2.2": { "pass": false, "note": "Only nav tag found (1 semantic tag); needs 3+" },
+    "2.3": { "pass": true, "note": "/soccer/la-liga/1X2 — readable sport/league/market-type slugs" },
+    "2.4": { "pass": true, "note": "docs.sx.bet/sitemap.xml valid with API reference URLs" },
+    "2.5": { "pass": false, "note": "Non-existent URL returns 403 CF challenge, not 404" },
+    "3.1": { "pass": true, "note": "docs.sx.bet has full dev docs: API ref, WebSocket, guides" },
+    "3.2": { "pass": true, "note": "Footer links to API Documentation and SX Bet Docs" },
+    "3.3": { "pass": true, "note": "REST endpoints, WebSocket API, Python/JS examples documented" },
+    "3.4": { "pass": true, "note": "Standard a href links throughout site and docs" },
+    "4.1": { "pass": true, "note": "docs.sx.bet robots.txt allows all except /cdn-cgi/" },
+    "4.2": { "pass": false, "note": "Cloudflare managed challenge on sx.bet (403 + cf-mitigated)" },
+    "4.3": { "pass": false, "note": "llms.txt exists but no explicit bot/agent policy document" }
+  },
+  "tested": "2026-03-31"
+}

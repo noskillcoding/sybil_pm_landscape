@@ -1,0 +1,77 @@
+{
+  "subject": "Hedgehog Markets",
+  "url": "https://www.hedgehog.markets",
+  "test_date": "2026-03-31",
+  "reachability": "open",
+  "reachability_detail": "HTTP 200 with real content. Next.js SSR app, no CAPTCHA or challenge page.",
+
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "detail": "hedgehog.markets/llms.txt returns 404. docs.hedgehog.markets/llms.txt unreachable (expired SSL certificate)."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "detail": "No evidence of Accept: text/markdown content negotiation. Server returns HTML regardless."
+    },
+    "1.3_structured_metadata": {
+      "pass": false,
+      "detail": "No meta description tag found. No JSON-LD structured data. No OpenGraph tags detected in rendered HTML."
+    },
+    "2.1_content_without_js": {
+      "pass": true,
+      "detail": "Next.js SSR provides real text content in HTML: headings ('Bet. On. Anything.'), navigation labels, category filters. Not a blank JS shell."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "detail": "Primarily div-based layout with Tailwind classes. No explicit nav, main, article, header, or footer semantic elements detected."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "detail": "URLs use readable paths: /versus, /markets, /create/custom, /versus/solana/[id]. Category-based routing."
+    },
+    "2.4_sitemap_xml": {
+      "pass": false,
+      "detail": "sitemap.xml returns 404."
+    },
+    "2.5_proper_404s": {
+      "pass": true,
+      "detail": "/this-does-not-exist-xyz123 returns HTTP 404 status code (not a soft 200)."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": false,
+      "detail": "docs.hedgehog.markets has expired SSL certificate and is unreachable. /docs returns 404. No GitBook or alternate docs found."
+    },
+    "3.2_docs_findable": {
+      "pass": false,
+      "detail": "No documentation links found anywhere on the main site navigation. No links to docs, API, developers, help, or FAQ."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": false,
+      "detail": "No API documentation, SDK references, or programmatic integration docs found anywhere."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "detail": "Standard <a href> links used for navigation: /, /versus, /markets, /create/custom."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": true,
+      "detail": "robots.txt exists. No AI-specific crawler blocks. User-agent: * allows / (only /products disallowed). Social bots explicitly allowed for /markets."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "detail": "No CAPTCHA, challenge page, or bot verification detected."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "detail": "No bot policy, agent documentation, or AI usage guidelines found."
+    }
+  },
+
+  "score": {
+    "total_passed": 6,
+    "total_checks": 15,
+    "grade": "D",
+    "summary": "Hedgehog Markets passes basic reachability and bot-friendliness (no CAPTCHA, robots.txt allows crawlers, proper 404s, SSR content, readable URLs, standard links). However it fails on discoverability and documentation: no llms.txt, no structured metadata, no sitemap, no semantic HTML, and critically, the docs subdomain has an expired SSL certificate making all documentation inaccessible. No API or developer docs are findable."
+  }
+}

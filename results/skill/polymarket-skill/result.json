@@ -1,0 +1,116 @@
+{
+  "pm": "Polymarket",
+  "skill": "Polymarket Agent Skills (SKILL.md)",
+  "skillUrl": "https://raw.githubusercontent.com/Polymarket/agent-skills/main/SKILL.md",
+  "skillFormat": "pure-docs",
+  "testDate": "2026-04-10",
+  "milestones": {
+    "M1": {
+      "status": "PASS",
+      "summary": "Skill covers full Polymarket integration: L1/L2 auth, order placement (GTC/GTD/FOK/FAK), market data (Gamma API, CLOB, Data API), WebSocket, CTF operations, bridge, gasless. Auth method: EIP-712 (L1) to derive API creds, then HMAC-SHA256 (L2) for trading.",
+      "skillSaid": "Two-level auth with SDK clients. TypeScript and Python examples provided.",
+      "agentDid": "Read SKILL.md + 3 reference files. Understood auth flow, order patterns, and market data sources."
+    },
+    "M2": {
+      "status": "PASS",
+      "summary": "Successfully authenticated via Python SDK. Derived API creds and verified with balance check (4.221699 USDC).",
+      "skillSaid": "ClobClient(host, key=pk, chain_id=137) then create_or_derive_api_creds(), then full client with creds/signature_type/funder.",
+      "agentDid": "Followed pattern. Hit minor SDK naming mismatches (api_secret vs secret, BalanceAllowanceParams vs dict). Auth succeeded."
+    },
+    "M3": {
+      "status": "PASS",
+      "summary": "Found 10+ active markets via Gamma API. Identified liquid tradeable markets with mid-range prices.",
+      "skillSaid": "GET gamma-api.polymarket.com/events?active=true&closed=false. Supports order=volume_24hr sorting.",
+      "agentDid": "Fetched events successfully. Note: order=volume_24hr returned validation error (not a valid sort parameter). Used default ordering + manual filtering."
+    },
+    "M4": {
+      "status": "PASS",
+      "summary": "Got full orderbook data for 'Bitcoin $1M before GTA VI' market. Price endpoints: mid=$0.4885, buy=$0.488, sell=$0.489, spread=0.001.",
+      "skillSaid": "GET /book?token_id=, GET /price?token_id=&side=, GET /midpoint, GET /spread.",
+      "agentDid": "All REST endpoints worked. Discovered that /book returns raw complement orderbook while /price, /midpoint, /spread return derived prices. Skill doesn't explain this distinction."
+    },
+    "M5": {
+      "status": "PASS",
+      "summary": "Placed GTC BUY order: 5 YES shares at $0.489, matched immediately. Cost: $2.445.",
+      "skillSaid": "client.create_and_post_order(OrderArgs(...), options={'tick_size': ..., 'neg_risk': ...}, order_type=OrderType.GTC)",
+      "agentDid": "Used create_and_post_order. Hit 3 SDK mismatches: (1) options must be PartialCreateOrderOptions not dict, (2) no order_type param (defaults GTC), (3) minor. All fixable."
+    },
+    "M6": {
+      "status": "PASS",
+      "summary": "Verified position: 5 YES shares held, USDC reduced by $2.445 as expected.",
+      "skillSaid": "get_balance_allowance with conditional token type.",
+      "agentDid": "Confirmed 5M raw units (5 shares) on YES token. Collateral reduced from 4.221699 to 1.776699."
+    },
+    "M7": {
+      "status": "PASS",
+      "summary": "Sold position. First sell at $0.489 rested (live). Cancelled, resold at $0.488 and matched. Received $2.44.",
+      "skillSaid": "Same create_and_post_order with side=SELL. Cancel with client.cancel(order_id).",
+      "agentDid": "Required 2 attempts. Cancel API worked as documented. Sell at best bid rested; one tick lower matched."
+    },
+    "M8": {
+      "status": "PASS",
+      "summary": "Final balance: 4.216699 USDC. Delta: -$0.005 (spread cost on 5 shares at 0.001 tick).",
+      "skillSaid": "N/A (verification step).",
+      "agentDid": "Confirmed zero conditional balance, zero open orders, clean round trip with minimal spread loss."
+    }
+  },
+  "score": "8/8",
+  "grade": "A",
+  "skillAssessment": {
+    "overall": "Good reference documentation that enables a competent developer to trade on Polymarket. All core flows work. Several SDK API mismatches between the docs and actual py-clob-client v0.34.6 reduce friction-free usability.",
+    "strengths": [
+      "Comprehensive coverage of all Polymarket functionality (auth, orders, data, WS, CTF, bridge, gasless)",
+      "Clear two-level auth flow with code examples for both TypeScript and Python",
+      "Good contract address reference table",
+      "Order type reference table (GTC/GTD/FOK/FAK) is accurate and useful",
+      "Error codes table aids debugging",
+      "Modular reference file structure (load on demand) reduces cognitive load"
+    ],
+    "weaknesses": [
+      "SDK API mismatches: skill shows dict options but SDK requires typed PartialCreateOrderOptions",
+      "SDK API mismatches: skill shows order_type as 3rd arg to create_and_post_order but SDK has no such param",
+      "SDK API mismatches: skill uses 'secret'/'passphrase' attribute names but SDK uses 'api_secret'/'api_passphrase'",
+      "Gamma API: order=volume_24hr sort parameter documented but returns validation error",
+      "Raw orderbook vs derived price distinction not explained — /book shows complement, /price shows derived. Critical for understanding Polymarket's binary market model",
+      "No guidance on when a sell order will rest vs match at the bid price",
+      "Minimum order size mentioned but not in the quick-start order example",
+      "Missing proxy/VPN guidance for geo-restricted access"
+    ],
+    "frictionPoints": [
+      "3 separate try-fix cycles needed for SDK mismatches in Python",
+      "Market selection confusing because Gamma API reports derived bid/ask but raw CLOB shows complement orderbook",
+      "Sell at reported 'best bid' price actually rests — needed to go one tick below to match"
+    ]
+  },
+  "methodUsed": "Python SDK (py-clob-client v0.34.6) with SOCKS5 proxy",
+  "vpnRequired": true,
+  "keyFindings": [
+    "Skill is comprehensive and covers the full Polymarket integration surface area",
+    "All 8 milestones passed — full trade cycle completed successfully",
+    "3-4 SDK API naming/signature mismatches between skill doc and actual py-clob-client v0.34.6",
+    "Gamma API sort parameter (order=volume_24hr) documented incorrectly",
+    "Critical conceptual gap: raw CLOB orderbook shows complement tokens, not the derived prices shown by /price endpoint",
+    "Trade executed: bought 5 YES shares at $0.489, sold at $0.488, net cost $0.005 (spread)",
+    "Pure-docs format works well — agent successfully wrote its own code following the patterns",
+    "Python ALL_PROXY env var with httpx[socks] worked for VPN; Node.js would have been harder"
+  ],
+  "blockers": [],
+  "tradeDetails": {
+    "market": "Will bitcoin hit $1m before GTA VI?",
+    "conditionId": "0xbb57ccf5853a85487bc3d83d04d669310d28c6c810758953b9d9b91d1aee89d2",
+    "tokenId": "105267568073659068217311993901927962476298440625043565106676088842803600775810",
+    "buyOrderId": "0x59998929321cbbd46dfd1bd5b241dc5d3ddd7fcd4d1479b23fe0a29ba187c367",
+    "buyPrice": 0.489,
+    "buySize": 5,
+    "buyCost": 2.445,
+    "buyTx": "0x97fcb6f87a8a3bb982a77fedc3ccf2059341d473d24e42d81af44d4cb4209e56",
+    "sellOrderId": "0x7ce09b56f166b19cff9fb6cbf4ccd6b559dd3114d79fa0d93a78e4f727d9f051",
+    "sellPrice": 0.488,
+    "sellSize": 5,
+    "sellProceeds": 2.44,
+    "sellTx": "0xb554d3c8684faa485366cb565fb1f95dec558119efb62d713166acef60ace8f0",
+    "initialBalance": 4.221699,
+    "finalBalance": 4.216699,
+    "delta": -0.005
+  }
+}

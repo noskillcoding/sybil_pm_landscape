@@ -1,0 +1,80 @@
+{
+  "platform": "Manifold",
+  "url": "https://manifold.markets",
+  "testDate": "2026-03-31",
+  "reachability": "open",
+  "httpStatus": 200,
+  "grade": "B",
+  "score": 11,
+  "maxScore": 15,
+  "checks": {
+    "discovery": {
+      "1.1_llms_txt": {
+        "pass": false,
+        "details": "manifold.markets/llms.txt returns HTTP 200 but body is HTML 404 page ('404: Oops! Less than 1% chance anything exists at this url'). docs.manifold.markets/llms.txt returns real HTTP 404. Neither provides actual llms.txt content. Classic false-200 pattern on main domain."
+      },
+      "1.2_markdown_negotiation": {
+        "pass": false,
+        "details": "Accept: text/markdown returns same HTML page (content-type: text/html; charset=utf-8). No markdown content negotiation."
+      },
+      "1.3_structured_metadata": {
+        "pass": true,
+        "details": "Has meta name='description' ('Manifold is a social prediction game. Bet on news, politics, tech, & AI with play money.'), og:description, og:title, og:image, og:url, og:site_name, twitter:card, twitter:site, twitter:image. Rich OpenGraph and Twitter Card metadata."
+      }
+    },
+    "crawlability": {
+      "2.1_content_without_js": {
+        "pass": true,
+        "details": "Next.js SSR delivers real HTML content without JS. Navigation links (Browse, Predictle, About), category buttons (Politics, Technology, Sports, Culture, Business, Fun), search input, sign-up CTA all rendered server-side. Market listings show loading skeletons (animate-pulse divs) but structural content is present."
+      },
+      "2.2_semantic_html": {
+        "pass": false,
+        "details": "Only 2 semantic tags found: <nav> (sidebar + mobile bottom nav) and <main>. Missing <article>, <header>, <footer>, <section>, <aside>. Footer content is a plain div with copyright text, not a <footer> element. Needs 3+ to pass."
+      },
+      "2.3_readable_url_slugs": {
+        "pass": true,
+        "details": "Markets use /{username}/{slug} pattern, e.g. /MartinRandall/will-joe-biden-win-the-2024-preside. Human-readable slugs derived from market titles."
+      },
+      "2.4_sitemap_xml": {
+        "pass": true,
+        "details": "Valid XML sitemap at /sitemap.xml with proper XML declaration, urlset namespace, 7 URL entries with loc/changefreq/priority. Also references /server-sitemap.xml in robots.txt for dynamic content."
+      },
+      "2.5_proper_404s": {
+        "pass": false,
+        "details": "Known false-200 pattern confirmed. /this-does-not-exist-xyz123 returns HTTP 200 status but renders a 404 page ('404: Oops! Less than 1% chance anything exists at this url'). All unknown paths fall through to user profile lookup and return 200 regardless."
+      }
+    },
+    "documentation": {
+      "3.1_dev_docs_exist": {
+        "pass": true,
+        "details": "docs.manifold.markets hosts documentation hub with API docs, FAQ, and data resources. /api redirects (307) to docs.manifold.markets/api. Links to Discord, Twitter, GitHub, and Substack blog."
+      },
+      "3.2_docs_findable_from_site": {
+        "pass": true,
+        "details": "Homepage -> About (1 click) -> docs.manifold.markets/faq link (2 clicks). About page has direct link to FAQ docs. Within 2-click threshold."
+      },
+      "3.3_programmatic_surface_documented": {
+        "pass": true,
+        "details": "REST API fully documented at docs.manifold.markets/api. Endpoints: /v0/user, /v0/markets, /v0/search-markets, /v0/bet, /v0/market/{id}/resolve, /v0/comments, /v0/txns, plus WebSocket at wss://api.manifold.markets/ws. Curl examples provided. Mentions TypeScript APIRealtimeClient but no formal SDK install instructions."
+      },
+      "3.4_standard_navigation": {
+        "pass": true,
+        "details": "Extensive <a href> links throughout: /, /browse, /predictle, /about, /terms, /privacy, /explore, /calibration, plus external links to Discord, Substack, Twitter, docs. Both desktop nav and mobile bottom nav use proper anchor tags."
+      }
+    },
+    "access": {
+      "4.1_ai_crawlers_allowed": {
+        "pass": true,
+        "details": "robots.txt: User-agent: * / Allow: /. All crawlers permitted. Sitemaps declared. No Disallow rules. No specific AI crawler blocks (no GPTBot, CCBot, anthropic-ai restrictions)."
+      },
+      "4.2_no_captcha": {
+        "pass": true,
+        "details": "No CAPTCHA, challenge pages, or bot detection encountered across all fetches. Site served without any access barriers."
+      },
+      "4.3_bot_policy_or_agent_docs": {
+        "pass": true,
+        "details": "API docs explicitly list 'building bots, automated trading systems, algorithmic tools' as permitted uses. No dedicated MCP server, agent-specific docs, or formal bot policy page, but bot usage is sanctioned in API documentation."
+      }
+    }
+  }
+}

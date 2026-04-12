@@ -1,0 +1,76 @@
+{
+  "platform": "XO Market",
+  "url": "https://xo.market",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "http_status": 403,
+    "method": "playwright",
+    "notes": "Cloudflare blocks non-browser fetches (403). Playwright succeeds. Site redirects to alphaarcade.com via JS after initial load — XO Market appears to have been acquired/rebranded to Alpha Arcade."
+  },
+  "score": 6,
+  "max_score": 15,
+  "grade": "D",
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "details": "xo.market/llms.txt returns 404. docs.xo.market/llms.txt fails with ECONNREFUSED (subdomain does not exist)."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "details": "Cloudflare blocks all non-browser requests with 403. No opportunity to test Accept: text/markdown."
+    },
+    "1.3_structured_metadata": {
+      "pass": true,
+      "details": "Meta description: 'Open conviction markets for all. Create, trade and share your beliefs with XO Market.' Full OG tags (og:title, og:description, og:image, og:url, og:site_name), Twitter Card (summary_large_image), keywords meta tag, author meta tag, canonical URL."
+    },
+    "2.1_content_without_js": {
+      "pass": false,
+      "details": "Next.js SSR app but Cloudflare blocks non-browser fetches (403). Content is only accessible via browser with JS execution. Meta tags are in HTML source but body content requires JS hydration."
+    },
+    "2.2_semantic_html": {
+      "pass": true,
+      "details": "Found nav, footer, section (3 semantic tags). Missing main, article, header."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "details": "Clean readable slugs: /docs, /privacy-policy, /terms-of-service, /blog (external to Medium)."
+    },
+    "2.4_sitemap_xml": {
+      "pass": false,
+      "details": "sitemap.xml returns 404."
+    },
+    "2.5_proper_404s": {
+      "pass": true,
+      "details": "/this-does-not-exist-xyz123 returns '404 This page could not be found.' with correct page behavior."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": false,
+      "details": "/docs page exists but only contains placeholder content: FAQ link, 'XO Market Litepaper' (Coming soon), 'XO Oracle Litepaper' (Coming soon). No actual developer or API documentation."
+    },
+    "3.2_docs_findable": {
+      "pass": true,
+      "details": "'Docs' link in top navigation bar, reachable in 1 click from homepage."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": false,
+      "details": "No REST API documentation, no SDKs (Python, TypeScript, C++), no programmatic surface documented anywhere on the site."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "details": "Standard <a href> links throughout: Home (/), Blog (medium.com/@xomarket), Docs (/docs), Launch App, social links, legal pages. 18 total links on homepage."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": false,
+      "details": "No robots.txt (returns 404). No explicit AI crawler policy. Cloudflare blocks non-browser user agents with 403."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "details": "No CAPTCHA elements found on pages. However, Cloudflare firewall blocks non-browser fetches at the network level (403), which is functionally similar to a CAPTCHA for automated agents."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "details": "No bot policy, no agent-specific documentation, no terms addressing automated access."
+    }
+  },
+  "summary": "XO Market scores poorly on agent accessibility (D grade, 6/15). The site is a Next.js app behind Cloudflare that blocks all non-browser requests. Key deficits: no llms.txt, no robots.txt, no sitemap.xml, no API/SDK documentation, and only placeholder docs ('Coming soon'). The domain now redirects via JS to alphaarcade.com (Alpha Arcade), suggesting a rebrand or acquisition. Strengths: good structured metadata (OG/Twitter/meta tags), clean URL slugs, proper 404 handling, standard link navigation, and docs link discoverable in nav."
+}

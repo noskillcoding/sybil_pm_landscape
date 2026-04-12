@@ -1,0 +1,60 @@
+{
+  "pm": "Sapience",
+  "skill": "SKILL.md",
+  "skillFormat": "sdk-guide",
+  "milestones": {
+    "M1_understand": { "status": "PASS", "notes": "Skill is comprehensive sdk-guide covering GraphQL, WS auction, EIP-712 signing, forecasting. Clear auth method (wallet signing, no API keys)." },
+    "M2_authenticate": { "status": "PASS", "notes": "GraphQL API works without auth. SDK installed (v0.2.0). Wallet loaded from Keychain. submitForecast() works end-to-end." },
+    "M3_list_markets": { "status": "PASS", "notes": "10+ active markets returned via questions query. Conditions include id, question, endTime, resolver, openInterest, similarMarkets." },
+    "M4_market_detail": { "status": "PASS", "notes": "Full condition detail + Polymarket prices retrieved. Iran regime market: YES 2.55%, NO 97.45%." },
+    "M5_buy_order": { "status": "PARTIAL", "notes": "Forecast submitted on-chain (EAS attestation on Arbitrum, tx confirmed). Auction flow failed: SDK v0.2 uses SIWE protocol but server expects v0.4 EIP-712 AuctionIntent. Signature verification failed. Additionally, no WUSDe on Ethereal for collateral." },
+    "M6_verify_position": { "status": "FAIL", "notes": "No position tokens — forecasts are EAS attestations, not position tokens. Would need successful auction+mint for positions." },
+    "M7_sell_position": { "status": "FAIL", "notes": "No position to sell. Full trade cycle requires WUSDe on Ethereal + working auction flow." },
+    "M8_check_balance": { "status": "PASS", "notes": "Balance before: 0.00498 ETH. After: 0.00396 ETH. Delta: -0.00102 ETH. Forecast gas ~0.0000078 ETH." }
+  },
+  "score": 5,
+  "grade": "B",
+  "skillAssessment": {
+    "overall": "Well-structured SDK guide covering the full trading lifecycle. GraphQL queries, Polymarket price integration, and forecasting all work exactly as documented. However, the auction/trade flow has a critical gap: the skill (v0.4) describes EIP-712 types that don't match the published SDK (v0.2), and the server requires an undocumented 'escrowContract' field. An agent following the skill's trading instructions will fail at signature verification.",
+    "strengths": [
+      "Comprehensive coverage: GraphQL queries, WS auctions, EIP-712 signing, on-chain minting, secondary market, forecasting, claiming",
+      "GraphQL queries work exactly as documented — copy-paste curl commands succeed",
+      "Polymarket price integration is well-documented and functional",
+      "SDK import reference table is helpful for discovering functions",
+      "Forecasting flow works perfectly via SDK submitForecast()",
+      "Good safety warnings about irreversible transactions and EIP-712 domain verification",
+      "Rate limits, error handling, and troubleshooting sections are useful"
+    ],
+    "weaknesses": [
+      "CRITICAL: Skill v0.4 describes EIP-712 AuctionIntent types that don't match published SDK v0.2 — agent cannot complete a trade",
+      "Server requires 'escrowContract' field in auction.start payload, not documented in skill",
+      "SDK import paths in skill (e.g., @sapience/sdk/contracts/addresses, @sapience/sdk/auction/escrowEncoding, @sapience/sdk/auction/escrowSigning) don't exist in published SDK v0.2",
+      "No working end-to-end trade example that an agent could copy — buildAuctionIntentTypedData, canonicalizePicks, computePickConfigId are referenced but not in SDK",
+      "Setup section assumes user has USDe and knows how to bridge to Ethereal — no direct acquisition path described",
+      "No testnet or paper-trading mode documented for safe testing"
+    ],
+    "recommendations": [
+      "Publish SDK v0.4 to npm to match skill's import paths and EIP-712 types",
+      "Add a complete end-to-end trade example (forecast + auction + mint) as a runnable script",
+      "Document the escrowContract field in auction.start payload",
+      "Add a 'verify setup' checklist: check WUSDe balance, check approval, check nonce availability",
+      "Consider adding a forecasting-only quick-start since it requires minimal setup"
+    ]
+  },
+  "methodUsed": "SDK (@sapience/sdk v0.2.0) + direct GraphQL API + WebSocket + viem wallet signing",
+  "vpnRequired": false,
+  "keyFindings": [
+    "GraphQL API (api.sapience.xyz/graphql) works perfectly, no auth required, 10+ active markets with real open interest",
+    "Forecasting via submitForecast() works end-to-end: EAS attestation on Arbitrum, ~$0.01 gas, confirmed on-chain",
+    "WebSocket (wss://relayer.sapience.xyz/auction) connects and processes messages, but EIP-712 signature verification fails due to protocol version mismatch",
+    "SDK v0.2 on npm uses SIWE auth + UMA/Pyth encodings; skill v0.4 describes EIP-712 AuctionIntent + picks-based protocol — incompatible",
+    "Server requires undocumented 'escrowContract' field in auction.start payload",
+    "Polymarket price integration via similarMarkets URLs works as documented",
+    "No WUSDe/USDe in test wallet — trading on Ethereal would require bridging funds"
+  ],
+  "blockers": [
+    "SDK version mismatch: published v0.2 doesn't implement v0.4 protocol described in skill (no buildAuctionIntentTypedData, canonicalizePicks, escrowSigning module)",
+    "EIP-712 AuctionIntent signature verification fails — cannot complete auction flow",
+    "No WUSDe on Ethereal — even if auction worked, mint would fail at collateral transfer"
+  ]
+}

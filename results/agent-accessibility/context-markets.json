@@ -1,0 +1,83 @@
+{
+  "platform": "Context Markets",
+  "url": "https://context.markets",
+  "test_date": "2026-03-31",
+  "reachability": "open",
+  "http_status": 200,
+  "checks": {
+    "1_discovery": {
+      "1.1_llms_txt": {
+        "pass": true,
+        "notes": "Both context.markets/llms.txt and docs.context.markets/llms.txt return markdown starting with '# Context Docs'. Comprehensive index with ~50 doc links plus OpenAPI spec link."
+      },
+      "1.2_markdown_negotiation": {
+        "pass": false,
+        "notes": "Accept: text/markdown header ignored. Server returns HTML/Next.js SSR content regardless of Accept header."
+      },
+      "1.3_structured_metadata": {
+        "pass": true,
+        "notes": "meta name=description ('Internet prediction markets'), OG tags (title, description, url, image), Twitter card metadata present."
+      }
+    },
+    "2_crawlability": {
+      "2.1_content_without_js": {
+        "pass": true,
+        "notes": "SSR delivers market listings, probabilities, categories, and text content in initial HTML. Visible text includes market names, percentages, resolution statuses."
+      },
+      "2.2_semantic_html": {
+        "pass": true,
+        "notes": "Uses <html lang=en>, <main>, <header>, <nav>, <section>, <article> — well over 3 semantic tags."
+      },
+      "2.3_readable_url_slugs": {
+        "pass": true,
+        "notes": "Market URLs are human-readable slugs, e.g. /markets/will-eth-hit-2500, /markets/will-oh-my-god-win-a-game-vs-jdg."
+      },
+      "2.4_sitemap_xml": {
+        "pass": true,
+        "notes": "Valid XML sitemap at /sitemap.xml with 4 entries (/, /create, /privacy, /terms) and proper priority/frequency attributes."
+      },
+      "2.5_proper_404s": {
+        "pass": true,
+        "notes": "/this-does-not-exist-xyz123 returns HTTP 404 status code."
+      }
+    },
+    "3_documentation": {
+      "3.1_dev_docs_exist": {
+        "pass": true,
+        "notes": "Comprehensive docs at docs.context.markets (built with Mintlify). Covers API reference, SDK, CLI, MCP server, agents, skills, contracts, and learning resources."
+      },
+      "3.2_docs_findable_from_site": {
+        "pass": true,
+        "notes": "/build page is linked from main nav ('API' link). /build links directly to docs.context.markets and all developer resources. One click from homepage."
+      },
+      "3.3_programmatic_surface_documented": {
+        "pass": true,
+        "notes": "REST API v2 with OpenAPI spec (api.context.markets/v2/openapi.json), TypeScript SDK (context-markets on npm), CLI (context-markets-cli), MCP server (context-markets-mcp), Claude Code plugin, Skills library — all documented with GitHub repos."
+      },
+      "3.4_standard_navigation": {
+        "pass": true,
+        "notes": "Standard <a href> links throughout: nav links (/, /market-updates, /build, /create), market links, profile links, external links to v1 site."
+      }
+    },
+    "4_access": {
+      "4.1_ai_crawlers_allowed": {
+        "pass": true,
+        "notes": "robots.txt allows all user agents with 'User-Agent: * / Allow: /'. Only blocks /profile, /refresh, /settings, /verify. Includes sitemap reference."
+      },
+      "4.2_no_captcha": {
+        "pass": true,
+        "notes": "No CAPTCHA or challenge page encountered. Direct HTTP 200 response with full content."
+      },
+      "4.3_bot_policy_or_agent_docs": {
+        "pass": true,
+        "notes": "Extensive agent-first documentation: MCP server with 17 tools, Claude Code plugin, Skills library, CLI with 35+ commands and JSON output for scripting. Platform explicitly built for AI agent integration."
+      }
+    }
+  },
+  "score": {
+    "total_passed": 14,
+    "total_checks": 15,
+    "grade": "A",
+    "summary": "Context Markets is exceptionally agent-accessible. It provides llms.txt on both domains, comprehensive developer docs (Mintlify), a full programmatic stack (REST API, SDK, CLI, MCP server, Claude plugin, Skills library), SSR content, semantic HTML, proper robots.txt, and no access barriers. The only miss is markdown content negotiation via Accept header. The platform is explicitly designed as agent-native."
+  }
+}

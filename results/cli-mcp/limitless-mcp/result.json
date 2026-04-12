@@ -1,0 +1,166 @@
+{
+  "pm": "Limitless",
+  "tool": "@iqai/mcp-limitless",
+  "toolType": "MCP",
+  "version": "0.0.1",
+  "chain": "Base",
+  "currency": "USDC",
+  "testedAt": "2026-04-09",
+  "checklistVersion": "unified-v1",
+  "sections": {
+    "setup": {
+      "S1": {
+        "name": "Start MCP server + initialize",
+        "pass": true,
+        "note": "Server starts, responds with protocolVersion 2024-11-05, serverInfo name 'Limitless MCP Server' version '0.0.1'"
+      },
+      "S2": {
+        "name": "List tools",
+        "pass": true,
+        "note": "30 tools listed with descriptions and JSON Schema input schemas. Covers auth (5), discovery (8), portfolio (7), trading (4), public (3), utility (3)"
+      },
+      "S3": {
+        "name": "Auth flow",
+        "pass": true,
+        "note": "GET_SIGNING_MESSAGE returns nonce, signed with viem privateKeyToAccount().signMessage(), LOGIN succeeds, VERIFY_AUTH confirms session. Rate-limited (429) on repeated attempts within minutes."
+      },
+      "S4": {
+        "name": "Balance/portfolio tool",
+        "pass": true,
+        "note": "GET_PORTFOLIO_POSITIONS returns empty (valid), GET_USER_TRADED_VOLUME returns 0, GET_TRADING_ALLOWANCE returns allowance=0 with spender address"
+      }
+    },
+    "discovery": {
+      "D1": {
+        "name": "GET_ACTIVE_MARKETS",
+        "pass": true,
+        "note": "967 active markets. sortBy accepts: ending_soon, high_value, lp_rewards, newest, trending. Pagination works."
+      },
+      "D2": {
+        "name": "GET_MARKET by slug",
+        "pass": true,
+        "note": "Returns question, slug, category, description, type (single/group), status, volume, end date, URL"
+      },
+      "D3": {
+        "name": "GET_MARKET_ORDERBOOK",
+        "pass": true,
+        "note": "Returns last trade price, adjusted midpoint, max spread, min size, asks (price|size), bids (price|size), totals. Works for single-type markets."
+      },
+      "D4": {
+        "name": "SEARCH_MARKETS",
+        "pass": true,
+        "note": "Semantic search with configurable limit, page, similarityThreshold. Returns slug, volume, URL per result."
+      },
+      "D5": {
+        "name": "Query 3 different markets",
+        "pass": true,
+        "note": "Consistent response structure across bitcoin-price-on-june-30, solana-price-on-june-30, bitcoin-all-time-high-by markets"
+      }
+    },
+    "trading": {
+      "T1": {
+        "name": "Preview order",
+        "pass": false,
+        "note": "BLOCKED. No preview/estimate tool exists. Orderbook provides raw bid/ask but no trade simulation."
+      },
+      "T2": {
+        "name": "Place order + verify",
+        "pass": false,
+        "note": "BLOCKED. CREATE_ORDER requires fully pre-signed EIP-712 typed data order. No signing abstraction. Client must know domain separator, type hashes, construct order struct in wei, sign typed data. Schema bug: side documented as enum ['BUY','SELL'] but API expects number."
+      },
+      "T3": {
+        "name": "Cancel order + verify",
+        "pass": false,
+        "note": "BLOCKED. CANCEL_ORDER tool exists with simple orderId param (good abstraction) but cannot test without a placed order."
+      },
+      "T4": {
+        "name": "Market buy + position",
+        "pass": false,
+        "note": "BLOCKED. Same as T2 - no order construction abstraction."
+      },
+      "T5": {
+        "name": "Sell + balance delta",
+        "pass": false,
+        "note": "BLOCKED. Same as T2 - no order construction abstraction."
+      }
+    },
+    "errorHandling": {
+      "E1": {
+        "name": "Oversized/bad order",
+        "pass": true,
+        "note": "Returns structured 400 error with field-level validation messages. Helpful error text includes suggestion to check balance/allowance."
+      },
+      "E2": {
+        "name": "Invalid inputs",
+        "pass": true,
+        "note": "JSON-RPC error -32602 with field-level validation (e.g., 'String must contain at least 1 character(s)'). Clean parameter validation before API call."
+      },
+      "E3": {
+        "name": "Query resolved/closed market",
+        "pass": false,
+        "note": "Resolved markets return 404 'Market not found'. No way to distinguish 'never existed' from 'resolved'. Limitless removes resolved markets from API."
+      },
+      "E4": {
+        "name": "Bad input then valid call (recovery)",
+        "pass": true,
+        "note": "Server recovers cleanly. 404 error followed by successful GET_ACTIVE_MARKETS call."
+      }
+    }
+  },
+  "score": {
+    "passed": 11,
+    "total": 18,
+    "percentage": 61
+  },
+  "grade": "C",
+  "metadata": {
+    "toolCount": 30,
+    "authMethod": "wallet_sign (GET_SIGNING_MESSAGE + signMessage + LOGIN)",
+    "protocolVersion": "2024-11-05",
+    "activeMarkets": 967,
+    "rateLimit": "Aggressive - 429 on repeated login within minutes",
+    "apiTokenHint": "429 error suggests API token auth available at docs.limitless.exchange"
+  },
+  "keyFindings": [
+    "Discovery is excellent: 30 tools covering markets, orderbook, history, search, categories, feed events",
+    "Auth works but is rate-limited aggressively (429 within minutes)",
+    "Trading is fundamentally BLOCKED: CREATE_ORDER requires fully pre-signed EIP-712 typed data - no signing abstraction",
+    "Schema inconsistency: CREATE_ORDER.side documented as enum ['BUY','SELL'] but API expects numeric value",
+    "Orderbook + historical price provide good data for analysis (price, spread, midpoint, volume)",
+    "CANCEL_ORDER has good abstraction (just orderId) but untestable without placed orders",
+    "Resolved markets disappear from API (404) with no resolution data accessible",
+    "Group-type markets (multi-outcome) don't work with orderbook/history - need sub-market slugs",
+    "Session auth persists within MCP connection but rate limits make reconnection painful"
+  ],
+  "blockers": [
+    {
+      "severity": "critical",
+      "issue": "No trading abstraction - CREATE_ORDER requires pre-signed EIP-712 typed data",
+      "detail": "Client must independently know the Limitless CLOB contract's EIP-712 domain separator, type hashes, construct the order struct with correct tokenId/amounts in wei, track nonces, and sign the typed data. The MCP server acts as a passthrough, not an abstraction layer.",
+      "impact": "An AI agent cannot trade without a separate EIP-712 signing library tightly coupled to Limitless contract specifics"
+    },
+    {
+      "severity": "high",
+      "issue": "Schema bug in CREATE_ORDER",
+      "detail": "side field documented as enum ['BUY','SELL'] but API rejects strings, expects numeric value. No documentation on what numbers map to what sides.",
+      "impact": "Even with EIP-712 signing capability, the tool's own schema is misleading"
+    },
+    {
+      "severity": "medium",
+      "issue": "Aggressive rate limiting on auth endpoint",
+      "detail": "429 Too Many Requests after single login within minutes. Error suggests using API tokens instead.",
+      "impact": "Agent restarts or reconnections may fail auth. Need API token support."
+    },
+    {
+      "severity": "low",
+      "issue": "Resolved markets return 404 with no resolution data",
+      "detail": "Cannot access historical resolution outcomes, only active markets visible",
+      "impact": "Agent cannot learn from past market resolutions"
+    }
+  ],
+  "comparisonToPriorTest": {
+    "priorGrade": "C",
+    "currentGrade": "C",
+    "changes": "No improvement in trading abstraction since prior test. Discovery remains strong (same finding). The fundamental blocker - requiring pre-signed EIP-712 orders with no abstraction - is unchanged. Grade remains C."
+  }
+}

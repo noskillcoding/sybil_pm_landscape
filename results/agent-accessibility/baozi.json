@@ -1,0 +1,82 @@
+{
+  "site": "baozi.bet",
+  "url": "https://baozi.bet",
+  "test_date": "2026-03-31",
+  "reachability": "open",
+  "http_status": 200,
+  "grade": "B",
+  "score": "11/15",
+  "passed": 11,
+  "total": 15,
+  "checks": {
+    "discovery": {
+      "1.1_llms_txt": {
+        "pass": true,
+        "notes": "baozi.bet/llms.txt returns rich markdown starting with '# Baozi - AI Agent Prediction Markets on Solana'. Covers MCP tools (76), market types, guardrails, installation. docs.baozi.bet/llms.txt returns 404."
+      },
+      "1.2_markdown_negotiation": {
+        "pass": false,
+        "notes": "Accept: text/markdown returns text/html (content-type: text/html; charset=utf-8). No markdown content negotiation."
+      },
+      "1.3_structured_metadata": {
+        "pass": true,
+        "notes": "Three JSON-LD schemas in HTML head: Organization (name, contact, founding), WebSite (search action, description), WebApplication (features, fees, chains). Also has .well-known/agents.json with full API spec."
+      }
+    },
+    "crawlability": {
+      "2.1_content_without_js": {
+        "pass": false,
+        "notes": "Next.js SPA - body contains only React hydration scripts. No visible text content in static HTML. JSON-LD schemas in <head> provide some machine-readable info but page content requires JavaScript."
+      },
+      "2.2_semantic_html": {
+        "pass": false,
+        "notes": "No <nav>, <main>, <article>, <header>, or <footer> tags in static HTML source. All rendered client-side via React/Next.js."
+      },
+      "2.3_readable_url_slugs": {
+        "pass": true,
+        "notes": "Market URLs use date-based readable slugs: /events/2025/12/nba-cup-2025-champion, /events/2026/01/afcon-2025-winner. Insight articles also readable: /insights/pari-mutuel-betting."
+      },
+      "2.4_sitemap_xml": {
+        "pass": true,
+        "notes": "Valid XML sitemap at /sitemap.xml with 42 URL entries. Includes homepage, events, insights, market pages. Proper lastmod, changefreq, priority attributes."
+      },
+      "2.5_proper_404s": {
+        "pass": true,
+        "notes": "/this-does-not-exist-xyz123 returns HTTP 404 status code."
+      }
+    },
+    "documentation": {
+      "3.1_dev_docs_exist": {
+        "pass": true,
+        "notes": "/docs serves documentation page. /agents/docs provides comprehensive agent documentation covering MCP setup, market architecture, resolution system, 76 tools, fees, program IDs. docs.baozi.bet and developer.baozi.bet return 404."
+      },
+      "3.2_docs_findable": {
+        "pass": true,
+        "notes": "Documentation discoverable within 2 hops: homepage JSON-LD references site, /llms.txt links to docs and guardrails, /.well-known/agents.json explicitly lists documentation URLs (/agents/docs, /agents/idl, /agents/rules). robots.txt also references agent endpoints."
+      },
+      "3.3_programmatic_surface_documented": {
+        "pass": true,
+        "notes": "Exceptionally well-documented: MCP server with 76 tools (@baozi.bet/mcp-server), REST API v4 with endpoints in agents.json, Solana IDL at /api/agent/idl, x402 paid intelligence endpoints, builder transactions for unsigned TX construction."
+      },
+      "3.4_standard_navigation": {
+        "pass": false,
+        "notes": "Static HTML contains no <a href> navigation links - all content is JS-rendered. Navigation only available after client-side React hydration. Links exist in JSON-LD schemas but not as standard anchor elements."
+      }
+    },
+    "access": {
+      "4.1_ai_crawlers_allowed": {
+        "pass": true,
+        "notes": "robots.txt explicitly allows AI crawlers (GPTBot, ClaudeBot, PerplexityBot) with specific Allow directives for /api/skill, /api/home, /api/agents/info, /api/agents/proofs. Blocks data harvesters (CCBot, Bytespider). 1-second crawl delay."
+      },
+      "4.2_no_captcha": {
+        "pass": true,
+        "notes": "No CAPTCHA scripts detected. No recaptcha, hcaptcha, or Cloudflare challenge. Site loads cleanly with HTTP 200."
+      },
+      "4.3_bot_policy_or_agent_docs": {
+        "pass": true,
+        "notes": "Comprehensive agent support: /.well-known/agents.json (agentspec v1), /llms.txt, /agents/docs, MCP server (76 tools, npm package), /api/pari-mutuel-guardrails for agent market creation rules. Explicitly designed as 'AI agent-native prediction market platform'."
+      }
+    }
+  },
+  "summary": "Baozi is one of the most AI-agent-friendly prediction markets tested. It provides /llms.txt, /.well-known/agents.json, 76 MCP tools, comprehensive agent docs, and explicit AI crawler permissions. The main weaknesses are typical SPA issues: no content without JavaScript, no semantic HTML in static source, no markdown content negotiation, and no static <a href> navigation. The site compensates significantly with machine-readable metadata (JSON-LD, agents.json) and purpose-built agent infrastructure."
+}

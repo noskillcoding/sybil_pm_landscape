@@ -1,0 +1,92 @@
+{
+  "pm": "Context Markets",
+  "skill": "contextwtf/context-skills",
+  "skillFormat": "navigation-hub",
+  "skillUrl": "https://github.com/contextwtf/context-skills",
+  "chain": "Base",
+  "currency": "USDC",
+  "testedAt": "2026-04-10",
+  "testVersion": "skill-v1",
+  "milestones": {
+    "M1": {
+      "status": "PASS",
+      "summary": "Skill is well-structured navigation-hub with Trade/Research/Build/Create categories. Trade skill documents SDK, CLI, MCP (25 tools), and React hooks. Clear auth (API key + private key), price encoding (cents 1-99), and order params (outcome/side/price/size).",
+      "skillSaid": "Use ContextClient SDK, CLI, or MCP tools. Auth requires CONTEXT_API_KEY + CONTEXT_PRIVATE_KEY. Account must be set up before first trade.",
+      "agentDid": "Fetched README.md, skills/trade/SKILL.md, skills/trade/place-order/SKILL.md, skills/trade/references/orders.md, and skills/api/README.md from GitHub raw URLs."
+    },
+    "M2": {
+      "status": "PASS",
+      "summary": "Authenticated via CLI and SDK. Account status shows isReady=true, 2.258 USDC balance, operator approved.",
+      "skillSaid": "Check with ctx.account.status() or context_account_setup. Must be set up and funded.",
+      "agentDid": "Ran CLI account status and SDK account.status(). Both confirmed auth works."
+    },
+    "M3": {
+      "status": "PASS",
+      "summary": "Found 50 markets total, 4+ active markets with live bid/ask orderbooks (esports, OpenAI, Trump tie, OpenAI voice).",
+      "skillSaid": "Use context_list_markets or ctx.markets.list() to browse markets.",
+      "agentDid": "Listed markets via CLI, filtered for active status with non-null bid/ask prices."
+    },
+    "M4": {
+      "status": "PASS",
+      "summary": "Got detailed data for esports parlay market: YES bid 35.1c/ask 40.9c, NO bid 59.1c/ask 64.9c, spread 5.75c.",
+      "skillSaid": "Call context_get_quotes or ctx.markets.quotes(marketId) for bid/ask/last prices.",
+      "agentDid": "Used SDK ctx.markets.get(marketId) to retrieve full market data with outcomePrices array."
+    },
+    "M5": {
+      "status": "BLOCKED",
+      "summary": "API key's account is in SettlementV2 migration state. All trading blocked with 409 error. Migration requires smart contract wallet (SCW) to approve v2 operator, but EOA cannot execute transactions for the SCW. Multiple approaches tried and failed.",
+      "skillSaid": "Place limit order: ctx.orders.create({ marketId, outcome, side, priceCents, size }). Use proxy for geo-restricted regions.",
+      "agentDid": "1) SDK v0.6.1 order create -> 409 migration error. 2) Manual v2 EIP-712 signing via viem -> same 409. 3) On-chain migration approval -> succeeded for EOA but not SCW. 4) Sponsored migration -> 400 invalid input. 5) Gasless relay for SCW -> 400 UserOperation reverted."
+    },
+    "M6": {
+      "status": "BLOCKED",
+      "summary": "No position to verify because order placement was blocked by migration.",
+      "skillSaid": "Check with context_my_orders or ctx.orders.mine(marketId).",
+      "agentDid": "Checked portfolio.positions() — empty as expected. Read operations work fine."
+    },
+    "M7": {
+      "status": "BLOCKED",
+      "summary": "No position to sell because no trade was executed.",
+      "skillSaid": "Sell via ctx.orders.create with side='sell', or use market order.",
+      "agentDid": "Could not attempt — blocked by M5."
+    },
+    "M8": {
+      "status": "PASS",
+      "summary": "Balance retrieved: 2.258180 USDC (unchanged). ETH decreased by ~0.000626 ETH from migration approval gas. Delta: 0 USDC.",
+      "skillSaid": "Check balance with ctx.account.status() or context_get_balance.",
+      "agentDid": "Ran SDK account.status() to get final balance. Pre/post comparison shows no USDC change, minor ETH gas loss from on-chain migration attempts."
+    }
+  },
+  "score": { "passed": 5, "total": 8 },
+  "grade": "B",
+  "skillAssessment": {
+    "readable": true,
+    "hasAuth": true,
+    "hasDiscovery": true,
+    "hasTrading": true,
+    "hasExamples": true,
+    "upToDate": false
+  },
+  "methodUsed": "SDK (context-markets v0.6.1) for reads, manual EIP-712 signing via viem for write attempts, node-fetch with socks-proxy-agent for proxied API calls",
+  "packagesInstalled": ["context-markets@0.6.1", "socks-proxy-agent", "node-fetch", "viem"],
+  "vpnRequired": true,
+  "vpnExit": "Japan (socks5h://127.0.0.1:1081) — KR proxy (1083) was down, EU proxy (1082) was geo-blocked for trading",
+  "keyFindings": [
+    "Skill is well-structured navigation-hub with comprehensive coverage (SDK, CLI, MCP, React hooks)",
+    "SDK v0.6.1 targets legacy Settlement contract; v0.7.0 is testnet-only — no mainnet v2 SDK available before supply-chain-guard date",
+    "API key's account is in SettlementV1->V2 migration state, blocking ALL trading with 409 errors",
+    "Migration requires smart contract wallet (SCW) operator approval that EOA signers cannot execute",
+    "Skill documentation does NOT mention v2 migration, settlement contract changes, or SCW requirements — critical gap",
+    "Read operations (markets, portfolio, balance, account status) work perfectly without proxy",
+    "Write operations require VPN/proxy — Japan (1081) works, EU (1082) blocked, KR (1083) down",
+    "Price encoding is in micro-units (e.g., 356250 = 35.625 cents) not raw cents as documented",
+    "The skill's quotes method (ctx.markets.quotes) returned 404; ctx.markets.get() works for price data",
+    "Gasless relay endpoint (/gasless/operator) exists and works for EOA but cannot operate on SCW accounts"
+  ],
+  "blockers": [
+    "SettlementV2 migration blocks all trading for this API key — cannot be resolved without AA/SCW infrastructure or updated SDK",
+    "SDK v0.6.1 signs orders with legacy settlement domain (0x000000000000aF25d425101A0C8e3adFB67BCfD0)",
+    "API checks migration status per-API-key and returns 409 regardless of order signature domain",
+    "KR SOCKS proxy (port 1083) is down — had to discover Japan proxy works despite documentation saying Japan is blocked"
+  ]
+}

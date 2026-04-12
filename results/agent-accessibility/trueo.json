@@ -1,0 +1,93 @@
+{
+  "project": "trueo",
+  "url": "https://trueo.com",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "http_status": 200,
+    "notes": "Site loads successfully. Next.js app on Vercel with SSR/RSC streaming."
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "details": "Both trueo.com/llms.txt and docs.trueo.com/llms.txt return 404."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "details": "Accept: text/markdown returns text/html; charset=utf-8. No markdown content negotiation."
+    },
+    "1.3_structured_metadata": {
+      "pass": false,
+      "details": "No meta description, no og:description, no JSON-LD found. Only viewport/theme-color/referrer meta tags present."
+    },
+    "2.1_content_without_js": {
+      "pass": true,
+      "details": "Next.js SSR streams real text content in HTML via RSC payload. i18n strings and page content are present in initial HTML, not an empty div#root."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "details": "Only nav and footer confirmed in rendered output. Most structure is React components without semantic HTML elements. Does not meet 3+ threshold."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "details": "URLs are human-readable: /en/markets, /en/tyd, /en/vote, /en/portfolio, /en/attesters. Market pages use contract addresses which is acceptable for web3."
+    },
+    "2.4_sitemap_xml": {
+      "pass": true,
+      "details": "Valid sitemap.xml with 31 URLs, proper XML structure, hreflang for en/zh, lastmod dates, priorities, and change frequencies. Referenced in robots.txt."
+    },
+    "2.5_proper_404s": {
+      "pass": true,
+      "details": "/this-does-not-exist-xyz123 redirects 307 to /en/this-does-not-exist-xyz123 which returns proper HTTP 404 status."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": true,
+      "details": "docs.trueo.com exists with protocol documentation covering trading, tokenomics, oracle mechanics, governance, and market resolution. Linked from main site."
+    },
+    "3.2_docs_findable": {
+      "pass": true,
+      "details": "Docs link (docs.trueo.com) visible in main site footer navigation. One click from homepage."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": false,
+      "details": "No API docs, SDK references, contract ABIs, or developer integration guides found on docs.trueo.com. Documentation is protocol-concept focused only. GitHub link exists but no programmatic docs."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "details": "Standard anchor (a href) links used for navigation including footer links to /terms, /privacy, docs.trueo.com, GitHub, Discord, and internal routes."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": true,
+      "details": "robots.txt allows all user-agents (User-Agent: * / Allow: /). Only /debug/ disallowed. No AI crawlers blocked. Sitemap referenced."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "details": "No CAPTCHA or bot-blocking mechanisms detected. Uses wallet-based authentication only."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "details": "No bot policy, AI agent documentation, or machine-readable API guidance found."
+    }
+  },
+  "summary": {
+    "passed": 9,
+    "failed": 6,
+    "total": 15,
+    "grade": "C",
+    "strengths": [
+      "Proper SSR with real content in initial HTML (Next.js RSC streaming)",
+      "Valid sitemap.xml with 31 URLs and hreflang support",
+      "Clean robots.txt allowing all crawlers",
+      "Proper 404 responses for non-existent pages",
+      "Protocol documentation exists at docs.trueo.com",
+      "No CAPTCHA or bot-blocking"
+    ],
+    "weaknesses": [
+      "No llms.txt at either domain",
+      "No meta description or structured data (JSON-LD, OpenGraph)",
+      "No markdown content negotiation",
+      "Insufficient semantic HTML elements",
+      "No API/SDK/developer documentation despite being a web3 protocol",
+      "No bot policy or agent-specific guidance"
+    ]
+  }
+}

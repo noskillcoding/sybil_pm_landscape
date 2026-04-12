@@ -1,0 +1,104 @@
+{
+  "platform": "AIOmen / Presagio",
+  "url": "https://presagio.pages.dev",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "status": 200,
+    "notes": "Site loads successfully. Next.js RSC app, requires JS for rendering."
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "details": "All three URLs returned 404: presagio.pages.dev/llms.txt, docs.presagio.pages.dev/llms.txt, aiomen.eth.limo/llms.txt. No llms.txt exists."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "details": "Accept: text/markdown has no effect. Returns Next.js RSC payload regardless of Accept header."
+    },
+    "1.3_structured_metadata": {
+      "pass": true,
+      "details": "Good meta tags: title='Presagio - Where predictions meet AI agents', meta description='Bet on prediction markets in Gnosis Chain, enhanced by AI.', og:title, og:description, og:image, twitter:card with summary_large_image. No JSON-LD found."
+    },
+    "2.1_content_without_js": {
+      "pass": false,
+      "details": "HTML source is an empty Next.js RSC shell with no readable text content. All market data and UI rendered client-side via JavaScript. aiomen.eth.limo similarly shows 'You need to enable JavaScript to run this app'."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "details": "Playwright snapshot shows only 'navigation' and 'region' as semantic landmarks. Most elements are generic divs. Missing main, article, header, footer, section in actual markup (footer exists visually but rendered as generic divs). Does not meet 3+ semantic elements threshold."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": false,
+      "details": "Market URLs use contract addresses: /markets?id=0x7bf86da53495a6f703226e0dc0d0d7aae24264a0. No human-readable slugs. Category pages use readable params like /?c=technology. Navigation links like /chat/new, /leaderboard/agents, /my-bets are readable."
+    },
+    "2.4_sitemap_xml": {
+      "pass": false,
+      "details": "presagio.pages.dev/sitemap.xml returns 404."
+    },
+    "2.5_proper_404": {
+      "pass": true,
+      "details": "/this-does-not-exist-xyz123 returns HTTP 404 status code (not a soft 200)."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": false,
+      "details": "No docs section on presagio.pages.dev (/docs returns 404). GitHub repo (SwaprHQ/presagio) has minimal README with setup instructions only. However, Gnosis maintains separate repos: prediction-market-agent-tooling and prediction-market-agent on GitHub with substantial documentation for building agents that interact with AIOmen/Omen markets."
+    },
+    "3.2_docs_findable": {
+      "pass": false,
+      "details": "No link to developer docs from presagio.pages.dev. The Gnosis agent tooling repos are not linked from the site or footer. The footer links to Discord, GitHub (frontend repo only), and X. Agent tooling is only discoverable via separate Gnosis GitHub search."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": true,
+      "details": "gnosis/prediction-market-agent-tooling on GitHub provides comprehensive Python SDK for programmatic market interaction: place_bet(), sell_tokens(), market retrieval across AIOmen/Manifold/Polymarket. Includes DeployableTraderAgent base class, benchmarking, Safe wallet integration. gnosis/prediction-market-agent provides agent framework examples. Both repos are well-documented but not linked from Presagio itself."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "details": "Rendered page has standard <a href> navigation links: /, /chat/new, /leaderboard/agents, /my-bets, market links, category links, footer links to Discord/GitHub/X/Gnosis/Reality.eth/Kleros. All functional anchor tags with URLs."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": true,
+      "details": "presagio.pages.dev/robots.txt returned the Cloudflare Pages content signals policy (not a traditional robots.txt) with no Disallow rules for AI crawlers. No GPTBot, ClaudeBot, CCBot, or Google-Extended blocks. aiomen.eth.limo/robots.txt only blocks /wiki/ and /Wiki/ and /I/ paths."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "details": "No CAPTCHA encountered during any fetch or Playwright navigation. Site loads freely."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": true,
+      "details": "Site explicitly positions itself around AI agents: title 'Where predictions meet AI agents', footer 'Where prediction markets and AI agents meet', /leaderboard/agents page, /chat/new AI Chat feature. Gnosis AI linked in footer. Clear AI-agent-friendly messaging and features."
+    }
+  },
+  "summary": {
+    "total_checks": 15,
+    "passed": 7,
+    "failed": 8,
+    "grade": "C",
+    "strengths": [
+      "Strong AI agent branding and positioning throughout the site",
+      "Good OpenGraph and Twitter meta tags for discovery",
+      "Proper 404 responses",
+      "No CAPTCHA or bot-blocking",
+      "AI crawlers not blocked in robots.txt",
+      "Gnosis prediction-market-agent-tooling provides excellent programmatic SDK (Python) for market interaction",
+      "Standard anchor-based navigation in rendered page"
+    ],
+    "weaknesses": [
+      "No llms.txt on any domain",
+      "Fully JS-dependent rendering - empty HTML shell with no SSR content for crawlers",
+      "No sitemap.xml",
+      "No markdown content negotiation",
+      "Market URLs use hex contract addresses instead of readable slugs",
+      "Minimal semantic HTML (mostly generic divs)",
+      "Developer docs and agent tooling not linked from the site itself - only discoverable via separate Gnosis GitHub repos",
+      "No /docs section on the site"
+    ],
+    "agent_recommendations": [
+      "Add llms.txt describing the platform and linking to agent tooling repos",
+      "Implement server-side rendering so market data is in HTML for crawlers",
+      "Add sitemap.xml with market URLs",
+      "Link to prediction-market-agent-tooling from the site (footer or dedicated docs page)",
+      "Use semantic HTML elements (main, article, header, footer) instead of generic divs",
+      "Add human-readable URL slugs for markets alongside contract addresses"
+    ]
+  }
+}

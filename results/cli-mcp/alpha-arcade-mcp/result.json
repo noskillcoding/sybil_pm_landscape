@@ -1,0 +1,77 @@
+{
+  "pm": "Alpha Arcade",
+  "tool": "@alpha-arcade/mcp",
+  "toolType": "MCP",
+  "version": "0.1.0",
+  "chain": "Algorand",
+  "currency": "USDC",
+  "testedAt": "2026-04-09",
+  "checklistVersion": "unified-v1",
+  "sections": {
+    "setup": {
+      "S1": { "name": "Initialize MCP server", "result": "PASS", "notes": "Server responds: alpha-arcade v0.1.0, protocolVersion 2024-11-05" },
+      "S2": { "name": "List tools + agent guide", "result": "PASS", "notes": "20 tools listed. Agent guide retrieved with units, data model, orderbook mechanics, workflows, pitfalls." },
+      "S3": { "name": "Auth (get_positions)", "result": "PASS", "notes": "Mnemonic auth works. Returns 'No positions found for this wallet.'" },
+      "S4": { "name": "Balance check", "result": "FAIL", "notes": "No get_balance or get_wallet tool. Agent cannot check USDC/ALGO balance before trading." }
+    },
+    "discovery": {
+      "D1": { "name": "List live markets", "result": "PASS", "notes": "177 live markets returned. Mix of binary + multi-choice (sports, politics, crypto, real estate)." },
+      "D2": { "name": "Market detail", "result": "PASS", "notes": "Returns id, title, marketAppId, yesAssetId, noAssetId, endTs, isResolved, isLive, feeBase, source." },
+      "D3": { "name": "Orderbook quality", "result": "PASS", "notes": "Unified YES-perspective view. Sports markets: 2c spread, ~$150 depth. OKC NBA: 5+ orders, 1.5c spread. Includes price, priceRaw, shares, total, escrowAppId, owner, source." },
+      "D4": { "name": "Search", "result": "FAIL", "notes": "No search/filter tool. Must fetch all 177 markets and filter client-side." },
+      "D5": { "name": "Compare 3 markets", "result": "PASS", "notes": "Consistent structure across binary markets. Multi-choice adds options[] array." }
+    },
+    "trading": {
+      "T1": { "name": "Preview/simulate", "result": "FAIL", "notes": "No simulate/estimate tool. Must calculate from orderbook data manually." },
+      "T2": { "name": "Place limit order + verify", "result": "PASS", "notes": "Placed YES BUY at $0.10 on Bitcoin market. Escrow 3513867552. Verified via get_open_orders. Confirmed round 60077518." },
+      "T3": { "name": "Cancel order + verify", "result": "PASS", "notes": "Cancelled escrow 3513867552. Confirmed round 60077523." },
+      "T4": { "name": "Market buy", "result": "PASS", "notes": "Bought 1 YES share on Heat vs Raptors at $0.41 fill price. Fully matched. Confirmed round 60077529." },
+      "T5": { "name": "Sell + balance delta", "result": "PASS", "notes": "Sold 1 YES share at $0.40 fill price. Full round-trip complete. Net cost ~$0.07 (spread + fees)." }
+    },
+    "errorHandling": {
+      "E1": { "name": "Huge amount order", "result": "PASS", "notes": "Returns isError:true with 'underflow on subtracting 51750000000 from sender amount 3277574'." },
+      "E2": { "name": "Invalid inputs", "result": "PASS", "notes": "Zod validation: field-level errors for type mismatches, invalid literals. isError:true, MCP error -32602." },
+      "E3": { "name": "Nonexistent market", "result": "PASS", "notes": "Returns 'Market \"9999999999\" not found.' Clean, parseable." },
+      "E4": { "name": "Recovery after error", "result": "PASS", "notes": "get_positions succeeds after E1-E3. Server fully recovers." }
+    }
+  },
+  "score": {
+    "passed": 15,
+    "total": 18
+  },
+  "grade": "A-",
+  "metadata": {
+    "wallet": "6QD3JGXHWU2FXQSVIVV2PAGQWJBDYBFF5H2S5QNP6CLXPD4PUK7XCOVKWM",
+    "toolCount": 20,
+    "marketCount": 177,
+    "protocolVersion": "2024-11-05",
+    "serverVersion": "0.1.0",
+    "tools": [
+      "get_agent_guide", "get_live_markets", "get_reward_markets", "get_market",
+      "get_orderbook", "get_full_orderbook", "get_open_orders", "get_positions",
+      "create_limit_order", "create_market_order", "cancel_order", "amend_order",
+      "propose_match", "split_shares", "merge_shares", "claim",
+      "stream_orderbook", "stream_live_markets", "stream_market", "stream_wallet_orders"
+    ],
+    "feeBase": 70000,
+    "collateralPerOrder": "~0.957 ALGO",
+    "unitSystem": "microunits (1000000 = $1.00 or 1 share)",
+    "orderbookModel": "4-sided (YES bids/asks + NO bids/asks), unified YES-perspective view"
+  },
+  "keyFindings": [
+    "Massive improvement from previous test: 177 live markets (was 2), full order lifecycle works including market orders with auto-matching",
+    "Complete trading workflow: limit orders, market orders, cancel, amend, propose_match, split/merge shares, claim",
+    "Real-time streaming: 4 WebSocket tools for orderbook, market changes, and wallet order monitoring",
+    "Agent guide (get_agent_guide) provides thorough documentation: units, data model, orderbook mechanics, workflows, pitfalls",
+    "Error handling is excellent: Zod validation with field-level detail, structured isError flag, clear messages",
+    "Sports markets have real liquidity with tight 1.5-2c spreads and $100-300 depth per side",
+    "Full buy+sell round-trip executed: bought 1 YES @ $0.41, sold @ $0.40 on Heat vs Raptors",
+    "No balance check tool - agent cannot verify available USDC/ALGO before trading",
+    "No search/filter tool - must retrieve all markets and filter client-side",
+    "No preview/simulate tool - must calculate costs from orderbook data manually"
+  ],
+  "blockers": [
+    "Missing balance query: Agent cannot check available USDC or ALGO before placing orders, risking underflow errors on-chain. Workaround: catch the error and reduce size, but this wastes ALGO on failed transaction fees.",
+    "No search/filter: With 177 markets, inability to search by keyword or filter by category forces full list retrieval every time. Manageable but inefficient at scale."
+  ]
+}

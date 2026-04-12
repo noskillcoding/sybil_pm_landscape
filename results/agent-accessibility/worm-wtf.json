@@ -1,0 +1,83 @@
+{
+  "subject": "worm.wtf",
+  "url": "https://worm.wtf",
+  "testDate": "2026-03-31",
+  "reachability": "open",
+  "reachabilityNote": "HTTP 200 with content, Next.js SSR app",
+  "checks": {
+    "1_discovery": {
+      "1.1_llms_txt": {
+        "pass": false,
+        "note": "worm.wtf/llms.txt returns 404 (Next.js error page). docs.worm.wtf/llms.txt exists but is a documentation index page (Mintlify-generated), not a proper llms.txt manifest."
+      },
+      "1.2_markdown_negotiation": {
+        "pass": false,
+        "note": "No markdown negotiation. Homepage returns Next.js HTML regardless of Accept header."
+      },
+      "1.3_structured_metadata": {
+        "pass": true,
+        "note": "Rich structured metadata: meta description, Open Graph tags, Twitter Card, JSON-LD Organization schema with contact/social links, JSON-LD WebSite schema with SearchAction. Also has robots meta tag, keywords, category."
+      }
+    },
+    "2_crawlability": {
+      "2.1_content_without_js": {
+        "pass": false,
+        "note": "Page is heavily JS-dependent (Next.js). Without hydration, only meta descriptions and serialized JSON payloads are available. No readable market listings or text content in raw HTML."
+      },
+      "2.2_semantic_html": {
+        "pass": false,
+        "note": "No semantic HTML tags found (no header, nav, main, section, article, footer, aside). Page uses only div-based React component structure."
+      },
+      "2.3_readable_url_slugs": {
+        "pass": false,
+        "note": "Market URLs appear to use numeric IDs (e.g., /market/7055) or long Solana condition hashes. Schema.org SearchAction template uses /market/{search_term_string} but actual market pages use opaque IDs."
+      },
+      "2.4_sitemap_xml": {
+        "pass": false,
+        "note": "sitemap.xml returns a Next.js HTML error page (404), not valid XML. No functional sitemap despite being referenced in robots.txt."
+      },
+      "2.5_proper_404s": {
+        "pass": false,
+        "note": "Soft 404: /this-does-not-exist-xyz123 returns HTTP 200 with Next.js error fallback page containing digest NEXT_HTTP_ERROR_FALLBACK;404. Not a proper HTTP 404 status code."
+      }
+    },
+    "3_documentation": {
+      "3.1_dev_docs_exist": {
+        "pass": true,
+        "note": "docs.worm.wtf exists (Mintlify-powered) with articles on prediction markets, leveraged markets, FAQs. However, it's user-facing documentation, not developer/API docs. developer.worm.wtf does not resolve. /docs on main site returns 404."
+      },
+      "3.2_docs_findable_from_site": {
+        "pass": false,
+        "note": "No visible link to docs.worm.wtf from the main homepage HTML. The docs subdomain exists but is not discoverable from the main site without JS rendering."
+      },
+      "3.3_programmatic_surface_documented": {
+        "pass": false,
+        "note": "No API documentation, OpenAPI spec, or SDK references found. docs.worm.wtf mentions OpenAPI in navigation but /api-reference and /openapi return 404. No public API docs exist."
+      },
+      "3.4_standard_navigation": {
+        "pass": false,
+        "note": "Minimal anchor tags in raw HTML. Only social links (Twitter, Telegram) visible without JS. Navigation requires client-side rendering. docs.worm.wtf does have proper <a href> navigation links."
+      }
+    },
+    "4_access": {
+      "4.1_ai_crawlers_allowed": {
+        "pass": true,
+        "note": "Main site robots.txt allows all crawlers (User-Agent: *) on non-API paths. No AI-specific blocks on worm.wtf. However, docs.worm.wtf/robots.txt explicitly blocks ClaudeBot, GPTBot, Amazonbot, and many other AI crawlers. Mixed signal across subdomains."
+      },
+      "4.2_no_captcha": {
+        "pass": true,
+        "note": "No CAPTCHA or challenge pages encountered on any endpoint."
+      },
+      "4.3_bot_policy_or_agent_docs": {
+        "pass": false,
+        "note": "No bot policy, agent documentation, or AI interaction guidelines found anywhere."
+      }
+    }
+  },
+  "score": {
+    "total_passed": 4,
+    "total_checks": 15,
+    "grade": "F",
+    "summary": "worm.wtf scores poorly on agent accessibility. The site is a heavily JS-dependent Next.js app with almost no static content, no semantic HTML, broken sitemap, soft 404s, no llms.txt, no API docs, and limited discoverability. The only passes are for rich structured metadata (JSON-LD), existence of a docs subdomain, no CAPTCHA, and partial AI crawler access on the main domain."
+  }
+}

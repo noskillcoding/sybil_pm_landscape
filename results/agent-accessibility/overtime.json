@@ -1,0 +1,79 @@
+{
+  "platform": "Overtime",
+  "url": "https://overtimemarkets.xyz",
+  "test_date": "2026-03-31",
+  "methodology_version": "v3",
+  "reachability": {
+    "status": "up",
+    "http_status": 200,
+    "notes": "Site loads but requires JavaScript - SPA with 'You need to enable JavaScript to run this app' fallback"
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "details": "overtimemarkets.xyz/llms.txt returns the SPA shell (no llms.txt file). docs.overtimemarkets.xyz redirects to docs.overtime.io which has a documentation index at /llms.txt path but it is NOT a valid llms.txt file - it's a docs table of contents."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "details": "No evidence of Accept: text/markdown content negotiation. Site serves the same JS-dependent SPA shell regardless of Accept header."
+    },
+    "1.3_structured_metadata": {
+      "pass": false,
+      "details": "No meta description, no Open Graph tags, no JSON-LD structured data found in the static HTML. Only a title tag is present: 'Overtime Sportsbook | Unlimited Crypto Sports Betting with Overtime'."
+    },
+    "2.1_content_without_js": {
+      "pass": false,
+      "details": "No real text content in HTML. The only static content is 'You need to enable JavaScript to run this app.' Entire UI is client-side rendered."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "details": "No semantic HTML tags (nav, main, article, header, footer) found. The page is a bare div-based SPA shell with no semantic structure."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "details": "Sitemap reveals readable URL slugs: /markets, /liquidity-pool, /promotions, /referral, /resources, plus descriptive paths like /resources/how-to-bet-on-nfl, /resources/what-is-moneyline-betting. Docs also use clean slugs: /get-started/how-to-bet, /learn-about-overtime/overtime-amm-and-liquidity-mechanics."
+    },
+    "2.4_sitemap_xml": {
+      "pass": true,
+      "details": "Valid sitemap.xml at overtimemarkets.xyz/sitemap.xml with 99 URLs covering markets, resources, promotions. Docs site also has sitemap at docs.overtime.io/sitemap.xml. All entries have lastmod, changefreq, and priority."
+    },
+    "2.5_proper_404": {
+      "pass": false,
+      "details": "The /this-does-not-exist-xyz123 path returns the same SPA shell with 'You need to enable JavaScript to run this app.' - appears to return 200 with the app shell rather than a proper 404 status code. SPA catch-all routing."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": true,
+      "details": "Comprehensive developer docs at docs.overtime.io (redirected from docs.overtimemarkets.xyz). Includes Overtime V2 Integration section with API endpoints (api.overtime.io), smart contract addresses (Optimism network), code examples in JS/ethers.js, Postman collections. Also Speed Markets developer docs with contract ABIs and integration code."
+    },
+    "3.2_docs_findable": {
+      "pass": true,
+      "details": "docs.overtimemarkets.xyz redirects cleanly to docs.overtime.io. The docs subdomain is a standard convention. From the main site's sitemap, /resources pages link to guides. Docs are within 1-2 clicks via the subdomain pattern."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": true,
+      "details": "Well-documented programmatic surface: REST API at api.overtime.io (requires API key), smart contract addresses and ABIs for SportsAMMV2, LiveTradingProcessor, and SpeedMarketsAMM. Code examples for trading, resolving markets. Postman collections available. GitHub links to contracts."
+    },
+    "3.4_standard_navigation": {
+      "pass": false,
+      "details": "The main site has zero standard <a href> navigation links in the static HTML. All navigation is JS-rendered. However, the docs site (GitBook-based) does have standard navigation links."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": true,
+      "details": "robots.txt at overtimemarkets.xyz has User-agent: * with empty Disallow (all allowed). No AI-specific blocks. Docs site (docs.overtime.io) also allows crawling with minor query parameter restrictions only."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "details": "No CAPTCHA elements detected on any tested pages."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "details": "No explicit bot policy, AI agent documentation, or terms addressing automated access. The API requires an approved API key but there are no published agent-specific guidelines."
+    }
+  },
+  "score": {
+    "total_passed": 7,
+    "total_checks": 15,
+    "grade": "C",
+    "summary": "Overtime scores 7/15 (grade C). The main app is a pure SPA with zero server-side content, no semantic HTML, no meta tags, and no static navigation - making the primary site nearly invisible to agents without a browser. However, the documentation ecosystem is solid: docs.overtime.io provides well-structured developer docs with API endpoints, smart contract addresses, code examples, and Postman collections. Sitemaps are present and robots.txt is permissive. The platform is split: excellent docs accessibility but poor main site accessibility."
+  }
+}

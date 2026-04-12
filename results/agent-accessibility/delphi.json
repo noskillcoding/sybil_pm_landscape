@@ -1,0 +1,96 @@
+{
+  "site": "Delphi by Gensyn",
+  "url": "https://delphi.gensyn.ai",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "status": 200,
+    "note": "HTTP 200 via curl; WebFetch blocked with 403 by Cloudflare bot protection"
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "details": "delphi.gensyn.ai/llms.txt returns 404. docs.delphi.gensyn.ai does not exist (ECONNREFUSED). Parent docs site docs.gensyn.ai/llms.txt does exist with full documentation index, but not on the Delphi domain itself."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "details": "Accept: text/markdown header returns text/html; charset=utf-8. No markdown content negotiation."
+    },
+    "1.3_structured_metadata": {
+      "pass": true,
+      "details": "Rich meta tags present: meta description ('Delphi is a prediction market over model evaluations...'), og:title, og:description, og:image, og:url, og:site_name, twitter:card, twitter:title, twitter:description, twitter:image, keywords, application-name, canonical URL. No JSON-LD."
+    },
+    "2.1_content_without_js": {
+      "pass": false,
+      "details": "Next.js app with empty body in raw HTML source. All content is JS-rendered. The body contains only a hidden div with React template markers and script tags. No readable text without JavaScript execution."
+    },
+    "2.2_semantic_html": {
+      "pass": true,
+      "details": "Rendered DOM includes 4 semantic elements: navigation (nav bar), main (content area), article (market cards), contentinfo/footer. Meets the 3+ threshold but only after JS renders."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "details": "URLs are reasonably readable: /market/active, /market/9, /account. Market IDs are numeric rather than slug-based, but the structure is clear and predictable."
+    },
+    "2.4_sitemap_xml": {
+      "pass": false,
+      "details": "sitemap.xml returns HTTP 404."
+    },
+    "2.5_proper_404s": {
+      "pass": true,
+      "details": "/this-does-not-exist-xyz123 returns proper HTTP 404 status code."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": true,
+      "details": "Documentation exists at docs.gensyn.ai/intelligence-market/what-is-delphi covering what Delphi is, liquidity & pricing, trading & evaluation, rounds & winners. Additional pages for vaults and getting started."
+    },
+    "3.2_docs_findable": {
+      "pass": true,
+      "details": "Docs link is in the main navigation bar (1 click away), pointing to https://docs.gensyn.ai/intelligence-market/what-is-delphi. Also linked in the footer."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": false,
+      "details": "No API documentation, no contract addresses, no SDK, no developer integration docs. Documentation is entirely user/consumer-facing, explaining concepts and UI workflows only."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "details": "Standard anchor tags with href attributes throughout: nav links to /market/active, external docs, /account; market cards link to /market/{id}; footer links to gensyn.ai, dashboard, docs, Discord, X."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": false,
+      "details": "robots.txt (Cloudflare Managed) explicitly blocks AI crawlers: ClaudeBot, GPTBot, Google-Extended, Amazonbot, Applebot-Extended, Bytespider, CCBot, meta-externalagent all have Disallow: /. Content-Signal explicitly sets ai-train=no. WebFetch requests are blocked with 403."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "details": "No CAPTCHA encountered. Cloudflare is present but did not trigger a challenge for browser-based access. Curl requests succeed for the main page."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "details": "robots.txt includes Cloudflare's Content-Signal framework (search=yes, ai-train=no) with EU Directive 2019/790 rights reservation. However, no dedicated bot policy page or agent-specific documentation exists."
+    }
+  },
+  "score": {
+    "passed": 8,
+    "total": 15,
+    "grade": "C",
+    "passed_checks": [
+      "1.3_structured_metadata",
+      "2.2_semantic_html",
+      "2.3_readable_url_slugs",
+      "2.5_proper_404s",
+      "3.1_dev_docs_exist",
+      "3.2_docs_findable",
+      "3.4_standard_navigation",
+      "4.2_no_captcha"
+    ],
+    "failed_checks": [
+      "1.1_llms_txt",
+      "1.2_markdown_negotiation",
+      "2.1_content_without_js",
+      "2.4_sitemap_xml",
+      "3.3_programmatic_surface_documented",
+      "4.1_ai_crawlers_allowed",
+      "4.3_bot_policy_or_agent_docs"
+    ]
+  },
+  "notes": "Delphi is a Next.js SPA with Cloudflare bot protection. The site is effectively invisible to non-JS agents -- raw HTML is empty. Cloudflare's managed robots.txt blocks all major AI crawlers. Documentation lives on the parent Gensyn docs site (docs.gensyn.ai) rather than a Delphi-specific subdomain. The docs are conceptual/user-facing only with no programmatic integration surface documented. Strong metadata game (og/twitter tags) but fundamentally hostile to agent access due to JS-only rendering and aggressive bot blocking."
+}

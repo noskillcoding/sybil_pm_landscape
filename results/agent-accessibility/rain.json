@@ -1,0 +1,111 @@
+{
+  "protocol": "Rain Protocol",
+  "url": "https://rain.one",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "http_status": "403 (Cloudflare blocks non-browser fetchers; 200 via real browser)",
+    "redirects_to": "https://www.rain.one/",
+    "cloudflare_protected": true,
+    "notes": "Main site returns 403 to curl/WebFetch. Requires browser JS execution to load. Docs subdomain (docs.rain.one) does not resolve; docs hosted at rain.one/docs instead."
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": true,
+      "score": 1,
+      "details": "rain.one/llms.txt returns 404. However rain.one/docs/llms.txt EXISTS and is comprehensive - covers Help Center, Developer docs, SDK, AI Agent integration, RNG Layer, DAO governance, token info. Hosted on Mintlify which auto-generates llms.txt."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "score": 0,
+      "details": "Accept: text/markdown returns 403 (Cloudflare block). No markdown content negotiation available."
+    },
+    "1.3_structured_metadata": {
+      "pass": true,
+      "score": 1,
+      "details": "Rich structured metadata. Meta description: 'The decentralized prediction markets protocol where anyone can create and trade markets on any topic.' Four JSON-LD blocks: BreadcrumbList, Organization (with logo, name, description), WebSite, and FAQPage with multiple Q&A entries."
+    },
+    "2.1_content_without_js": {
+      "pass": false,
+      "score": 0,
+      "details": "Main site returns 403 to non-browser clients (Cloudflare). No real text content accessible without JS execution. Docs site (Mintlify) also returns 403 to curl."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "score": 0,
+      "details": "Only section tags found (9 instances). Zero nav, main, article, header, footer, or aside tags. Uses generic div-based layout. Does not meet 3+ semantic tag threshold. Accessibility snapshot showed 'generic' containers throughout."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "score": 1,
+      "details": "Clean readable slugs: /apps, /builders, /liquidity, /builders#program. Docs use descriptive paths: /docs/For-Developers/Rain-Builders, /docs/For-Developers/Rain-for-Ai-Agents/Agent-Skills, /docs/Help-Center/intro-page."
+    },
+    "2.4_sitemap_xml": {
+      "pass": false,
+      "score": 0,
+      "details": "rain.one/sitemap.xml returns 403 (Cloudflare block). Not accessible to crawlers."
+    },
+    "2.5_proper_404": {
+      "pass": true,
+      "score": 1,
+      "details": "Non-existent URL /this-does-not-exist-xyz123 redirects to /404 with dedicated 404 page. Proper error handling."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": true,
+      "score": 1,
+      "details": "Comprehensive docs at rain.one/docs (Mintlify-powered). Sections include: Help Center, For Developers (Rain Builders, Rain SDK, Rain for AI Agents, RNG Layer). Dedicated AI Agent docs with OpenClaw Skills for Create Market, Trade, and Data access. Has OpenAPI specification."
+    },
+    "3.2_docs_findable": {
+      "pass": true,
+      "score": 1,
+      "details": "Docs reachable via /builders page which links to /docs/For-Developers/Rain-for-Ai-Agents/Agent-Skills. Also directly at rain.one/docs. Within 2 clicks from homepage (Home -> Builders -> docs links)."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": true,
+      "score": 1,
+      "details": "Rain SDK fully documented with sections for trading, liquidity, analytics. AI Agent integration documented with installable OpenClaw Skills (Create Market, Trade, Data). OpenAPI specification present. Docs describe full programmatic access for building prediction market applications."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "score": 1,
+      "details": "Standard a href navigation throughout. Main site: /, /apps, /builders, /liquidity, /builders#program. Docs: proper link hierarchy with sidebar navigation. Social links to X, Telegram, Discord, LinkedIn, YouTube. Footer with full link structure."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": false,
+      "score": 0,
+      "details": "robots.txt explicitly blocks all major AI crawlers: ClaudeBot, GPTBot, CCBot, Amazonbot, Applebot-Extended, Bytespider, Google-Extended, meta-externalagent with Disallow: /. Default user-agent allowed but with Content-Signal: ai-train=no. Additionally, Cloudflare WAF blocks non-browser HTTP clients entirely (403)."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "score": 1,
+      "details": "No CAPTCHA encountered during browser navigation. Cloudflare does block non-browser requests with 403 but does not present a challenge page to real browsers."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": true,
+      "score": 1,
+      "details": "Dedicated AI Agent documentation at /docs/For-Developers/Rain-for-Ai-Agents/. Describes itself as 'first machine-readable infrastructure specifically engineered for AI agents.' Offers installable OpenClaw Skills for agent integration. SDK described as 'AI-ready'. Content-Signal header in robots.txt defines explicit bot policy. However, robots.txt simultaneously blocks AI crawlers."
+    }
+  },
+  "summary": {
+    "total_passed": 10,
+    "total_checks": 15,
+    "grade": "B",
+    "grade_range": "10-12 = B",
+    "strengths": [
+      "Excellent AI agent SDK documentation with OpenClaw Skills integration",
+      "Rich JSON-LD structured data (4 blocks: Organization, WebSite, FAQPage, BreadcrumbList)",
+      "Comprehensive Mintlify-powered docs with llms.txt",
+      "Clean URL slugs throughout main site and docs",
+      "Dedicated AI agent section in developer docs",
+      "OpenAPI specification available"
+    ],
+    "weaknesses": [
+      "Cloudflare WAF blocks all non-browser HTTP requests with 403",
+      "robots.txt explicitly blocks all AI crawlers (ClaudeBot, GPTBot, CCBot, etc.)",
+      "No content accessible without JavaScript execution",
+      "Poor semantic HTML - only section tags, no nav/main/article/header/footer",
+      "No markdown content negotiation",
+      "Sitemap blocked behind Cloudflare 403"
+    ],
+    "paradox_note": "Rain markets itself as 'AI Agent-Ready' with dedicated agent SDK docs, yet simultaneously blocks all AI crawlers via robots.txt and Cloudflare. The agent SDK is designed for runtime integration (building apps), not for web crawling, which explains the disconnect."
+  }
+}

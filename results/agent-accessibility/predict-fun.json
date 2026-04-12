@@ -1,0 +1,106 @@
+{
+  "site": "predict.fun",
+  "url": "https://predict.fun",
+  "testDate": "2026-03-31",
+  "reachability": "cf-blocked",
+  "reachabilityNote": "All WebFetch requests return HTTP 403 (Cloudflare). Site loads fine in Playwright browser.",
+  "grade": "C",
+  "score": 9,
+  "maxScore": 15,
+  "sections": {
+    "discovery": {
+      "score": 2,
+      "maxScore": 3,
+      "checks": {
+        "1.1_llms_txt": {
+          "pass": true,
+          "note": "docs.predict.fun/llms.txt exists, starts with '# predict.fun', lists all doc pages in markdown link format. predict.fun/llms.txt returns 404."
+        },
+        "1.2_markdown_negotiation": {
+          "pass": false,
+          "note": "Cannot test Accept: text/markdown header — site is Cloudflare-blocked (403) for non-browser agents. No evidence of markdown content negotiation."
+        },
+        "1.3_structured_metadata": {
+          "pass": true,
+          "note": "Has <meta name=\"description\"> with content: 'Bet on future outcomes (and earn rewards) across politics, sports, crypto and more on Predict — the BNB-native prediction market.' No JSON-LD found."
+        }
+      }
+    },
+    "crawlability": {
+      "score": 3,
+      "maxScore": 5,
+      "checks": {
+        "2.1_content_without_js": {
+          "pass": false,
+          "note": "Cloudflare blocks non-browser agents with 403. Next.js app behind CF — even if CF were removed, SSR status unclear. No content reachable without JS execution for agents."
+        },
+        "2.2_semantic_html": {
+          "pass": false,
+          "note": "Only 2 semantic tags found: <nav> (1) and <main> (1). No <header>, <footer>, <section>, <article>, or <aside>. Needs 3+ to pass."
+        },
+        "2.3_readable_url_slugs": {
+          "pass": true,
+          "note": "Market URLs are readable slugs: /market/btc-usd-up-down-2026-03-31-08-45-15-minutes, /market/based-fdv-above-one-day-after-launch, /market/uef-cze-den-2026-03-31. Also /markets, /points, /invite."
+        },
+        "2.4_sitemap_xml": {
+          "pass": true,
+          "note": "Valid XML sitemap at /sitemap.xml with <urlset> containing URLs with priority values: predict.fun (1), /markets (0.8), /points (0.5), /invite (0.5), etc."
+        },
+        "2.5_proper_404s": {
+          "pass": true,
+          "note": "/this-does-not-exist-xyz123 returns HTTP 404 with a custom error page: '404 — Uh oh. That page doesn't exist.'"
+        }
+      }
+    },
+    "documentation": {
+      "score": 4,
+      "maxScore": 4,
+      "checks": {
+        "3.1_dev_docs_exist": {
+          "pass": true,
+          "note": "Comprehensive docs at docs.predict.fun (GitBook — user guides, how-to, knowledge base) and dev.predict.fun (full REST API reference with endpoints for markets, orders, accounts, positions, search, OAuth, WebSocket). Mentions MCP via Context7 integration for SDKs."
+        },
+        "3.2_docs_findable_from_site": {
+          "pass": true,
+          "note": "Homepage footer has direct links to 'Docs' (docs.predict.fun) and 'Developers' (dev.predict.fun). One click from homepage."
+        },
+        "3.3_programmatic_surface_documented": {
+          "pass": true,
+          "note": "Full REST API documented at dev.predict.fun: Authorization (JWT), Markets (GET list/by-id/stats/orderbook), Orders (GET/POST create/cancel), Positions, Search, OAuth, WebSocket. SDKs in TypeScript (npm @predictdotfun/sdk) and Python (pypi predict-sdk) with GitHub repos."
+        },
+        "3.4_standard_navigation": {
+          "pass": true,
+          "note": "Extensive <a href> links throughout: nav links (Markets, Points, Invite), market cards link to /market/slug, footer links to docs/dev/blog/learn, user portfolio links, external links to Discord/X/bscscan."
+        }
+      }
+    },
+    "access": {
+      "score": 0,
+      "maxScore": 3,
+      "checks": {
+        "4.1_ai_crawlers_allowed": {
+          "pass": false,
+          "note": "No robots.txt found — /robots.txt renders as the app's 404 page. Without a robots.txt, Cloudflare's 403 blocks all automated access regardless."
+        },
+        "4.2_no_captcha": {
+          "pass": false,
+          "note": "Cloudflare challenge/WAF blocks all non-browser HTTP requests with 403. While no visible CAPTCHA appears in the browser, the CF layer effectively serves as an anti-bot gate for programmatic access."
+        },
+        "4.3_bot_policy_or_agent_docs": {
+          "pass": false,
+          "note": "No explicit bot policy or robots.txt. However, dev docs FAQ mentions Context7 MCP integration for AI access to SDKs/API docs, and SDKs are published on npm/PyPI for programmatic trading. Agent-awareness exists but no formal bot/agent access policy."
+        }
+      }
+    }
+  },
+  "summary": "predict.fun scores 9/15 (grade C). Strong documentation ecosystem with docs.predict.fun (user guides), dev.predict.fun (full REST API with SDK references), and llms.txt on the docs subdomain. SDKs available in TypeScript and Python, with Context7/MCP integration for AI-assisted development. However, Cloudflare blocks all non-browser agents with 403, there is no robots.txt, only 2 semantic HTML tags, and no formal bot/agent access policy. The CF wall is the primary barrier to agent accessibility.",
+  "keyFindings": [
+    "Cloudflare WAF blocks all non-browser HTTP requests (403) — primary accessibility barrier",
+    "docs.predict.fun/llms.txt exists with full doc index",
+    "dev.predict.fun has comprehensive REST API docs with TypeScript and Python SDKs",
+    "Context7 MCP integration mentioned in dev docs FAQ for AI-assisted SDK usage",
+    "Valid sitemap.xml and proper 404 handling",
+    "No robots.txt, no explicit bot/agent policy",
+    "Only 2 semantic HTML tags (nav, main) — minimal semantic markup"
+  ]
+}

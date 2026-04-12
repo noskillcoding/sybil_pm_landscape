@@ -1,0 +1,26 @@
+{
+  "pm": "Polymarket",
+  "slug": "polymarket",
+  "website": "https://polymarket.com",
+  "reachability": "open",
+  "score": 13,
+  "grade": "A",
+  "checks": {
+    "1.1": { "pass": true, "note": "docs.polymarket.com/llms.txt returns markdown starting with # Polymarket Documentation" },
+    "1.2": { "pass": false, "note": "Homepage returns HTML regardless of Accept header, no markdown negotiation" },
+    "1.3": { "pass": true, "note": "meta description + Organization and WebApplication JSON-LD present" },
+    "2.1": { "pass": true, "note": "SSR homepage has real market names, prices, nav labels without JS" },
+    "2.2": { "pass": true, "note": "nav, main, header, footer, section, article, aside all present" },
+    "2.3": { "pass": true, "note": "URLs use /event/descriptive-slug format e.g. /event/2026-fifa-world-cup-winner-595" },
+    "2.4": { "pass": true, "note": "Sitemap index at /sitemaps/sitemap-index.xml with base, categories, events XMLs" },
+    "2.5": { "pass": true, "note": "/this-does-not-exist-xyz123 returns HTTP 404" },
+    "3.1": { "pass": true, "note": "docs.polymarket.com has full dev docs with quickstart, API ref, SDKs" },
+    "3.2": { "pass": true, "note": "Footer contains Docs link; APIs link also in footer nav" },
+    "3.3": { "pass": true, "note": "REST API endpoints, Python/TS/Rust SDKs with pip/npm/cargo install commands" },
+    "3.4": { "pass": true, "note": "Homepage nav and footer use standard a href links, not JS-only routing" },
+    "4.1": { "pass": true, "note": "robots.txt allows all bots (User-agent: *), no blocks on AI crawlers" },
+    "4.2": { "pass": true, "note": "No CAPTCHA or Cloudflare challenge on public pages" },
+    "4.3": { "pass": false, "note": "No bot policy, agent quickstart, MCP docs, or dedicated agent section found" }
+  },
+  "tested": "2026-03-31"
+}

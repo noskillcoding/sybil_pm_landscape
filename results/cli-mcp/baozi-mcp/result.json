@@ -1,0 +1,216 @@
+{
+  "pm": "Baozi",
+  "tool": "@baozi.bet/mcp-server",
+  "toolType": "MCP",
+  "version": "2.0.0",
+  "chain": "Solana",
+  "currency": "SOL",
+  "testedAt": "2026-04-10T07:40:00Z",
+  "checklistVersion": "unified-v1",
+  "sections": [
+    {
+      "name": "Setup",
+      "checks": [
+        {
+          "id": "S1",
+          "name": "Install + Initialize",
+          "status": "PASS",
+          "command": "echo '{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",...}' | npx --before=2026-04-03 @baozi.bet/mcp-server",
+          "output": "{\"result\":{\"protocolVersion\":\"2024-11-05\",\"capabilities\":{\"tools\":{},\"resources\":{}},\"serverInfo\":{\"name\":\"baozi-mcp\",\"version\":\"2.0.0\"}},\"jsonrpc\":\"2.0\",\"id\":1}",
+          "evidence": "Server starts and responds to initialize. baozi-mcp v2.0.0, protocol 2024-11-05."
+        },
+        {
+          "id": "S2",
+          "name": "List Tools",
+          "status": "PASS",
+          "command": "tools/list",
+          "output": "76 tools returned",
+          "evidence": "76 tools with names, descriptions, and JSON schemas. Categories: markets, quotes, transactions, positions, affiliates, intel, arena."
+        },
+        {
+          "id": "S3",
+          "name": "Auth",
+          "status": "PASS",
+          "command": "tools/call get_positions {\"wallet\":\"AP4u47AMhh3fbuBJqk34vWbxqePPAHt8Yo5zcKPxecbm\"}",
+          "output": "{\"success\":true,\"totalPositions\":1,\"totalBetSol\":0.01,\"activePositions\":1}",
+          "evidence": "Wallet-authenticated call succeeds. Shows 1 active position on mainnet-beta."
+        },
+        {
+          "id": "S4",
+          "name": "Balance",
+          "status": "PASS",
+          "command": "tools/call get_claimable {\"wallet\":\"AP4u47AMhh3fbuBJqk34vWbxqePPAHt8Yo5zcKPxecbm\"}",
+          "output": "{\"success\":true,\"totalClaimableSol\":0,\"winningsClaimableSol\":0,\"refundsClaimableSol\":0}",
+          "evidence": "No dedicated SOL balance tool. get_claimable returns platform balance. get_positions returns bet amounts. Native SOL balance requires direct RPC."
+        }
+      ]
+    },
+    {
+      "name": "Discovery",
+      "checks": [
+        {
+          "id": "D1",
+          "name": "List Markets",
+          "status": "PASS",
+          "command": "tools/call list_markets {}",
+          "output": "{\"success\":true,\"totalMarkets\":86}",
+          "evidence": "86 total markets. 15 Active, 3 with betting open. Markets include IDs, public keys, questions, status, pool sizes, odds."
+        },
+        {
+          "id": "D2",
+          "name": "Market Detail",
+          "status": "PASS",
+          "command": "tools/call get_market {\"publicKey\":\"9RX4qTzJUtg4cd1DacPKnAwosexpyTzpFoWUiZCxtVkY\"}",
+          "output": "{\"success\":true,\"market\":{\"marketId\":\"90\",\"question\":\"Will the SEC approve a prediction market ETF before Jun 30, 2026?\",\"yesPoolSol\":0.02,\"noPoolSol\":0.02,\"totalPoolSol\":0.04,\"platformFeeBps\":300}}",
+          "evidence": "22-field market detail: outcomes, pool sizes, odds, fees (platform 300bps + creator 50bps), timing, layer, access gate."
+        },
+        {
+          "id": "D3",
+          "name": "Pricing Quality",
+          "status": "PASS",
+          "command": "tools/call get_quote {\"market\":\"9RX4qTzJUtg4cd1DacPKnAwosexpyTzpFoWUiZCxtVkY\",\"side\":\"Yes\",\"amount\":0.01}",
+          "output": "{\"success\":true,\"quote\":{\"expectedPayoutSol\":0.0167,\"potentialProfitSol\":0.0065,\"impliedOdds\":60,\"decimalOdds\":1.67,\"feeSol\":0.0002}}",
+          "evidence": "Pari-mutuel pricing with expected payout, profit, implied odds, decimal odds, fees, and pool shift projections."
+        },
+        {
+          "id": "D4",
+          "name": "Search",
+          "status": "FAIL",
+          "command": "N/A",
+          "output": "No search tool exists",
+          "evidence": "list_markets only supports status and layer filters. No keyword/text/category search. Agent must list all and filter client-side."
+        },
+        {
+          "id": "D5",
+          "name": "Schema Consistency",
+          "status": "PASS",
+          "command": "tools/call get_market for 3 markets (IDs 108, 85, 90)",
+          "output": "All 3 markets: 22 identical fields, Schema consistent: True",
+          "evidence": "Identical 22-field schemas across all markets: accessGate, closingTime, creator, creatorFeeBps, currencyType, hasBets, isBettingOpen, layer, layerCode, marketId, noPercent, noPoolSol, platformFeeBps, publicKey, question, resolutionTime, status, statusCode, totalPoolSol, winningOutcome, yesPercent, yesPoolSol."
+        }
+      ]
+    },
+    {
+      "name": "Trading",
+      "checks": [
+        {
+          "id": "T1",
+          "name": "Preview/Dry-Run",
+          "status": "PASS",
+          "command": "tools/call validate_bet {\"market\":\"...\",\"side\":\"Yes\",\"amount\":0.01}",
+          "output": "{\"success\":true,\"validation\":{\"valid\":true,\"details\":{\"amountValid\":true,\"marketStateValid\":true,\"timingValid\":true,\"accessValid\":true}},\"quote\":{\"expectedPayoutSol\":0.0167}}",
+          "evidence": "Two preview tools: get_quote (pricing) and validate_bet (full validation + quote). Both return expected payout, odds, fees without executing."
+        },
+        {
+          "id": "T2",
+          "name": "Place Bet",
+          "status": "PASS",
+          "command": "BAOZI_LIVE=1 tools/call build_bet_transaction {\"market\":\"...\",\"outcome\":\"yes\",\"amount_sol\":0.01,\"user_wallet\":\"AP4u47AMhh3fbuBJqk34vWbxqePPAHt8Yo5zcKPxecbm\"} + external sign/send",
+          "output": "Signature: 55JRYZw6XiSJiGkFTyAExWKM7maLYXw2AxfCBDGdyi5sRemEVhitGm5hPX9nsDVbGHJ2ZN2VGhUHuLZXBKS6oTyM, Confirmed: {\"value\":{\"err\":null}}",
+          "evidence": "MCP builds unsigned tx + simulates (22415 CU). Does NOT auto-sign. External @solana/web3.js signing required. Bet of 0.01 SOL on Yes for market 90 confirmed on-chain at slot 412243463."
+        },
+        {
+          "id": "T3",
+          "name": "Check Position",
+          "status": "PASS",
+          "command": "tools/call get_positions {\"wallet\":\"AP4u47AMhh3fbuBJqk34vWbxqePPAHt8Yo5zcKPxecbm\"}",
+          "output": "{\"success\":true,\"totalPositions\":1,\"totalBetSol\":0.02,\"activePositions\":1}",
+          "evidence": "Position shows 0.02 SOL total (was 0.01 before bet). Bet correctly added to existing position on market 90."
+        },
+        {
+          "id": "T4",
+          "name": "Sell Position",
+          "status": "PASS",
+          "command": "N/A (pari-mutuel)",
+          "output": "No sell tools exist",
+          "evidence": "No sell/exit/redeem tools. Only post-resolution claim tools (winnings, refunds). Correctly reflects pari-mutuel model."
+        },
+        {
+          "id": "T5",
+          "name": "Balance Roundtrip",
+          "status": "PASS",
+          "command": "Solana RPC getBalance",
+          "output": "Balance: 0.111083764 SOL",
+          "evidence": "Balance decreased from ~0.12 to ~0.111 SOL after 0.01 SOL bet + fees. MCP has no native balance tool; requires direct Solana RPC."
+        }
+      ]
+    },
+    {
+      "name": "Error Handling",
+      "checks": [
+        {
+          "id": "E1",
+          "name": "Insufficient Balance",
+          "status": "PASS",
+          "command": "BAOZI_LIVE=1 build_bet_transaction with amount_sol=99",
+          "output": "{\"simulation\":{\"success\":false,\"unitsConsumed\":18611,\"error\":\"{\\\"InstructionError\\\":[0,{\\\"Custom\\\":1}]}\"}}",
+          "evidence": "Two layers: (1) >100 SOL rejected at input validation, (2) 99 SOL (within range, exceeds wallet) caught by simulation with InstructionError Custom(1). Simulation success=false prevents signing."
+        },
+        {
+          "id": "E2",
+          "name": "Invalid Inputs",
+          "status": "PASS",
+          "command": "3 tests: amount=0, amount=-1, invalid market ID",
+          "output": "All 3 return structured errors",
+          "evidence": "amount=0: 'Amount must be between 0.01 and 100 SOL'. amount=-1: same. Invalid market: 'Market INVALID_MARKET_ID_999999 not found'. All return success:false with descriptive messages."
+        },
+        {
+          "id": "E3",
+          "name": "Nonexistent Market",
+          "status": "PASS",
+          "command": "tools/call get_market {\"publicKey\":\"INVALID_MARKET_ID_999999\"}",
+          "output": "{\"success\":false,\"error\":\"Market INVALID_MARKET_ID_999999 not found\"}",
+          "evidence": "Clear error for invalid market. Valid Solana address that isn't a market returns valid=false with zeroed fields (soft failure)."
+        },
+        {
+          "id": "E4",
+          "name": "Recovery",
+          "status": "PASS",
+          "command": "tools/call list_markets {\"status\":\"Active\"}",
+          "output": "{\"success\":true,\"count\":15}",
+          "evidence": "After all error tests, list_markets returns 15 active markets normally. No state corruption."
+        }
+      ]
+    }
+  ],
+  "score": {
+    "passed": 17,
+    "total": 18
+  },
+  "grade": "A",
+  "metadata": {
+    "serverVersion": "2.0.0",
+    "protocolVersion": "2024-11-05",
+    "totalTools": 76,
+    "totalMarkets": 86,
+    "activeMarkets": 15,
+    "bettingOpenMarkets": 3,
+    "programId": "FWyTPzm5cfJwRKzfkscxozatSxF6Qu78JQovQUwKPruJ",
+    "walletAddress": "AP4u47AMhh3fbuBJqk34vWbxqePPAHt8Yo5zcKPxecbm",
+    "betPlaced": {
+      "market": "9RX4qTzJUtg4cd1DacPKnAwosexpyTzpFoWUiZCxtVkY",
+      "marketId": "90",
+      "question": "Will the SEC approve a prediction market ETF before Jun 30, 2026?",
+      "side": "Yes",
+      "amount": 0.01,
+      "txSignature": "55JRYZw6XiSJiGkFTyAExWKM7maLYXw2AxfCBDGdyi5sRemEVhitGm5hPX9nsDVbGHJ2ZN2VGhUHuLZXBKS6oTyM",
+      "slot": 412243463
+    },
+    "toolCallsUsed": 35
+  },
+  "keyFindings": [
+    "MCP does NOT auto-sign transactions. It builds unsigned transactions and returns a signUrl for manual signing. For AI agent use, external Solana signing infrastructure (@solana/web3.js + Keypair) is required.",
+    "No native SOL balance query tool. The MCP only tracks platform positions and claimable amounts. Wallet balance requires direct Solana RPC.",
+    "No keyword search for markets. Only status and layer filters. Agent must list all markets and filter client-side.",
+    "Excellent pari-mutuel pricing tools: get_quote shows expected payout, implied odds, decimal odds, fees, and pool shift. validate_bet adds market state/timing/access validation.",
+    "76 tools covering markets, betting, positions, races, affiliates, intel/analytics, and Agent Arena paper trading.",
+    "Consistent 22-field schema across all markets. Clean JSON responses with success/error pattern.",
+    "BAOZI_LIVE=1 env var required to build transactions (safety gate).",
+    "Only 3 of 86 markets have open betting. Most Lab markets have closed or have zero pools.",
+    "Two-layer error handling: input validation (amount range, required fields) + Solana simulation (insufficient funds, program errors).",
+    "Intel tools (sentiment, whale moves, resolution forecast, market alpha) cost 0.005 SOL each via x402 payment."
+  ],
+  "blockers": [
+    "Agent cannot place bets end-to-end via MCP alone — external transaction signing and broadcasting required. This is the single biggest integration gap for autonomous agent operation."
+  ]
+}

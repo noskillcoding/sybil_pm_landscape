@@ -1,0 +1,199 @@
+{
+  "pm": "Myriad",
+  "tool": "@myriadmarkets/cli",
+  "toolType": "CLI",
+  "version": "0.2.0",
+  "chain": "BNB Chain",
+  "currency": "USD1/USDT",
+  "testedAt": "2026-04-09",
+  "checklistVersion": "unified-v1",
+  "sections": {
+    "setup": {
+      "checks": {
+        "S1": {
+          "id": "S1",
+          "name": "Install + version",
+          "status": "PASS",
+          "command": "npx @myriadmarkets/cli --version",
+          "output": "0.2.0",
+          "evidence": "Version 0.2.0 returned immediately"
+        },
+        "S2": {
+          "id": "S2",
+          "name": "Help / list commands",
+          "status": "PASS",
+          "command": "npx @myriadmarkets/cli --help",
+          "output": "Usage: myriad [options] [command]\n\nMyriad Markets CLI for AI agents (MYRIAD API v2 + wallet execution)\n\nOptions:\n  -V, --version  output the version number\n  --plain  Output ASCII tables (default)\n  --json  Output JSON\n  ...\n\nCommands: mcp, markets, portfolio, wallet, swap, trade, ob, claim, skills",
+          "evidence": "9 commands listed with descriptions, --json flag exists as global option"
+        },
+        "S3": {
+          "id": "S3",
+          "name": "Auth",
+          "status": "PASS",
+          "command": "MYRIAD_PRIVATE_KEY=<from-keychain> npx @myriadmarkets/cli wallet balances --json",
+          "output": "{\"wallet\":\"0x165E...661b\",\"chainId\":56,\"native\":{\"symbol\":\"BNB\",\"formatted\":\"0.0033458792\"},\"tokens\":[{\"symbol\":\"USDT\",\"formatted\":\"1.345165122922471128\"},{\"symbol\":\"USD1\",\"formatted\":\"1.574146003137306546\"}]}",
+          "evidence": "Returns wallet data without interactive auth, MYRIAD_PRIVATE_KEY env var works"
+        },
+        "S4": {
+          "id": "S4",
+          "name": "Balance",
+          "status": "PASS",
+          "command": "wallet balances --json",
+          "output": "{\"wallet\":\"0x165E...661b\",\"chainId\":56,\"native\":{\"symbol\":\"BNB\",\"formatted\":\"0.0033458792\"},\"tokens\":[{\"symbol\":\"USDT\",\"formatted\":\"1.345165122922471128\"},{\"symbol\":\"USD1\",\"formatted\":\"1.574146003137306546\"}]}",
+          "evidence": "Valid JSON with BNB=0.00335, USDT=1.345, USD1=1.574 — all three tokens present with raw and formatted amounts"
+        }
+      }
+    },
+    "discovery": {
+      "checks": {
+        "D1": {
+          "id": "D1",
+          "name": "List markets",
+          "status": "PASS",
+          "command": "ob markets list --json",
+          "output": "{\"data\":[{\"id\":4,\"networkId\":56,\"slug\":\"bitcoin-above-68k-on-april-9-at-4pm-utc-3f5ecda8\",\"title\":\"Bitcoin above $68K on April 9 at 4PM UTC?\",\"publishedAt\":\"2026-04-06T14:27:21.252Z\",\"expiresAt\":\"2026-04-09T16:00:00.000Z\",...}]}",
+          "evidence": "Structured list with IDs, titles, slugs, prices, fees, outcomes. 1 active OB market (id=4)."
+        },
+        "D2": {
+          "id": "D2",
+          "name": "Market detail",
+          "status": "PASS",
+          "command": "ob markets show 4 --json",
+          "output": "{\"id\":4,\"title\":\"Bitcoin above $68K on April 9 at 4PM UTC?\",\"fees\":{\"maker_fee_bps\":0,\"taker_fee_bps\":73},\"outcomes\":[{\"id\":0,\"title\":\"Yes\",...},{\"id\":1,\"title\":\"No\",...}],\"volume\":17842.1995728,...}",
+          "evidence": "Outcomes (Yes/No with prices, shares, holders), volume=17842, fees (maker 0bps, taker 73bps), expiry, description present"
+        },
+        "D3": {
+          "id": "D3",
+          "name": "Orderbook quality",
+          "status": "FAIL",
+          "command": "ob markets orderbook --market-id 4 --outcome-id 0 --json",
+          "output": "{\"marketId\":4,\"outcomeId\":0,\"bids\":[[\"980000000000000000\",\"27210884353741500416\"],[\"970000000000000000\",\"54982817869415809024\"],...],\"asks\":[[\"990000000000000000\",\"910079909090909175808\"]]}",
+          "evidence": "18 bid levels (0.98 to 0.01, monotonically decreasing), but only 1 ask level (0.99). Requires 5+ levels per side. Bid < ask confirmed (spread = 0.01). Fails on ask depth."
+        },
+        "D4": {
+          "id": "D4",
+          "name": "Search",
+          "status": "PASS",
+          "command": "markets list --keyword bitcoin --json",
+          "output": "{\"data\":[{\"id\":19075,\"title\":\"Will Strategy (MSTR) sell any BTC by end of 2026?\",...},{\"id\":49327,\"title\":\"How much Gold will it take to buy one Bitcoin next?\",...},...]}",
+          "evidence": "Returns relevant Bitcoin-related markets with IDs, titles, volumes, outcomes"
+        },
+        "D5": {
+          "id": "D5",
+          "name": "Schema consistency",
+          "status": "PASS",
+          "command": "markets show <id> --json for IDs 120473, 10198, 141355",
+          "output": "All 3 markets returned identical 40-key schema",
+          "evidence": "Keys: bannerImageUrl, description, eventId, executionMode, expiresAt, externalSources, featured, fees, id, imageUrl, inPlay, liquidity, liquidityPrice, moneyline, negRisk, networkId, ogImageUrl, outcomeIndex, outcomes, perpetual, publishedAt, resolutionSource, resolutionTitle, resolvedOutcomeId, resolvesAt, shares, slug, state, title, token, topHolders, topics, users, voided, volume, volume24h, volumeNotional, volumeNotional24h"
+        }
+      }
+    },
+    "trading": {
+      "checks": {
+        "T1": {
+          "id": "T1",
+          "name": "Preview / dry-run",
+          "status": "PASS",
+          "command": "ob market buy --market-id 4 --outcome-id 0 --value 1 --dry-run --json",
+          "output": "{\"executionMode\":\"orderbook\",\"marketId\":4,\"side\":\"buy\",\"marketQuote\":{\"inputMode\":\"value\",\"requestedValueRaw\":\"1000000000000000000\",\"estimatedSharesRaw\":\"1010101010101010102\",\"estimatedValueRaw\":\"1000000000000000000\",\"deepestPriceRaw\":\"990000000000000000\",\"levels\":[...]}}",
+          "evidence": "Returns estimated shares (1.0101), cost ($1), deepest price (0.99), order details without submitting to exchange"
+        },
+        "T2": {
+          "id": "T2",
+          "name": "Limit order + verify",
+          "status": "PASS",
+          "command": "ob limit buy --market-id 4 --outcome-id 0 --price 0.05 --shares 1 --json",
+          "output": "{\"orderHash\":\"0x54ae...2d24\",\"response\":{\"status\":\"open\",\"timeInForce\":\"GTC\"},\"approval\":{\"approved\":true,\"symbol\":\"USD1\"}}",
+          "evidence": "Order placed with hash 0x54ae...2d24, GTC time-in-force. Verified via ob orders show: status=open, filledAmount=0"
+        },
+        "T3": {
+          "id": "T3",
+          "name": "Cancel + verify",
+          "status": "PASS",
+          "command": "ob orders cancel 0x54aeff471e2d2b230db4b2ba0cdcf357c8efc3e63297d38d254ec41b00ea2d24 --json",
+          "output": "{\"wallet\":\"0x165E...661b\",\"orderHash\":\"0x54ae...2d24\",\"response\":{\"orderHash\":\"0x54ae...2d24\",\"status\":\"cancelled\"}}",
+          "evidence": "Cancel succeeded on first attempt. Verified via ob orders show: status=cancelled, cancelledAt not null"
+        },
+        "T4": {
+          "id": "T4",
+          "name": "Market buy + position",
+          "status": "PASS",
+          "command": "ob market buy --market-id 4 --outcome-id 0 --value 1 --json --wait-ms 15000",
+          "output": "{\"observedStatus\":\"filled\",\"completion\":\"filled\",\"observedOrder\":{\"filledAmount\":\"1010101010101010102\",\"filledAt\":\"2026-04-09T12:24:21.808Z\"}}",
+          "evidence": "Filled 1.0101 shares at 0.99. Position verified via ob positions list: shares=1.0101, outcomeTitle=Yes, status=ongoing"
+        },
+        "T5": {
+          "id": "T5",
+          "name": "Sell + balance delta",
+          "status": "PASS",
+          "command": "ob market sell --market-id 4 --outcome-id 0 --shares 1.01 --json --wait-ms 15000",
+          "output": "{\"observedStatus\":\"filled\",\"completion\":\"filled\",\"observedOrder\":{\"filledAmount\":\"1010000000000000000\",\"filledAt\":\"2026-04-09T12:24:49.754Z\"}}",
+          "evidence": "Sold 1.01 shares at 0.98. USD1 balance: pre-buy=1.574, post-buy=0.574, post-sell=1.564. Net loss=0.0106 (1.06%), within 5% tolerance."
+        }
+      }
+    },
+    "errors": {
+      "checks": {
+        "E1": {
+          "id": "E1",
+          "name": "Insufficient balance",
+          "status": "FAIL",
+          "command": "ob market buy --market-id 4 --outcome-id 0 --value 300 --json",
+          "output": "{\"observedStatus\":\"cancelled\",\"completion\":\"cancelled\",\"observedOrder\":{\"status\":\"cancelled\",\"filledAmount\":\"0\"}}",
+          "evidence": "CLI submitted $300 FAK order with only ~$1.56 USD1. No pre-flight balance check. Order was silently cancelled by exchange. No structured error about insufficient funds — an AI agent cannot distinguish balance failure from other cancellation reasons."
+        },
+        "E2": {
+          "id": "E2",
+          "name": "Invalid inputs",
+          "status": "PASS",
+          "command": "Three tests: value=0, shares=-1, price=-1",
+          "output": "{\"ok\":false,\"error\":\"value must be greater than zero. Received: 0\"}\n{\"ok\":false,\"error\":\"shares must be a positive decimal amount. Received: -1\"}\n{\"ok\":false,\"error\":\"price must be a positive decimal amount. Received: -1\"}",
+          "evidence": "All 3/3 return parseable JSON errors with clear descriptive messages and exit code 1"
+        },
+        "E3": {
+          "id": "E3",
+          "name": "Resolved market",
+          "status": "PASS",
+          "command": "trade buy --market-id 2116 --outcome-id 0 --value 0.01 --json",
+          "output": "{\"ok\":false,\"error\":\"MYRIAD API request failed (400): Market is not open for trading\"}",
+          "evidence": "Clear structured JSON error indicating market is not open for trading (market 2116 = 'Will Donald Trump meet with CZ before December?', state=resolved)"
+        },
+        "E4": {
+          "id": "E4",
+          "name": "Error recovery",
+          "status": "PASS",
+          "command": "markets show 999999999 --json && wallet balances --json",
+          "output": "Error: {\"ok\":false,\"error\":\"MYRIAD API request failed (404): Market not found\"}\nRecovery: USD1=1.563549 returned successfully",
+          "evidence": "Invalid market returns structured 404 error. Subsequent balance query succeeds immediately — no state corruption."
+        }
+      }
+    }
+  },
+  "score": {
+    "passed": 16,
+    "total": 18
+  },
+  "grade": "A",
+  "gradeReason": "16/18 checks passed. Two failures: (1) D3 orderbook depth has only 1 ask level vs required 5+ per side — this is a market liquidity issue, not a tool defect; (2) E1 insufficient balance order is silently cancelled rather than returning a structured error — this is a real tool deficiency that would confuse an AI trading agent. All trading operations (preview, limit, cancel, market buy, sell) worked flawlessly on first attempt. JSON output is consistently structured across all commands.",
+  "metadata": {
+    "auth": "env_var",
+    "outputQuality": "json",
+    "hasPreview": true,
+    "hasFeeInfo": true
+  },
+  "keyFindings": [
+    "Excellent JSON output quality — every command returns structured, parseable JSON with consistent schemas",
+    "Full trading lifecycle works: dry-run preview, limit order, cancel, market buy, market sell all succeeded on first attempt",
+    "Orderbook mode (ob) uses USD1 collateral with maker 0bps / taker 73bps fee structure",
+    "FAK (Fill-And-Kill) time-in-force for market orders with --wait-ms polling for fill confirmation",
+    "GTC (Good-Til-Cancelled) for limit orders, cancel works reliably",
+    "Dry-run mode provides detailed market quotes with level-by-level breakdown",
+    "Input validation is solid: zero, negative values all return clear error messages",
+    "CLI self-describes as 'for AI agents' — well-suited for programmatic use",
+    "MCP server mode available via 'mcp' command for tool integration",
+    "Only 1 active orderbook market during testing — limited market coverage"
+  ],
+  "blockers": [
+    "E1: No pre-flight balance check on orderbook orders. A $300 order with $1.56 balance is submitted and silently cancelled. An AI agent cannot programmatically determine the failure reason. Should return a structured error like {\"ok\":false,\"error\":\"Insufficient USD1 balance. Required: 315, Available: 1.56\"} before submission."
+  ]
+}

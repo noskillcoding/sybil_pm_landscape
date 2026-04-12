@@ -1,0 +1,26 @@
+{
+  "pm": "Limitless",
+  "slug": "limitless",
+  "website": "https://limitless.exchange",
+  "reachability": "open",
+  "score": 9,
+  "grade": "C",
+  "checks": {
+    "1.1": { "pass": true, "note": "docs.limitless.exchange/llms.txt returns markdown with # heading, Mintlify-built" },
+    "1.2": { "pass": false, "note": "Accept: text/markdown returns HTML (Next.js app), no content negotiation" },
+    "1.3": { "pass": true, "note": "meta description: 'Forecast the future on Limitless, financial prediction market'" },
+    "2.1": { "pass": false, "note": "Raw HTML is JS shell with script tags only, no real text content" },
+    "2.2": { "pass": false, "note": "No semantic HTML; rendered DOM uses only generic divs, no nav/main/article" },
+    "2.3": { "pass": true, "note": "Readable slugs: /markets/will-a-penalty-be-taken-in-rayo-vallecano-..." },
+    "2.4": { "pass": true, "note": "Sitemap index with 3 sub-sitemaps: general, markets, blog" },
+    "2.5": { "pass": true, "note": "/this-does-not-exist-xyz123 returns HTTP 404" },
+    "3.1": { "pass": true, "note": "docs.limitless.exchange exists with API ref, SDK docs, developer guides" },
+    "3.2": { "pass": true, "note": "Rendered homepage footer has 'Docs' link to docs.limitless.exchange" },
+    "3.3": { "pass": true, "note": "REST API endpoints, WebSocket, Python/TS/Java SDKs, EIP-712 signing docs" },
+    "3.4": { "pass": false, "note": "Raw HTML has zero <a href> navigation links; all routing is JS-only" },
+    "4.1": { "pass": true, "note": "robots.txt: User-agent: * Allow: / -- no AI bot blocks" },
+    "4.2": { "pass": true, "note": "No CAPTCHA or Cloudflare challenge on any public page" },
+    "4.3": { "pass": false, "note": "No bot/agent policy, no MCP docs, no agent quickstart section" }
+  },
+  "tested": "2026-03-31"
+}

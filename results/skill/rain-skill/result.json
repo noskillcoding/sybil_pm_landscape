@@ -1,0 +1,78 @@
+{
+  "pm": "Rain Protocol",
+  "skill": "OpenClaw Skills (rain-create-market, rain-trade, rain-data)",
+  "skillFormat": "openclaw",
+  "milestones": {
+    "M1_understand_skill": {
+      "pass": true,
+      "notes": "Three SKILL.md files in GitHub repo (rain-trade, rain-data, rain-create-market). Well-documented SDK with Rain (stateless queries/tx builders) and RainAA (smart account execution). Chain: Arbitrum One, Currency: USDT."
+    },
+    "M2_authenticate": {
+      "pass": true,
+      "notes": "SDK is stateless — no explicit auth. Initialized Rain({ environment: 'production' }), then viem WalletClient for signing. Private key from macOS Keychain. All API calls succeeded."
+    },
+    "M3_list_markets": {
+      "pass": true,
+      "notes": "getPublicMarkets returned 10 Live markets. API returns raw MongoDB objects (_id, question) not the documented field names (id, title). All markets had contract addresses and valid status."
+    },
+    "M4_market_detail_prices": {
+      "pass": true,
+      "notes": "getMarketDetails and getMarketPrices both returned correct data. Netflix-Warner market: YES 60.3%, NO 30.9%, Unclassified 8.8%. Prices in 1e18 scale as documented."
+    },
+    "M5_buy_order": {
+      "pass": true,
+      "notes": "Bought 1 USDT of Option 1 (YES) on Netflix-Warner market. Required USDT approval first. Note: selectedOption is 1-indexed on-chain despite skill docs claiming 0-indexed. Tx: 0x33e987924da1624eccb040b7b82e3d3c1281be259f45b17110edabaa1efbd802"
+    },
+    "M6_verify_position": {
+      "pass": true,
+      "notes": "getPositionByMarket showed 1,666,666 shares of Option 1 with dynamic payout of 2.366897 USDT. getPositions (all markets) returned empty — possible API delay."
+    },
+    "M7_sell_position": {
+      "pass": false,
+      "notes": "buildSellOptionTx only places LIMIT sell orders, not market sells. Three attempts at different prices all placed orders in the order book. No buy orders exist for Option 1 (firstBuyOrderPrice: 0). Position could not be closed. Cancel orders worked after extracting orderID from event logs. SDK lacks market sell capability."
+    },
+    "M8_final_balance": {
+      "pass": true,
+      "notes": "Pre: 0.003969 ETH + 2.186595 USDT. Post: 0.003936 ETH + 1.186595 USDT + 1,666,666 shares (worth ~$1 at market or $2.37 if YES wins). ETH gas: -$0.06 across 7 txs. USDT delta: -1.000000 (in position)."
+    }
+  },
+  "score": "6/8",
+  "grade": "B",
+  "skillAssessment": {
+    "quality": "Good — comprehensive SDK with clear architecture (Rain stateless + RainAA execution). Three well-structured SKILL.md files covering trading, data, and market creation. API reference is thorough.",
+    "accuracy": "Mixed — field names in docs don't match API responses (id vs _id, title vs question). Option indexing documented as 0-indexed but actually 1-indexed on-chain for buys. buildSellOptionTx is only limit orders but docs don't clarify this.",
+    "completeness": "Missing market sell capability. The SDK only supports limit sells, and the docs don't mention this limitation. Cancel order flow requires manual event log parsing for orderID — SDK doesn't return it from the sell call. getPositions (all markets) has reliability issues.",
+    "usability": "Moderate — installation is easy (npm install), stateless design is clean, tx builder pattern is elegant. But the sell workflow gap and field name mismatches make real trading challenging. Agent would need external swap (Uniswap) to get USDT since Rain is USDT-only.",
+    "agentReadiness": "Medium — an AI agent can read markets, get prices, and buy shares effectively. Selling/closing positions is problematic without market sell. Order management (cancel) requires parsing raw event logs which is fragile."
+  },
+  "methodUsed": "Direct SDK integration via Node.js scripts. npm install @buidlrrr/rain-sdk + viem. No OpenClaw CLI used (read skill files from GitHub instead).",
+  "vpnRequired": false,
+  "keyFindings": [
+    "Rain SDK works on Arbitrum One with USDT as the base currency (6 decimals)",
+    "SDK architecture is clean: Rain (stateless tx builders) + RainAA (smart account execution)",
+    "API field names don't match SKILL.md documentation (_id vs id, question vs title)",
+    "Option indices are 1-based on-chain despite documentation claiming 0-indexed",
+    "buildSellOptionTx ONLY places limit orders — no market sell capability exists in the SDK",
+    "Cancel sell orders requires extracting orderID from PlaceSellOrder event logs (word[3] in event data)",
+    "getPositions (all markets) may return empty when getPositionByMarket returns data — API consistency issue",
+    "No USDT faucet or native swap — agents need external DEX (Uniswap) to acquire USDT for trading",
+    "Gas costs are low on Arbitrum (~$0.01 per tx)",
+    "Skill files are well-structured OpenClaw format with YAML frontmatter and clear code examples"
+  ],
+  "blockers": [
+    "No market sell function — cannot close positions immediately, only place limit sell orders",
+    "Order book for many options has zero buy orders, making limit sells unfillable",
+    "SDK doesn't return orderID from sell transactions, requiring manual event log parsing for cancels"
+  ],
+  "transactions": {
+    "uniswap_swap": "0xcf5825f0796541c0bacfee7279400bd14a8be657f6f4fc68fac7353ce505a91d",
+    "usdt_approval": "0x3237b8c14080b52c70d8d4af8fc6f5a95992d1ea0e89b74ec83525148c9a4b35",
+    "buy_option": "0x33e987924da1624eccb040b7b82e3d3c1281be259f45b17110edabaa1efbd802",
+    "sell_order_1": "0xd6a64277f4ad7c21ffed98854a9482358d91b97d113cc4bc3d1b20fde19d37f3",
+    "cancel_sell_1": "0x8f823e8e60783378e09f29dccd146a50d471335a3499c171d9d779dd74cad1dd",
+    "sell_order_2": "0x091de297850ac092cfd47633a1a79a30258477e79fcdd7d697487953f808041f",
+    "cancel_sell_2": "0x03e4e0d416103827a11d2e64b096fddc062d9d4c809c73dab63593d9ab209c11",
+    "sell_order_3": "0xf51e933776883bdf5d3088e99fc9a3908ee134966fd77ff915ce51fdf087f592",
+    "cancel_sell_3": "0x53d122b87386e380eebd75b3c70c78868d8f6748fbb89346bd736a5e18a2a04c"
+  }
+}

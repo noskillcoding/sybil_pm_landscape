@@ -1,0 +1,96 @@
+{
+  "platform": "Seer",
+  "url": "https://seer.pm",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "status": "OK",
+    "notes": "seer.pm loads successfully with real content. app.seer.pm is a JS SPA with dehydrated data."
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "notes": "seer.pm/llms.txt returns 404. docs.seer.pm does not resolve (ECONNREFUSED). No llms.txt found anywhere."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "notes": "No evidence of content negotiation for text/markdown on any endpoint."
+    },
+    "1.3_structured_metadata": {
+      "pass": false,
+      "notes": "No meta description, og:description, or JSON-LD detected on seer.pm landing page or app.seer.pm."
+    },
+    "2.1_content_without_js": {
+      "pass": true,
+      "notes": "seer.pm landing page has substantial static HTML text content (feature descriptions, market types, CTAs). app.seer.pm is a JS SPA requiring rendering, but market data is embedded in dehydrated state."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "notes": "No semantic HTML5 elements (nav, main, article, header, footer) detected in the landing page markup. Fails the 3+ threshold."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "notes": "app.seer.pm uses descriptive question-based slugs for markets, e.g. 'who-will-win-peruvian-presidential-election-in-2026'. Clean and readable."
+    },
+    "2.4_sitemap_xml": {
+      "pass": false,
+      "notes": "seer.pm/sitemap.xml returns 404."
+    },
+    "2.5_proper_404s": {
+      "pass": true,
+      "notes": "seer.pm/this-does-not-exist-xyz123 returned a proper 404 HTTP status code."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": true,
+      "notes": "Documentation exists at seer-3.gitbook.io/seer-documentation covering architecture, market types, Reality.eth, Conditional Tokens, Kleros. GitHub org has api-gateway with REST API docs and ai-prediction-markets repo."
+    },
+    "3.2_docs_findable": {
+      "pass": true,
+      "notes": "Documentation link is on the seer.pm landing page footer, directly linking to GitBook docs. One click from homepage."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": true,
+      "notes": "api-gateway repo documents a full REST API for prediction market operations: create-market, split, merge, redeem, trade/quote, trade/execute, relay. Supports Gnosis chain (100), Ethereum (1), Optimism (10), Base (8453). Account Abstraction via ERC-4337."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "notes": "Landing page uses standard a href links to app.seer.pm, documentation, blog, GitHub, Discord, and social media."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": false,
+      "notes": "seer.pm/robots.txt returns 404. No robots.txt found. While absence doesn't block crawlers, it shows no explicit consideration for bot access."
+    },
+    "4.2_no_captcha": {
+      "pass": true,
+      "notes": "No CAPTCHA encountered on any page or endpoint."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "notes": "No bot policy or agent-specific documentation. Seer is NOT listed in Gnosis prediction-market-agent-tooling (which supports Manifold, AIOmen, Polymarket). The ai-prediction-markets repo has only boilerplate README. No agent integration guide exists."
+    }
+  },
+  "score": {
+    "passed": 8,
+    "total": 15,
+    "checks_passed": [
+      "2.1_content_without_js",
+      "2.3_readable_url_slugs",
+      "3.1_dev_docs_exist",
+      "3.2_docs_findable",
+      "3.3_programmatic_surface_documented",
+      "2.5_proper_404s",
+      "3.4_standard_navigation",
+      "4.2_no_captcha"
+    ],
+    "checks_failed": [
+      "1.1_llms_txt",
+      "1.2_markdown_negotiation",
+      "1.3_structured_metadata",
+      "2.2_semantic_html",
+      "2.4_sitemap_xml",
+      "4.1_ai_crawlers_allowed",
+      "4.3_bot_policy_or_agent_docs"
+    ],
+    "grade": "C"
+  },
+  "summary": "Seer scores 8/15 (grade C). The landing page has real static content and standard navigation links, and the api-gateway repo documents a useful REST API for programmatic market operations. However, the platform lacks almost all AI/agent discoverability features: no llms.txt, no structured metadata, no semantic HTML, no sitemap, no robots.txt, and no integration with Gnosis prediction-market-agent-tooling. The docs are conceptual rather than developer-focused. The api-gateway is the bright spot but is buried in GitHub rather than linked from docs."
+}

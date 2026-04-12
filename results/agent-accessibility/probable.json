@@ -1,0 +1,96 @@
+{
+  "platform": "Probable",
+  "url": "https://probable.markets",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "status": 403,
+    "note": "Main site returns 403 (Cloudflare bot protection). docs.probable.markets returns 200."
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": true,
+      "note": "probable.markets/llms.txt returns 403 (blocked). docs.probable.markets/llms.txt exists and returns structured documentation index with 19 doc links across 5 categories (GitBook-hosted)."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": true,
+      "note": "docs.probable.markets returns Content-Type: text/markdown; charset=utf-8 when Accept: text/markdown is sent. Returns clean markdown content. Main site blocked (403)."
+    },
+    "1.3_structured_metadata": {
+      "pass": false,
+      "note": "Main site blocked (403), cannot verify meta tags. Docs site content shows no meta description or JSON-LD in the page excerpts examined."
+    },
+    "2.1_content_without_js": {
+      "pass": true,
+      "note": "docs.probable.markets serves real text content accessible without JavaScript. Main site blocked by Cloudflare so no content available without JS/browser."
+    },
+    "2.2_semantic_html": {
+      "pass": false,
+      "note": "Docs pages use basic HTML (h1, figure, figcaption, ul/li, strong) but lack nav, main, article, header, footer semantic elements. Only 0-1 of the required 3+ semantic elements found."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "note": "Docs URLs are clean and readable: /overview/how-it-works, /trade-on-probable/trading-basics, /markets/how-are-markets-created, etc."
+    },
+    "2.4_sitemap_xml": {
+      "pass": true,
+      "note": "docs.probable.markets/sitemap.xml exists with sitemap index pointing to sitemap-pages.xml containing 17 URLs. Main site sitemap returns 403."
+    },
+    "2.5_proper_404s": {
+      "pass": false,
+      "note": "probable.markets/this-does-not-exist-xyz123 returns 403 (not a proper 404). Cloudflare blocks everything uniformly."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": true,
+      "note": "docs.probable.markets exists as a GitBook-hosted documentation site with 17 pages covering platform mechanics, trading, markets, and points."
+    },
+    "3.2_docs_findable": {
+      "pass": false,
+      "note": "Main site is entirely blocked (403), so docs are not discoverable from the main site. No link path from probable.markets to docs.probable.markets is accessible to agents."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": false,
+      "note": "No API, SDK, smart contract, subgraph, GraphQL, or any programmatic access documentation found anywhere in the docs. All content is user-facing trading guides only."
+    },
+    "3.4_standard_navigation": {
+      "pass": false,
+      "note": "Docs pages show minimal navigation. Only one external link (Discord) found. No sidebar nav links, no header/footer nav rendered in agent-accessible content. GitBook may render nav via JS only."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": false,
+      "note": "robots.txt explicitly blocks ClaudeBot, GPTBot, CCBot, Amazonbot, Bytespider, Google-Extended, meta-externalagent, Applebot-Extended. Content-Signal: ai-train=no. Main site returns 403 to all non-browser requests."
+    },
+    "4.2_no_captcha": {
+      "pass": false,
+      "note": "Main site returns 403 for all non-browser user agents, effectively acting as a blanket block (likely Cloudflare challenge/WAF). This is functionally equivalent to a CAPTCHA wall for agents."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "note": "No bot policy page, no agent documentation, no terms for automated access. robots.txt has Cloudflare content-signal framework but no dedicated policy page."
+    }
+  },
+  "score": {
+    "total_passed": 6,
+    "total_checks": 15,
+    "grade": "D",
+    "passed_checks": [
+      "1.1_llms_txt",
+      "1.2_markdown_negotiation",
+      "2.1_content_without_js",
+      "2.3_readable_url_slugs",
+      "2.4_sitemap_xml",
+      "3.1_dev_docs_exist"
+    ],
+    "failed_checks": [
+      "1.3_structured_metadata",
+      "2.2_semantic_html",
+      "2.5_proper_404s",
+      "3.2_docs_findable",
+      "3.3_programmatic_surface_documented",
+      "3.4_standard_navigation",
+      "4.1_ai_crawlers_allowed",
+      "4.2_no_captcha",
+      "4.3_bot_policy_or_agent_docs"
+    ]
+  },
+  "summary": "Probable scores a D (6/15). The main site (probable.markets) is entirely blocked by Cloudflare, returning 403 to all non-browser requests. The docs subdomain (docs.probable.markets, GitBook-hosted) is more accessible, supporting llms.txt and markdown content negotiation. However, the docs contain only user-facing trading guides with no API/SDK documentation, minimal semantic HTML, and navigation that appears JS-rendered. The robots.txt explicitly blocks all major AI crawlers. There is no programmatic surface documented and no bot/agent policy."
+}

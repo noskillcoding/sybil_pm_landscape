@@ -1,0 +1,83 @@
+{
+  "site": "metaculus",
+  "url": "https://www.metaculus.com",
+  "test_date": "2026-03-31",
+  "reachability": "cf-blocked",
+  "reachability_detail": "Homepage returns 403 Cloudflare managed challenge to curl and WebFetch (empty body). Playwright (full browser with JS) passes the challenge and loads content. robots.txt and /llms.txt bypass CF and return directly from origin.",
+
+  "checks": {
+    "1_discovery": {
+      "1.1_llms_txt": {
+        "pass": false,
+        "detail": "metaculus.com/llms.txt returns HTTP 404 with a 'Page not found' message. docs.metaculus.com/llms.txt returns Cloudflare 522 error (origin server timeout). Neither returns markdown starting with #."
+      },
+      "1.2_markdown_negotiation": {
+        "pass": false,
+        "detail": "Accept: text/markdown returns HTTP 200 with content-type: text/markdown and headers 'content-signal: ai-train=yes, search=yes, ai-input=yes'. However content-length is 0 (empty body). Headers signal intent but no actual markdown content is served -- fails the practical test."
+      },
+      "1.3_structured_metadata": {
+        "pass": true,
+        "detail": "Has meta name='description' ('Metaculus is an online forecasting platform and aggregation engine working to improve human reasoning and coordination on topics of global importance.'). Also has og:title, og:description, og:image. No JSON-LD."
+      }
+    },
+    "2_crawlability": {
+      "2.1_content_without_js": {
+        "pass": false,
+        "detail": "Homepage is a Next.js SPA behind Cloudflare challenge. curl and WebFetch receive either a CF challenge page (403) or empty content. No real text is available without JavaScript execution."
+      },
+      "2.2_semantic_html": {
+        "pass": true,
+        "detail": "Rendered page uses header (1), main (1), section (7), footer (1) semantic HTML elements. Accessibility snapshot also shows banner, contentinfo, searchbox, heading, and list roles."
+      },
+      "2.3_readable_url_slugs": {
+        "pass": true,
+        "detail": "URLs follow /questions/{id}/{slug}/ pattern, e.g. /questions/25730/us-controls-tehran-in-war-with-iran/, /questions/42473/who-will-be-irans-supreme-leader-on-jan-1-2027/, /questions/40884/trump-declare-war-on-iran-before-2029/."
+      },
+      "2.4_sitemap_xml": {
+        "pass": false,
+        "detail": "sitemap.xml returns Cloudflare managed challenge (403) via curl. WebFetch returns empty content. robots.txt does not reference a sitemap. Cannot verify valid XML sitemap exists."
+      },
+      "2.5_proper_404s": {
+        "pass": true,
+        "detail": "Via Playwright, /this-does-not-exist-xyz123 renders a 'Page not found' page with a 'Return to Home page' link. The /llms.txt path returns proper HTTP 404 from origin. Via curl the path gets CF-challenged (403), but the underlying app handles 404s correctly."
+      }
+    },
+    "3_documentation": {
+      "3.1_dev_docs_exist": {
+        "pass": true,
+        "detail": "/api/ serves Swagger/OpenAPI documentation titled 'Metaculus API 2.0.0 OAS3' with sections on API Data Access, Bot Benchmarking Access Tier, Authentication, and endpoint documentation. docs.metaculus.com exists but returned 522 at test time."
+      },
+      "3.2_docs_findable": {
+        "pass": true,
+        "detail": "Footer contains direct link to 'API' (/api/), 'FAQ' (/faq/), 'Forecasting Resources' (/help/prediction-resources/), and 'Guidelines' (/help/guidelines/). API link is 1 click from homepage."
+      },
+      "3.3_programmatic_surface_documented": {
+        "pass": true,
+        "detail": "API docs include endpoints: GET /api/posts/ (retrieve posts feed), GET /api/posts/{postId}/ (retrieve post details), POST /api/questions/forecast/ (submit forecasts), with Authorize button and Schemas section. Mentions Bot Benchmarking Access Tier."
+      },
+      "3.4_standard_navigation": {
+        "pass": true,
+        "detail": "146 <a href> links on homepage including Questions, Tournaments, Services, News, API, FAQ, etc. Full standard HTML navigation."
+      }
+    },
+    "4_access": {
+      "4.1_ai_crawlers_allowed": {
+        "pass": true,
+        "detail": "robots.txt contains 'User-Agent: * / Allow: /' -- fully permissive. No AI-specific blocks. Markdown negotiation includes 'content-signal: ai-train=yes, search=yes, ai-input=yes' headers explicitly welcoming AI access."
+      },
+      "4.2_no_captcha": {
+        "pass": false,
+        "detail": "Cloudflare managed challenge (JS challenge) blocks non-browser agents on most pages. While not a traditional CAPTCHA, it requires JavaScript execution and browser fingerprinting to pass, effectively blocking simple HTTP agents. robots.txt and some static paths bypass CF."
+      },
+      "4.3_bot_policy_or_agent_docs": {
+        "pass": true,
+        "detail": "Footer links to 'Tournaments for AI bots' (/aib/) which redirects to /futureeval/ -- FutureEval page with 'Measuring the forecasting accuracy of AI', 'Model Leaderboard', 'Bot tournaments', 'Pros vs. Bots'. API docs mention 'Bot Benchmarking Access Tier'. Homepage features question about top bot rankings. Metaculus actively supports and documents AI agent participation."
+      }
+    }
+  },
+
+  "score": 10,
+  "max_score": 15,
+  "grade": "B",
+  "summary": "Metaculus earns a B grade (10/15). Strong points: excellent API documentation (Swagger/OpenAPI), explicit AI-welcoming signals (content-signal headers, permissive robots.txt), dedicated bot tournament infrastructure (FutureEval), semantic HTML, readable URL slugs, and standard navigation. Weaknesses: Cloudflare managed challenge blocks non-browser agents from most pages (CF-blocked reachability), no llms.txt, no accessible sitemap, content requires JavaScript to render, and the markdown negotiation returns empty bodies despite correct headers. The site is clearly AI-friendly in intent (bot tournaments, API access tiers, content-signal headers) but the CF protection and SPA architecture create significant barriers for simple HTTP-based agents."
+}

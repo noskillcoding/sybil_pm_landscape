@@ -1,0 +1,96 @@
+{
+  "pm": "Limitless",
+  "tool": "limitless-cli",
+  "toolType": "CLI",
+  "version": "0.1.0",
+  "chain": "Base",
+  "currency": "USDC",
+  "testedAt": "2026-04-09",
+  "checklistVersion": "unified-v1",
+  "sections": {
+    "setup": {
+      "checks": {
+        "S1": { "name": "Version Check", "result": "PASS", "output": "limitless 0.1.0" },
+        "S2": { "name": "Help Output", "result": "PASS", "output": "All commands listed, -o json confirmed, --api-key and --private-key global options present" },
+        "S3": { "name": "Auth Test", "result": "BLOCKED", "output": "Error: No API key found. Set via --api-key, LIMITLESS_API_KEY env var, or run `limitless setup`.", "notes": "CLI requires API key for all authenticated commands. Private key alone is insufficient. Setup wizard is interactive only. HMAC tokens from Limitless UI are incompatible with CLI's X-API-Key header." },
+        "S4": { "name": "Query Balance", "result": "BLOCKED", "output": "Error: No API key found.", "notes": "Depends on S3 auth. portfolio allowance/positions both require API key." }
+      },
+      "passed": 2,
+      "total": 4
+    },
+    "discovery": {
+      "checks": {
+        "D1": { "name": "Markets List", "result": "PASS", "output": "Returns 20 markets/page with 29-key schema. All USDC collateral on Base." },
+        "D2": { "name": "Get Specific Market", "result": "PASS", "output": "Detailed market data with prices, tokens, venue, conditionId. Slug is positional arg." },
+        "D3": { "name": "Orderbook Prices & Spread", "result": "PASS", "output": "bid/ask via `orderbook price`, spread via `orderbook spread`, full depth via `orderbook book`. Also has midpoint, last-trade, history, events, live monitor." },
+        "D4": { "name": "Search Markets", "result": "PASS", "output": "Search works without auth. Returns grouped markets with sub-markets. Has --limit flag." },
+        "D5": { "name": "Schema Consistency", "result": "PASS", "output": "All 3 test markets have identical 29-key schema across different categories (ETH, Oil, DOGE)." }
+      },
+      "passed": 5,
+      "total": 5
+    },
+    "trading": {
+      "checks": {
+        "T1": { "name": "Preview/Dry-Run", "result": "BLOCKED", "notes": "Auth required. No --dry-run flag exists." },
+        "T2": { "name": "Place Limit Order", "result": "BLOCKED", "notes": "Auth required." },
+        "T3": { "name": "Cancel Order", "result": "BLOCKED", "notes": "Auth required." },
+        "T4": { "name": "Market Buy + Position", "result": "BLOCKED", "notes": "Auth required." },
+        "T5": { "name": "Sell + Balance Delta", "result": "BLOCKED", "notes": "Auth required." }
+      },
+      "passed": 0,
+      "total": 5
+    },
+    "errorHandling": {
+      "checks": {
+        "E1": { "name": "Over-Balance Order", "result": "PASS", "output": "Clear auth error message with actionable fix instructions. Auth check fires before balance validation." },
+        "E2": { "name": "Invalid Inputs", "result": "PASS", "output": "404 for nonexistent slug, 400 with format hint for malformed slug. Clear structured JSON errors." },
+        "E3": { "name": "Resolved Market Trade", "result": "BLOCKED", "notes": "API only lists FUNDED markets. Cannot locate resolved market slug. Auth blocks trade attempt." },
+        "E4": { "name": "Recovery After Error", "result": "PASS", "output": "CLI recovers cleanly after 400 error. No state corruption between invocations." }
+      },
+      "passed": 3,
+      "total": 4
+    }
+  },
+  "score": {
+    "passed": 10,
+    "total": 18
+  },
+  "grade": "C",
+  "gradeScale": "A:16-18, B:13-15, C:9-12, D:5-8, F:0-4",
+  "metadata": {
+    "binary": "/tmp/limitless",
+    "binarySize": "5070240 bytes",
+    "wallet": "0x165E392409f3C0bA092Ae9Aa290B6AE57B1b661b",
+    "authMethods": ["--api-key flag", "LIMITLESS_API_KEY env var", "interactive setup wizard"],
+    "signingMethod": "--private-key flag or LIMITLESS_PRIVATE_KEY env var",
+    "commands": {
+      "discovery": ["markets list", "markets get", "markets search", "markets categories"],
+      "orderbook": ["orderbook book", "orderbook price", "orderbook midpoint", "orderbook spread", "orderbook last-trade", "orderbook history", "orderbook events", "orderbook monitor"],
+      "trading": ["trading create", "trading orders", "trading locked-balance", "trading cancel", "trading cancel-batch", "trading cancel-all"],
+      "portfolio": ["portfolio positions", "portfolio trades", "portfolio pnl", "portfolio history", "portfolio points", "portfolio allowance"],
+      "utility": ["approve check", "approve set", "wallet create", "wallet import", "wallet show", "wallet address", "wallet reset", "shell", "setup"]
+    },
+    "outputFormats": ["table", "json"],
+    "tradingOrderTypes": ["GTC (limit)", "FOK (market)"],
+    "tradingParams": ["--slug", "--side (buy/sell)", "--outcome (yes/no)", "--price (0.01-0.99)", "--size", "--order-type (GTC/FOK)", "--nonce"]
+  },
+  "keyFindings": [
+    "Discovery is excellent: rich 29-key market schema, full orderbook depth, search, categories, history, live monitoring",
+    "Auth remains the critical blocker: CLI requires API key but no programmatic way to generate one",
+    "Private key alone is insufficient; API key is checked BEFORE private key is used for signing",
+    "Interactive setup wizard exists but cannot be automated (requires TTY input)",
+    "HMAC tokens from Limitless web UI are reportedly incompatible with CLI's X-API-Key header (from prior testing)",
+    "Trading command structure is complete: GTC limits, FOK market orders, cancel/batch-cancel, position tracking",
+    "Error messages are clear and actionable on discovery endpoints (404, 400 with format hints)",
+    "CLI is stateless per invocation — recovers cleanly after errors",
+    "No --dry-run or preview mode for trading commands"
+  ],
+  "blockers": [
+    {
+      "severity": "critical",
+      "description": "API key authentication incompatible with automated usage. CLI requires an API key that can only be generated via interactive setup wizard or the Limitless UI, but UI-generated HMAC tokens are incompatible with the CLI's X-API-Key header format. This blocks ALL trading, portfolio, and approval operations.",
+      "impact": "All trading functionality (T1-T5) untestable. Portfolio queries blocked. An AI agent cannot authenticate to place trades.",
+      "possibleFix": "Limitless needs to provide either: (1) a non-interactive API key generation endpoint, (2) fix HMAC token compatibility, or (3) support auth via private key signing alone (like Polymarket CLI does)."
+    }
+  ]
+}

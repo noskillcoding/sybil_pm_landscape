@@ -1,0 +1,96 @@
+{
+  "platform": "Alpha Arcade",
+  "url": "https://alphaarcade.com",
+  "test_date": "2026-03-31",
+  "reachability": {
+    "http_status": 403,
+    "note": "alphaarcade.com 302 -> www.alphaarcade.com which returns 403 Cloudflare challenge to non-browser clients. Passes via real browser (Playwright). Site loads as React SPA on www.alphaarcade.com."
+  },
+  "checks": {
+    "1.1_llms_txt": {
+      "pass": false,
+      "details": "alphaarcade.com/llms.txt returns HTTP error. docs.alphaarcade.com does not exist (ECONNREFUSED). No llms.txt available."
+    },
+    "1.2_markdown_negotiation": {
+      "pass": false,
+      "details": "Accept: text/markdown header returns 403 Cloudflare challenge. No markdown content negotiation supported."
+    },
+    "1.3_structured_metadata": {
+      "pass": true,
+      "details": "Has meta description ('Predict sports, crypto, politics & more. 100% of trading fees go to $ALPHA holders.'), og:title, og:description, og:image, og:url, og:type, og:site_name, og:locale. No JSON-LD."
+    },
+    "2.1_content_without_js": {
+      "pass": false,
+      "details": "React SPA with #root container. No SSR/prerendering detected. Cloudflare challenge blocks curl entirely (403). Without JS execution, no content is accessible."
+    },
+    "2.2_semantic_html": {
+      "pass": true,
+      "details": "Uses nav (1), main (1), header (1), footer (1) = 4 semantic HTML elements. Meets 3+ threshold."
+    },
+    "2.3_readable_url_slugs": {
+      "pass": true,
+      "details": "Clean readable slugs: /market/bitcoin-hit-80k-mar-2026, /market/march-madness-winner-2026, /how-it-works, /leaderboard, /whitepaper, /parlay."
+    },
+    "2.4_sitemap_xml": {
+      "pass": true,
+      "details": "Valid sitemap.xml at /sitemap.xml with 100+ URLs covering homepage, markets, how-it-works, whitepaper, leaderboard, privacy-policy, terms-of-use, and individual market pages."
+    },
+    "2.5_proper_404s": {
+      "pass": false,
+      "details": "/this-does-not-exist-xyz123 returns 200 with full homepage content. No 404 status code, no 'not found' message. SPA catch-all renders homepage for unknown routes."
+    },
+    "3.1_dev_docs_exist": {
+      "pass": false,
+      "details": "No developer documentation found. docs.alphaarcade.com does not resolve (ECONNREFUSED). No /docs path. Only user-facing pages: /how-it-works, /whitepaper."
+    },
+    "3.2_docs_findable": {
+      "pass": false,
+      "details": "No documentation links found in navigation or footer. Footer has only social links (X, Discord, Telegram) and legal pages (Terms, Privacy)."
+    },
+    "3.3_programmatic_surface_documented": {
+      "pass": false,
+      "details": "No REST API, SDK, or MCP server documentation found. No developer-facing programmatic interface documented anywhere on the site."
+    },
+    "3.4_standard_navigation": {
+      "pass": true,
+      "details": "102 standard <a href> links on homepage. Navigation includes Build a Parlay, How it works, market links, category links, footer social/legal links."
+    },
+    "4.1_ai_crawlers_allowed": {
+      "pass": true,
+      "details": "robots.txt: User-agent: * / Disallow: (empty) / Sitemap: https://www.alphaarcade.com/sitemap.xml. All crawlers including AI bots explicitly allowed."
+    },
+    "4.2_no_captcha": {
+      "pass": false,
+      "details": "Cloudflare challenge (cf-mitigated: challenge) blocks all non-browser HTTP clients with 403. Effectively acts as a CAPTCHA/bot gate for programmatic access."
+    },
+    "4.3_bot_policy_or_agent_docs": {
+      "pass": false,
+      "details": "No MCP server, agent guide, or bot policy found. No developer or agent-facing documentation exists."
+    }
+  },
+  "score": {
+    "passed": 6,
+    "total": 15,
+    "grade": "D",
+    "passing_checks": [
+      "1.3_structured_metadata",
+      "2.2_semantic_html",
+      "2.3_readable_url_slugs",
+      "2.4_sitemap_xml",
+      "3.4_standard_navigation",
+      "4.1_ai_crawlers_allowed"
+    ],
+    "failing_checks": [
+      "1.1_llms_txt",
+      "1.2_markdown_negotiation",
+      "2.1_content_without_js",
+      "2.5_proper_404s",
+      "3.1_dev_docs_exist",
+      "3.2_docs_findable",
+      "3.3_programmatic_surface_documented",
+      "4.2_no_captcha",
+      "4.3_bot_policy_or_agent_docs"
+    ]
+  },
+  "summary": "Alpha Arcade scores D (6/15). The site has decent basic web standards (semantic HTML, sitemap, readable URLs, OG metadata, permissive robots.txt) but is severely limited for AI agent access. The Cloudflare challenge blocks all non-browser clients with 403, the React SPA renders nothing without JavaScript, there are no developer docs or API documentation, no llms.txt, no proper 404 handling, and no agent-facing resources (MCP, SDK, bot policy). The site is built for human browser users only."
+}

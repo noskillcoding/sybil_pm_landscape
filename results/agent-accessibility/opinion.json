@@ -1,0 +1,26 @@
+{
+  "pm": "Opinion",
+  "slug": "opinion",
+  "website": "https://opinion.trade",
+  "reachability": "cf-blocked",
+  "score": 8,
+  "grade": "C",
+  "checks": {
+    "1.1": { "pass": true, "note": "docs.opinion.trade/llms.txt returns markdown starting with # OPINION Docs" },
+    "1.2": { "pass": false, "note": "Accept: text/markdown returns HTML, not markdown" },
+    "1.3": { "pass": false, "note": "No meta description or JSON-LD in source HTML; only JS-injected" },
+    "2.1": { "pass": false, "note": "Pure SPA shell; zero text in raw HTML without JS execution" },
+    "2.2": { "pass": false, "note": "Zero semantic HTML tags (no nav, main, article, header, footer)" },
+    "2.3": { "pass": true, "note": "/market/eth-up-or-down-hourly-mar-31-2026-13-00-utc-close" },
+    "2.4": { "pass": true, "note": "docs.opinion.trade/sitemap.xml valid XML sitemap index" },
+    "2.5": { "pass": true, "note": "HTTP 404 returned for /this-does-not-exist-xyz123" },
+    "3.1": { "pass": true, "note": "docs.opinion.trade GitBook with REST API, Python/TS SDK, WebSocket" },
+    "3.2": { "pass": true, "note": "Link to docs.opinion.trade found on app homepage" },
+    "3.3": { "pass": true, "note": "REST API endpoints, Python SDK pip install, TS SDK, WebSocket docs" },
+    "3.4": { "pass": true, "note": "Multiple a href links for markets, profiles, terms, docs" },
+    "4.1": { "pass": false, "note": "robots.txt blocks ClaudeBot, GPTBot, CCBot, and 6 other AI bots" },
+    "4.2": { "pass": true, "note": "No CAPTCHA detected on any page" },
+    "4.3": { "pass": false, "note": "No bot policy, agent quickstart, or MCP mentions found" }
+  },
+  "tested": "2026-03-31"
+}

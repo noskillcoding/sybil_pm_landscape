@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["pm", "skill", "skillFormat", "chain", "currency", "testedAt", "testVersion", "milestones", "score", "grade"],
+  "properties": {
+    "pm": { "type": "string", "description": "Prediction market name" },
+    "skill": { "type": "string", "description": "Skill name" },
+    "skillFormat": { "type": "string", "enum": ["pure-docs", "sdk-guide", "executable-scripts", "navigation-hub", "openclaw"] },
+    "skillUrl": { "type": "string", "description": "URL to skill document" },
+    "chain": { "type": "string" },
+    "currency": { "type": "string" },
+    "testedAt": { "type": "string", "format": "date" },
+    "testVersion": { "type": "string", "const": "skill-v1" },
+    "milestones": {
+      "type": "object",
+      "properties": {
+        "M1": { "$ref": "#/$defs/milestone" },
+        "M2": { "$ref": "#/$defs/milestone" },
+        "M3": { "$ref": "#/$defs/milestone" },
+        "M4": { "$ref": "#/$defs/milestone" },
+        "M5": { "$ref": "#/$defs/milestone" },
+        "M6": { "$ref": "#/$defs/milestone" },
+        "M7": { "$ref": "#/$defs/milestone" },
+        "M8": { "$ref": "#/$defs/milestone" }
+      }
+    },
+    "score": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "total": { "type": "integer", "const": 8 }
+      }
+    },
+    "grade": { "type": "string", "enum": ["A", "B", "C", "D", "F"] },
+    "skillAssessment": {
+      "type": "object",
+      "description": "Quick assessment of skill document quality",
+      "properties": {
+        "readable": { "type": "boolean", "description": "Skill loads and is well-structured" },
+        "hasAuth": { "type": "boolean", "description": "Auth instructions present" },
+        "hasDiscovery": { "type": "boolean", "description": "Market discovery instructions present" },
+        "hasTrading": { "type": "boolean", "description": "Trading instructions present" },
+        "hasExamples": { "type": "boolean", "description": "Code examples or scripts provided" },
+        "upToDate": { "type": "boolean", "description": "Dependencies available, links work" }
+      }
+    },
+    "methodUsed": { "type": "string", "description": "How the agent executed: sdk, api, scripts, cli, code-generation" },
+    "packagesInstalled": { "type": "array", "items": { "type": "string" } },
+    "keyFindings": { "type": "array", "items": { "type": "string" } },
+    "blockers": { "type": "array", "items": { "type": "string" } }
+  },
+  "$defs": {
+    "milestone": {
+      "type": "object",
+      "required": ["status", "summary"],
+      "properties": {
+        "status": { "type": "string", "enum": ["PASS", "FAIL", "BLOCKED"] },
+        "summary": { "type": "string", "description": "One-line summary of what happened" },
+        "skillSaid": { "type": "string", "description": "What the skill instructed" },
+        "agentDid": { "type": "string", "description": "What the agent actually did" }
+      }
+    }
+  }
+}
