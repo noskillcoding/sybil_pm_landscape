@@ -202,6 +202,40 @@ table { border-collapse: collapse; width: 100%; }
 .t-footer a { color: var(--ink-dim); }
 .t-footer a:hover { color: var(--accent); }
 .t-footer-sep { color: var(--ink-muted); margin: 0 4px; }
+
+/* --- Stats strip ------------------------------------------ */
+.t-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+.t-stat {
+  padding: 16px 20px;
+  border-right: 1px solid var(--line);
+}
+.t-stat:last-child { border-right: 0; }
+.t-stat-label {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.t-stat-value {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--ink);
+}
+.t-stat-detail {
+  font-size: 11px;
+  color: var(--ink-dim);
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -1439,12 +1473,15 @@ function render() {
   const cefi = DATA.filter(p => p.category === 'Regulated/CeFi').length;
   const play = DATA.filter(p => p.category === 'Play Money').length;
 
+  const topbarCount = document.getElementById('topbarCount');
+  if (topbarCount) topbarCount.textContent = `${total} markets`;
+  document.getElementById('stats').className = 't-stats';
   document.getElementById('stats').innerHTML = `
-    <div class="stat-card"><div class="label">Total PMs</div><div class="value">${total}</div><div class="detail">Verified live, April 2026</div></div>
-    <div class="stat-card"><div class="label">With Dev Tools</div><div class="value">${withDev}</div><div class="detail">API, SDK, or WebSocket</div></div>
-    <div class="stat-card"><div class="label">With AI Tools</div><div class="value">${withAi}</div><div class="detail">MCP, CLI, Framework, Skill</div></div>
-    <div class="stat-card"><div class="label">Categories</div><div class="value">${decen}/${cefi}/${play}</div><div class="detail">Decentralized / CeFi / Play</div></div>
-  `;
+  <div class="t-stat"><div class="t-stat-label">markets</div><div class="t-stat-value mono">${total}</div><div class="t-stat-detail">verified live</div></div>
+  <div class="t-stat"><div class="t-stat-label">with dev tools</div><div class="t-stat-value mono">${withDev}</div><div class="t-stat-detail">api · sdk · ws</div></div>
+  <div class="t-stat"><div class="t-stat-label">with agent tools</div><div class="t-stat-value mono">${withAi}</div><div class="t-stat-detail">cli · mcp · skill · fw</div></div>
+  <div class="t-stat"><div class="t-stat-label">decen · cefi · play</div><div class="t-stat-value mono">${decen}/${cefi}/${play}</div><div class="t-stat-detail">category mix</div></div>
+`;
 
   // Category filters
   const cats = ['Decentralized', 'Regulated/CeFi', 'Play Money'];
