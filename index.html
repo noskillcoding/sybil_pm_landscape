@@ -514,6 +514,20 @@ table { border-collapse: collapse; width: 100%; }
   cursor: pointer;
 }
 .t-detail .m-show-more:hover { color: var(--ink); border-color: var(--line-2); }
+
+/* --- Tablet (640–1023px) ---------------------------------- */
+@media (max-width: 1023px) {
+  .t-shell { padding: 24px 20px 80px; }
+  .t-stats { grid-template-columns: 1fr 1fr; }
+  .t-stat:nth-child(2) { border-right: 0; }
+  .t-stat:nth-child(1), .t-stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .t-filters { flex-wrap: wrap; }
+  .t-filter-spacer { display: none; }
+  .t-search { flex: 1 0 100%; margin-top: 8px; }
+  .t-table thead th { padding: 12px 8px 9px; font-size: 9.5px; }
+  .t-table tbody td { padding: 12px 8px; }
+  .t-detail-inner { padding: 18px 16px 22px 40px; gap: 24px; }
+}
 </style>
 </head>
 <body>
