@@ -1,7 +1,7 @@
 // assets/js/testing.js
 
 import { state } from './state.js';
-import { esc, gradeClass, toolTypeBadgeClass } from './helpers.js';
+import { esc, gradeClass } from './helpers.js';
 import {
   TEST_COLS,
   TOOL_COL_MAP,
@@ -12,6 +12,49 @@ import {
   AA_DIMS,
   AA_TOTAL_CHECKS
 } from './constants.js';
+
+// === Unified check-list primitive ============================
+// Data drives UI; tokens do the theming. Zero inline styles.
+const STATUS_CLASS = {
+  PASS:    'is-pass',
+  PARTIAL: 'is-partial',
+  FAIL:    'is-fail',
+  BLOCKED: 'is-blocked'
+};
+const STATUS_ICON = { PASS: '✓', PARTIAL: '●', FAIL: '✗', BLOCKED: '▪' };
+
+// items: [{ num?, label, status?, detail? }]
+function renderItems(items, twoCol = false) {
+  const cls = twoCol ? 'm-items m-items--two-col' : 'm-items';
+  return `<ul class="${cls}">` + items.map(it => {
+    const sc = STATUS_CLASS[it.status] || 'is-na';
+    const ic = STATUS_ICON[it.status]  || '○';
+    const num = `<span class="m-num">${it.num ? esc(it.num) : ''}</span>`;
+    const det = it.detail ? `<span class="m-why">${esc(it.detail)}</span>` : '';
+    return `<li class="m-item ${sc}">${num}<span class="m-ico">${ic}</span><span class="m-label">${esc(it.label)}${det}</span></li>`;
+  }).join('') + `</ul>`;
+}
+
+// groups: [{ title, items, twoCol? }]
+function renderGroups(groups) {
+  return `<ul class="m-list">` + groups.map(g =>
+    `<li class="m-group"><div class="m-group-label">${esc(g.title)}</div>${renderItems(g.items, g.twoCol)}</li>`
+  ).join('') + `</ul>`;
+}
+
+function renderMeta(pills) {
+  const nonEmpty = pills.filter(Boolean);
+  if (!nonEmpty.length) return '';
+  return `<ul class="m-meta">${nonEmpty.map(p => `<li>${esc(p)}</li>`).join('')}</ul>`;
+}
+
+function renderFindings(title, items, tone /* 'info' | 'red' */) {
+  if (!items || !items.length) return '';
+  return `<div class="m-findings m-findings-${tone}">
+    <div class="m-findings-h">${esc(title)}</div>
+    <ul>${items.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+  </div>`;
+}
 
 export function getTestablePMs() {
   return window.DATA.filter(pm =>
@@ -180,215 +223,153 @@ export function renderTesting() {
     if (hasAA || hasCli || hasSkill || hasFw) {
       const uid = 'dt' + i;
       const firstTab = hasAA ? 'aa' : hasCli ? 'cli' : hasSkill ? 'skill' : 'fw';
-      const tabClick = `document.querySelectorAll('#${uid}-tabs .m-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');document.querySelectorAll('#${uid}-panels .methodology-content').forEach(c=>c.classList.remove('open'));`;
-      bodyHtml += `<div class="methodology" style="margin-top:16px; border-top:1px solid #30363d; padding-top:16px;">`;
-      bodyHtml += `<div class="m-tabs" id="${uid}-tabs">`;
-      if (hasAA) bodyHtml += `<button class="m-tab${firstTab==='aa'?' active':''}" onclick="${tabClick}document.getElementById('${uid}-aa').classList.add('open')">Agent Accessibility</button>`;
-      if (hasCli) bodyHtml += `<button class="m-tab${firstTab==='cli'?' active':''}" onclick="${tabClick}document.getElementById('${uid}-cli').classList.add('open')">CLI/MCP Test</button>`;
-      if (hasSkill) bodyHtml += `<button class="m-tab${firstTab==='skill'?' active':''}" onclick="${tabClick}document.getElementById('${uid}-skill').classList.add('open')">Skill Test</button>`;
-      if (hasFw) bodyHtml += `<button class="m-tab${firstTab==='fw'?' active':''}" onclick="${tabClick}document.getElementById('${uid}-fw').classList.add('open')">Framework</button>`;
-      bodyHtml += `</div>`;
-      bodyHtml += `<div id="${uid}-panels">`;
 
-      // === AA TAB ===
+      // --- panel header helper ---
+      const head = (gradeBadgeHtml, name, scoreText) => `
+        <div class="m-head">${gradeBadgeHtml}<span class="m-head-name">${esc(name)}</span>${scoreText ? `<span class="m-head-score">${esc(scoreText)}</span>` : ''}</div>`;
+
+      const tabs = `<div class="m-tabs" data-testing-tabs>
+        ${hasAA ? `<button class="m-tab${firstTab==='aa'?' active':''}" data-panel="${uid}-aa">Agent Accessibility</button>` : ''}
+        ${hasCli ? `<button class="m-tab${firstTab==='cli'?' active':''}" data-panel="${uid}-cli">CLI/MCP Test</button>` : ''}
+        ${hasSkill ? `<button class="m-tab${firstTab==='skill'?' active':''}" data-panel="${uid}-skill">Skill Test</button>` : ''}
+        ${hasFw ? `<button class="m-tab${firstTab==='fw'?' active':''}" data-panel="${uid}-fw">Framework</button>` : ''}
+      </div>`;
+
+      bodyHtml += `<div class="methodology">${tabs}<div id="${uid}-panels">`;
+
+      // === AA tab ===
       if (hasAA) {
-        bodyHtml += `<div class="methodology-content${firstTab==='aa'?' open':''}" id="${uid}-aa">`;
-        bodyHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;"><span class="test-badge grade-${aaRes.grade.toLowerCase()}">${aaRes.grade}</span><span style="font-size:12px; color:#8b949e;">${aaRes.score}/${AA_TOTAL_CHECKS} checks passed</span></div>`;
-        bodyHtml += `<div class="m-checks-list">`;
-        AA_DIMS.forEach(dim => {
-          bodyHtml += `<div class="m-dim-block"><div class="m-dim-label">${dim.label}</div>`;
-          dim.checks.forEach(chk => {
+        const groups = AA_DIMS.map(dim => ({
+          title: dim.label,
+          items: dim.checks.map(chk => {
             const r = aaRes.checks[chk.id];
-            const pass = r && r.pass;
-            const col = pass ? '#3fb950' : '#f85149';
-            const icon = pass ? '&#10003;' : '&#10007;';
-            bodyHtml += `<div class="m-check-item"><span class="m-check-num" style="color:${col}">${icon}</span><span class="m-check-name">${esc(chk.label)}</span>`;
-            if (r && r.note) bodyHtml += `<span class="m-check-why">${esc(r.note)}</span>`;
-            bodyHtml += `</div>`;
-          });
-          bodyHtml += `</div>`;
-        });
-        bodyHtml += `</div>`;
-        bodyHtml += `<button class="m-show-more" onclick="this.closest('.methodology-content').querySelectorAll('.m-check-why').forEach(e=>e.classList.toggle('visible'));this.textContent=this.textContent==='Show details'?'Hide details':'Show details'">Show details</button>`;
-        bodyHtml += `</div>`;
+            return {
+              num: chk.id,
+              label: chk.label,
+              status: (r && r.pass) ? 'PASS' : 'FAIL',
+              detail: r && r.note
+            };
+          })
+        }));
+        bodyHtml += `<div class="methodology-content${firstTab==='aa'?' open':''}" id="${uid}-aa">
+          ${head(`<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span>`, 'Agent Accessibility', `${aaRes.score}/${AA_TOTAL_CHECKS} checks passed`)}
+          ${renderGroups(groups)}
+          <button class="m-show-more" data-show-more>Show details</button>
+        </div>`;
       }
 
-      // === CLI/MCP TEST TAB ===
+      // === CLI/MCP tab ===
       if (hasCli) {
         bodyHtml += `<div class="methodology-content${firstTab==='cli'?' open':''}" id="${uid}-cli">`;
-        if (toolTests.length > 1) {
-          const stid = uid + '-st';
-          bodyHtml += `<div style="display:flex; gap:4px; margin-bottom:12px;">`;
+
+        const hasSubTabs = toolTests.length > 1;
+        if (hasSubTabs) {
+          bodyHtml += `<div class="m-tabs m-tabs-sub" data-sub-tabs="${uid}">`;
           toolTests.forEach((tt, ti) => {
-            bodyHtml += `<button style="background:${ti===0?'#1f6feb':'#21262d'}; color:${ti===0?'#fff':'#8b949e'}; border:1px solid ${ti===0?'#1f6feb':'#30363d'}; padding:3px 10px; border-radius:4px; font-size:11px; cursor:pointer;" onclick="document.querySelectorAll('.${stid}-panel').forEach(p=>p.style.display='none');document.getElementById('${stid}-${ti}').style.display='block';this.parentNode.querySelectorAll('button').forEach(b=>{b.style.background='#21262d';b.style.color='#8b949e';b.style.borderColor='#30363d'});this.style.background='#1f6feb';this.style.color='#fff';this.style.borderColor='#1f6feb'">${esc(tt.type)}: ${esc(tt.tool)}</button>`;
+            bodyHtml += `<button class="m-tab${ti===0?' active':''}" data-sub-panel="${uid}-st-${ti}">${esc(tt.type)}: ${esc(tt.tool)}</button>`;
           });
           bodyHtml += `</div>`;
         }
+
         toolTests.forEach((tt, ti) => {
-          if (toolTests.length > 1) bodyHtml += `<div class="${uid}-st-panel" id="${uid}-st-${ti}" style="${ti>0?'display:none':''}">`;
-          const gClass = 'grade-' + tt.grade.toLowerCase();
-          const statusColor = {PASS:'#3fb950',PARTIAL:'#d29922',FAIL:'#f85149',BLOCKED:'#6e7681'};
-          const statusIcon = {PASS:'&#10003;',PARTIAL:'&#9679;',FAIL:'&#10007;',BLOCKED:'&#9644;'};
-          bodyHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">`;
-          bodyHtml += `<span class="test-badge ${gClass}">${tt.grade}</span>`;
-          bodyHtml += `<span style="font-weight:600; color:#e6edf3; font-size:13px;">${esc(tt.tool)}</span>`;
-          bodyHtml += `<span class="tool-type-badge ${toolTypeBadgeClass(tt.type)}">${esc(tt.type)}</span>`;
-          bodyHtml += `</div>`;
-          bodyHtml += `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; font-size:11px; color:#8b949e;">`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">v${esc(tt.version)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">${esc(tt.chain)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">${esc(tt.currency)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">Auth: ${esc(tt.auth)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">Output: ${esc(tt.outputQuality)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">Install: ${esc(tt.installCmd)}</span>`;
-          bodyHtml += `</div>`;
+          if (hasSubTabs) bodyHtml += `<div class="m-sub-panel" id="${uid}-st-${ti}" style="${ti>0?'display:none':''}">`;
+
+          const pills = [
+            tt.version ? 'v' + tt.version : '',
+            tt.chain,
+            tt.currency,
+            tt.auth ? 'Auth: ' + tt.auth : '',
+            tt.outputQuality ? 'Output: ' + tt.outputQuality : '',
+            tt.installCmd ? 'Install: ' + tt.installCmd : ''
+          ];
+
+          let groups = [];
           if (tt.sections) {
-            bodyHtml += `<div class="m-checks-list">`;
-            UNIFIED_SECTIONS.forEach(sec => {
+            groups = UNIFIED_SECTIONS.map(sec => {
               const sData = tt.sections[sec];
-              if (!sData || !sData.checks) return;
-              bodyHtml += `<div class="m-dim-block"><div class="m-dim-label">${UNIFIED_SECTION_LABELS[sec]}</div>`;
-              Object.values(sData.checks).forEach(chk => {
-                const st = chk.status || chk.result || '—';
-                const col = statusColor[st] || '#6e7681';
-                const icon = statusIcon[st] || '&#9675;';
-                bodyHtml += `<div class="m-check-item"><span class="m-check-num" style="color:${col}">${icon}</span><span class="m-check-name">${esc(chk.name)}</span>`;
-                const ev = chk.evidence || chk.output || chk.notes || '';
-                if (ev) bodyHtml += `<span class="m-check-why">${esc(ev)}</span>`;
-                bodyHtml += `</div>`;
-              });
-              bodyHtml += `</div>`;
-            });
-            bodyHtml += `</div>`;
-          }
-          else if (tt.stages) {
-            bodyHtml += `<div class="m-checks-list">`;
-            TOOL_STAGES.forEach(stg => {
+              if (!sData || !sData.checks) return null;
+              return {
+                title: UNIFIED_SECTION_LABELS[sec],
+                items: Object.values(sData.checks).map(chk => ({
+                  label: chk.name,
+                  status: chk.status || chk.result || null,
+                  detail: chk.evidence || chk.output || chk.notes
+                }))
+              };
+            }).filter(Boolean);
+          } else if (tt.stages) {
+            groups = TOOL_STAGES.map(stg => {
               const s = tt.stages[stg.id];
-              if (!s) return;
-              const col = statusColor[s.status] || '#6e7681';
-              bodyHtml += `<div class="m-dim-block">`;
-              bodyHtml += `<div class="m-dim-label">${stg.label}</div>`;
-              if (s.blockedReason) bodyHtml += `<div style="font-size:11px; color:#f85149; margin-bottom:4px; padding-left:8px;">Blocked: ${esc(s.blockedReason)}</div>`;
+              if (!s) return null;
+              const items = [];
+              if (s.blockedReason) items.push({ label: 'Blocked', status: 'BLOCKED', detail: s.blockedReason });
               if (s.actions) {
                 Object.entries(s.actions).forEach(([name, act]) => {
-                  const aC = statusColor[act.status] || '#6e7681';
-                  const aI = statusIcon[act.status] || '&#9675;';
-                  bodyHtml += `<div class="m-check-item"><span class="m-check-num" style="color:${aC}">${aI}</span><span class="m-check-name">${esc(name)}</span>`;
-                  if (act.note) bodyHtml += `<span class="m-check-why">${esc(act.note)}</span>`;
-                  bodyHtml += `</div>`;
+                  items.push({ label: name, status: act.status, detail: act.note });
                 });
               }
-              bodyHtml += `</div>`;
-            });
-            bodyHtml += `</div>`;
+              return { title: stg.label, items };
+            }).filter(Boolean);
           }
-          bodyHtml += `<button class="m-show-more" onclick="this.closest('.methodology-content').querySelectorAll('.m-check-why').forEach(e=>e.classList.toggle('visible'));this.textContent=this.textContent==='Show details'?'Hide details':'Show details'">Show details</button>`;
-          if (tt.keyFindings && tt.keyFindings.length > 0) {
-            bodyHtml += `<div style="margin-top:8px; padding-top:8px; border-top:1px solid #21262d;">`;
-            bodyHtml += `<div style="font-size:11px; font-weight:600; color:#e6edf3; margin-bottom:4px;">Key Findings</div>`;
-            tt.keyFindings.forEach(f => { bodyHtml += `<div style="font-size:11px; color:#8b949e; padding-left:8px;">&#8226; ${esc(f)}</div>`; });
-            bodyHtml += `</div>`;
-          }
-          if (tt.blockers && tt.blockers.length > 0) {
-            bodyHtml += `<div style="margin-top:6px;">`;
-            bodyHtml += `<div style="font-size:11px; font-weight:600; color:#f85149; margin-bottom:4px;">Blockers</div>`;
-            tt.blockers.forEach(b => { bodyHtml += `<div style="font-size:11px; color:#f8514988; padding-left:8px;">&#8226; ${esc(b)}</div>`; });
-            bodyHtml += `</div>`;
-          }
-          if (toolTests.length > 1) bodyHtml += `</div>`;
+
+          bodyHtml += head(`<span class="${gradeClass(tt.grade)}">${tt.grade}</span>`, tt.tool, tt.type);
+          bodyHtml += renderMeta(pills);
+          bodyHtml += renderGroups(groups);
+          bodyHtml += `<button class="m-show-more" data-show-more>Show details</button>`;
+          bodyHtml += renderFindings('Key findings', tt.keyFindings, 'info');
+          bodyHtml += renderFindings('Blockers', tt.blockers, 'red');
+
+          if (hasSubTabs) bodyHtml += `</div>`;
         });
+
         bodyHtml += `</div>`;
       }
 
-      // === SKILL TEST TAB ===
+      // === Skill tab ===
       if (hasSkill) {
         bodyHtml += `<div class="methodology-content${firstTab==='skill'?' open':''}" id="${uid}-skill">`;
-        const statusColor = {PASS:'#3fb950',PARTIAL:'#d29922',FAIL:'#f85149',BLOCKED:'#6e7681'};
-        const statusIcon = {PASS:'&#10003;',PARTIAL:'&#9679;',FAIL:'&#10007;',BLOCKED:'&#9644;'};
         skillTests.forEach(st => {
-          const gClass = 'grade-' + st.grade.toLowerCase();
-          bodyHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">`;
-          bodyHtml += `<span class="test-badge ${gClass}">${st.grade}</span>`;
-          bodyHtml += `<span style="font-weight:600; color:#e6edf3; font-size:13px;">${esc(st.skill)}</span>`;
-          bodyHtml += `<span class="tool-type-badge tool-type-skill">Skill</span>`;
-          bodyHtml += `</div>`;
-          bodyHtml += `<div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; font-size:11px; color:#8b949e;">`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">Format: ${esc(st.skillFormat)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">${esc(st.chain)}</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">${esc(st.currency)}</span>`;
-          if (st.vpnRequired) bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">VPN required</span>`;
-          bodyHtml += `<span style="background:#21262d; padding:2px 6px; border-radius:4px;">Method: ${esc(st.methodUsed)}</span>`;
-          bodyHtml += `</div>`;
-          if (st.milestones) {
-            const passed = Object.values(st.milestones).filter(m => m.status === 'PASS').length;
-            bodyHtml += `<div style="font-size:12px; color:#8b949e; margin-bottom:8px;">${passed}/8 milestones passed</div>`;
-            bodyHtml += `<div class="m-checks-list"><div class="m-dim-block m-dim-block-wide"><div class="m-dim-label">Trade Cycle Milestones</div>`;
-            bodyHtml += `<div style="display:grid; grid-template-columns:1fr 1fr; gap:0 24px;">`;
-            const leftMs = SKILL_MILESTONES.slice(0,4);
-            const rightMs = SKILL_MILESTONES.slice(4,8);
-            bodyHtml += `<div>`;
-            leftMs.forEach(sm => {
-              const m = st.milestones[sm.id];
-              if (!m) return;
-              const col = statusColor[m.status] || '#6e7681';
-              const icon = statusIcon[m.status] || '&#9675;';
-              bodyHtml += `<div class="m-check-item"><span class="m-check-num" style="color:${col}">${icon}</span><span class="m-check-name">${esc(sm.name)}</span>`;
-              if (m.summary) bodyHtml += `<span class="m-check-why">${esc(m.summary)}</span>`;
-              bodyHtml += `</div>`;
-            });
-            bodyHtml += `</div><div>`;
-            rightMs.forEach(sm => {
-              const m = st.milestones[sm.id];
-              if (!m) return;
-              const col = statusColor[m.status] || '#6e7681';
-              const icon = statusIcon[m.status] || '&#9675;';
-              bodyHtml += `<div class="m-check-item"><span class="m-check-num" style="color:${col}">${icon}</span><span class="m-check-name">${esc(sm.name)}</span>`;
-              if (m.summary) bodyHtml += `<span class="m-check-why">${esc(m.summary)}</span>`;
-              bodyHtml += `</div>`;
-            });
-            bodyHtml += `</div></div></div></div>`;
-          }
-          bodyHtml += `<button class="m-show-more" onclick="this.closest('.methodology-content').querySelectorAll('.m-check-why').forEach(e=>e.classList.toggle('visible'));this.textContent=this.textContent==='Show details'?'Hide details':'Show details'">Show details</button>`;
-          if (st.keyFindings && st.keyFindings.length > 0) {
-            bodyHtml += `<div style="margin-top:8px; padding-top:8px; border-top:1px solid #21262d;">`;
-            bodyHtml += `<div style="font-size:11px; font-weight:600; color:#e6edf3; margin-bottom:4px;">Key Findings</div>`;
-            st.keyFindings.forEach(f => { bodyHtml += `<div style="font-size:11px; color:#8b949e; padding-left:8px;">&#8226; ${esc(f)}</div>`; });
-            bodyHtml += `</div>`;
-          }
-          if (st.blockers && st.blockers.length > 0) {
-            bodyHtml += `<div style="margin-top:6px;">`;
-            bodyHtml += `<div style="font-size:11px; font-weight:600; color:#f85149; margin-bottom:4px;">Blockers</div>`;
-            st.blockers.forEach(b => { bodyHtml += `<div style="font-size:11px; color:#f8514988; padding-left:8px;">&#8226; ${esc(b)}</div>`; });
-            bodyHtml += `</div>`;
-          }
+          const pills = [
+            st.skillFormat ? 'Format: ' + st.skillFormat : '',
+            st.chain,
+            st.currency,
+            st.vpnRequired ? 'VPN required' : '',
+            st.methodUsed ? 'Method: ' + st.methodUsed : ''
+          ];
+          const passed = st.milestones ? Object.values(st.milestones).filter(m => m.status === 'PASS').length : 0;
+          const groups = [{
+            title: 'Trade Cycle Milestones',
+            twoCol: true,
+            items: SKILL_MILESTONES.map(sm => {
+              const m = (st.milestones || {})[sm.id] || {};
+              return { num: sm.id, label: sm.name, status: m.status || null, detail: m.summary };
+            })
+          }];
+
+          bodyHtml += head(`<span class="${gradeClass(st.grade)}">${st.grade}</span>`, st.skill, `${passed}/8 passed`);
+          bodyHtml += renderMeta(pills);
+          bodyHtml += renderGroups(groups);
+          bodyHtml += `<button class="m-show-more" data-show-more>Show details</button>`;
+          bodyHtml += renderFindings('Key findings', st.keyFindings, 'info');
+          bodyHtml += renderFindings('Blockers', st.blockers, 'red');
         });
         bodyHtml += `</div>`;
       }
 
-      // === FRAMEWORK TAB ===
+      // === Framework tab ===
       if (hasFw) {
         bodyHtml += `<div class="methodology-content${firstTab==='fw'?' open':''}" id="${uid}-fw">`;
-        const fwGradeMap = {'Production':'fw-production','Usable':'fw-usable','Experimental':'fw-experimental','N/A':'fw-na'};
-        const categoryLabels = {type:'Type',architecture:'Architecture',stack:'Stack',platforms:'Platform Support',setup:'Setup Complexity'};
+        const categoryLabels = { type:'Type', architecture:'Architecture', stack:'Stack', platforms:'Platform Support', setup:'Setup Complexity' };
         fwTests.forEach(fw => {
-          const gClass = fwGradeMap[fw.grade] || 'untested';
-          bodyHtml += `<div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">`;
-          bodyHtml += `<span class="test-badge ${gClass}">${esc(fw.grade)}</span>`;
-          bodyHtml += `<span style="font-weight:600; color:#e6edf3; font-size:13px;">${esc(fw.name)}</span>`;
-          bodyHtml += `<span class="tool-type-badge tool-type-framework">Framework</span>`;
-          bodyHtml += `</div>`;
-          if (fw.categories) {
-            Object.entries(fw.categories).forEach(([key, val]) => {
-              bodyHtml += `<div class="fw-category"><div class="fw-category-label">${esc(categoryLabels[key] || key)}</div><div class="fw-category-value">${esc(val)}</div></div>`;
-            });
-          }
-          if (fw.keyFindings && fw.keyFindings.length > 0) {
-            bodyHtml += `<div style="margin-top:8px; padding-top:8px; border-top:1px solid #21262d;">`;
-            bodyHtml += `<div style="font-size:11px; font-weight:600; color:#e6edf3; margin-bottom:4px;">Key Findings</div>`;
-            fw.keyFindings.forEach(f => { bodyHtml += `<div style="font-size:11px; color:#8b949e; padding-left:8px;">&#8226; ${esc(f)}</div>`; });
-            bodyHtml += `</div>`;
-          }
+          const items = fw.categories
+            ? Object.entries(fw.categories).map(([k, v]) => ({ label: categoryLabels[k] || k, detail: v }))
+            : [];
+          const groups = items.length ? [{ title: 'Assessment', items }] : [];
+
+          bodyHtml += head(`<span class="${gradeClass(fw.grade)}">${esc(fw.grade)}</span>`, fw.name, 'Framework');
+          if (groups.length) bodyHtml += renderGroups(groups);
+          if (items.length) bodyHtml += `<button class="m-show-more" data-show-more>Show details</button>`;
+          bodyHtml += renderFindings('Key findings', fw.keyFindings, 'info');
         });
         bodyHtml += `</div>`;
       }
@@ -409,6 +390,45 @@ export function renderTesting() {
         detail.classList.toggle('open', isOpen);
       }
       row.querySelector('.t-chev').textContent = isOpen ? '▼' : '▶';
+    });
+  });
+
+  // Bind methodology tab switching (top-level tabs inside each PM detail)
+  document.querySelectorAll('#testTableBody [data-testing-tabs] .m-tab').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tabs = btn.closest('[data-testing-tabs]');
+      const panels = tabs.nextElementSibling; // #<uid>-panels
+      tabs.querySelectorAll('.m-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      panels.querySelectorAll(':scope > .methodology-content').forEach(c => c.classList.remove('open'));
+      const target = panels.querySelector('#' + btn.dataset.panel);
+      if (target) target.classList.add('open');
+    });
+  });
+
+  // Bind sub-tab switching (for CLI/MCP PMs with multiple tested tools)
+  document.querySelectorAll('#testTableBody [data-sub-tabs] .m-tab').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const bar = btn.closest('[data-sub-tabs]');
+      const container = bar.parentElement; // the methodology-content for cli
+      bar.querySelectorAll('.m-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      container.querySelectorAll(':scope > .m-sub-panel').forEach(p => { p.style.display = 'none'; });
+      const target = container.querySelector('#' + btn.dataset.subPanel);
+      if (target) target.style.display = 'block';
+    });
+  });
+
+  // Bind show-details toggle
+  document.querySelectorAll('#testTableBody [data-show-more]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const scope = btn.closest('.methodology-content') || btn.closest('.m-sub-panel');
+      if (!scope) return;
+      scope.querySelectorAll('.m-why').forEach(el => el.classList.toggle('visible'));
+      btn.textContent = btn.textContent === 'Show details' ? 'Hide details' : 'Show details';
     });
   });
 }

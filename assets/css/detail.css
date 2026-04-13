@@ -60,8 +60,8 @@
   line-height: 1.5;
 }
 
-/* --- Testing detail row ----------------------------------- */
-.t-detail .methodology { margin-top: 0; padding-top: 0; border-top: 0; }
+/* --- Testing detail row (unified) ------------------------- */
+.t-detail .methodology { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
 .t-detail .m-tabs {
   display: flex;
   gap: 0;
@@ -85,24 +85,104 @@
 .t-detail .methodology-content { display: none; }
 .t-detail .methodology-content.open { display: block; }
 
-.t-detail .m-checks-list,
-.t-detail .m-dim-block,
-.t-detail .m-check-item {
-  color: var(--ink-dim);
-  font-size: 12px;
+/* Panel header: badge + name + type glyph */
+.t-detail .m-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--ink);
 }
-.t-detail .m-dim-label {
-  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+.t-detail .m-head-name { font-weight: 550; color: var(--ink); }
+.t-detail .m-head-score {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+
+/* Meta pills — replaces all the inline #21262d pills */
+.t-detail .m-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10.5px;
+}
+.t-detail .m-meta li {
+  padding: 2px 8px;
+  color: var(--ink-dim);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+}
+
+/* The list primitive */
+.t-detail .m-list { list-style: none; margin: 0; padding: 0; }
+.t-detail .m-group + .m-group { margin-top: 14px; }
+.t-detail .m-group-label {
+  font-family: "JetBrains Mono", monospace;
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--ink-muted);
-  margin: 12px 0 6px;
+  margin-bottom: 6px;
 }
-.t-detail .m-check-num { color: var(--ink-muted); margin-right: 8px; }
-.t-detail .m-check-name { color: var(--ink); }
-.t-detail .m-check-why { color: var(--ink-dim); display: none; margin-left: 8px; }
-.t-detail .m-check-why.visible { display: inline; }
+.t-detail .m-items { list-style: none; margin: 0; padding: 0; }
+.t-detail .m-items--two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+.t-detail .m-item {
+  display: grid;
+  grid-template-columns: 32px 16px 1fr;
+  gap: 6px;
+  align-items: baseline;
+  padding: 3px 0;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.t-detail .m-num {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+.t-detail .m-ico {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  text-align: center;
+  color: var(--ink-muted);
+}
+.t-detail .m-label { color: var(--ink); }
+.t-detail .m-why { display: none; color: var(--ink-dim); margin-left: 6px; }
+.t-detail .m-why.visible { display: inline; }
+
+.t-detail .m-item.is-pass    .m-ico { color: var(--accent); }
+.t-detail .m-item.is-partial .m-ico { color: var(--warn);   }
+.t-detail .m-item.is-fail    .m-ico { color: var(--red);    }
+.t-detail .m-item.is-blocked .m-ico { color: var(--ink-muted); }
+.t-detail .m-item.is-na      .m-ico { color: var(--ink-muted); }
+
+/* Findings / blockers */
+.t-detail .m-findings { margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.t-detail .m-findings + .m-findings { margin-top: 8px; border-top: 0; padding-top: 0; }
+.t-detail .m-findings-h {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.t-detail .m-findings-red .m-findings-h { color: var(--red); }
+.t-detail .m-findings ul { list-style: none; margin: 0; padding-left: 10px; font-size: 11px; color: var(--ink-dim); }
+.t-detail .m-findings ul li::before { content: "· "; color: var(--ink-muted); }
+.t-detail .m-findings-red ul li { color: color-mix(in srgb, var(--red) 70%, var(--ink-dim)); }
+
+/* Show details toggle */
 .t-detail .m-show-more {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
