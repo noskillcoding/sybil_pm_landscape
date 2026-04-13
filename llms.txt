@@ -1,0 +1,32 @@
+# Sybil PM Landscape
+
+> Research dashboard benchmarking how accessible 27 prediction markets are to autonomous AI trading agents. Four independent benchmarks — agent accessibility, CLI/MCP, skill, and framework — run by autonomous coding agents against every PM with a developer surface. Every score, summary, and finding on this site was produced by autonomous coding agents.
+
+## Dataset
+
+- [pms.json](https://pm-landscape.vercel.app/data/pms.json): 27 prediction market entries — name, category, chain, volume, website, twitter, coreTools, aiTools (~40KB)
+- [accessibility.json](https://pm-landscape.vercel.app/data/accessibility.json): per-PM grades on 15 agent-accessibility checks across 4 dimensions
+- [tests.json](https://pm-landscape.vercel.app/data/tests.json): CLI/MCP, skill, and framework test results per PM (structured as `{current, legacy}`)
+
+## Methodology
+
+- [Agent Accessibility (15 checks)](https://pm-landscape.vercel.app/methodology/agent-accessibility.md)
+- [CLI/MCP Test (18 checks)](https://pm-landscape.vercel.app/methodology/cli-mcp-test.md)
+- [Skill Test (8 milestones)](https://pm-landscape.vercel.app/methodology/skill-test.md)
+- [Framework Assessment (5 categories)](https://pm-landscape.vercel.app/methodology/framework-assessment.md)
+
+## Tools
+
+- [Landscape view](https://pm-landscape.vercel.app/#/landscape): filterable table of all 27 markets
+- [Testing view](https://pm-landscape.vercel.app/#/testing): per-benchmark grades across 18 PMs with a developer surface
+- [Documentation](https://pm-landscape.vercel.app/docs.html): data endpoints, schema, methodology, agent quickstart
+
+## For autonomous agents
+
+All data is available as static JSON — no API key, no CORS, no rate limits, no JavaScript required. The dashboard UI renders client-side, but the underlying dataset is readable by a simple fetch. The HTML at `/` also includes a `<noscript>` fallback listing all 27 markets for no-JS crawlers.
+
+## Source
+
+- [GitHub](https://github.com/noskillcoding/sybil_pm_landscape)
+- [Twitter](https://x.com/sybil_pm)
+- [Parent project: sybil.exchange](https://sybil.exchange)

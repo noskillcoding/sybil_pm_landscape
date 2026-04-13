@@ -1,0 +1,19 @@
+# Agent-accessible research dashboard — all bots welcome.
+# See /llms.txt for a structured site overview.
+
+User-agent: *
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://pm-landscape.vercel.app/sitemap.xml
