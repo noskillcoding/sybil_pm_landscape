@@ -1,0 +1,875 @@
+[
+  {
+    "name": "Polymarket",
+    "website": "https://polymarket.com",
+    "twitter": "https://x.com/Polymarket",
+    "description": "World's largest decentralized prediction market. Binary/categorical markets on politics, sports, crypto, economics on Polygon.",
+    "chain": "Polygon",
+    "status": "Live",
+    "volumeEstimate": "$52.5B cumulative, ~$7B/month",
+    "volumeNumeric": 52500000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "CLOB REST API + Gamma API",
+        "type": "API",
+        "description": "Core trading API (CLOB) for orders, markets, positions + Gamma API for market data/events",
+        "docsUrl": "https://docs.polymarket.com",
+        "features": ["list markets", "get market details", "fetch orderbook", "place limit/market orders", "cancel orders", "check positions", "get trade history", "get balances", "WebSocket for live data"]
+      },
+      {
+        "name": "SDK (Python, TypeScript, Rust)",
+        "type": "SDK",
+        "languages": ["Python", "TypeScript", "Rust"],
+        "description": "Official SDKs wrapping the CLOB API",
+        "githubUrls": ["https://github.com/Polymarket/py-clob-client", "https://github.com/Polymarket/clob-client", "https://github.com/Polymarket/rs-clob-client"],
+        "features": ["same as CLOB API but type-safe", "order signing", "EIP-712 auth", "multi-wallet support", "Rust SDK (639 stars) published as polymarket-client-sdk on crates.io"]
+      },
+      {
+        "name": "WebSocket",
+        "type": "WebSocket",
+        "description": "Real-time market data and order updates",
+        "docsUrl": "https://docs.polymarket.com",
+        "features": ["live orderbook updates", "trade feed", "market resolution notifications"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "Polymarket CLI",
+        "type": "CLI",
+        "description": "Rust CLI for terminal traders and agents. JSON output mode.",
+        "githubUrl": "https://github.com/Polymarket/polymarket-cli",
+        "features": ["browse/search markets", "place limit/market orders", "manage positions", "view orderbooks", "on-chain token operations", "leaderboards"],
+        "techDescription": "Rust binary (1.9K stars), installs via cargo. JSON output mode for agents. Experimental status. Calls CLOB API directly."
+      },
+      {
+        "name": "Polymarket Agents",
+        "type": "Framework",
+        "description": "Python AI agent framework for autonomous PM trading",
+        "githubUrl": "https://github.com/Polymarket/agents",
+        "features": ["autonomous trading", "RAG pipeline", "news sourcing", "market queries via CLI"],
+        "techDescription": "Python 3.9+ framework (2.7K stars) using LangChain + OpenAI + Chroma. STALE -- last commit Sep 2024. Uses py-clob-client."
+      },
+      {
+        "name": "Agent Skills (SKILL.md)",
+        "type": "Skill",
+        "description": "Pure reference documentation — SKILL.md entry point + 7 deep-dive files (~1,700 lines total). Agent reads docs and writes its own API calls using py-clob-client or @polymarket/clob-client SDK. No scripts, no tools — just knowledge.",
+        "githubUrl": "https://github.com/Polymarket/agent-skills",
+        "features": ["auth", "trading", "market data", "WebSocket", "token operations", "bridging", "gasless txs", "negative risk markets"],
+        "techDescription": "Progressive disclosure: SKILL.md (~200 lines) covers API endpoints, contract addresses, client setup, core code patterns. Reference files load on-demand for auth flows, order execution, market data APIs, WebSocket protocols, CTF operations, bridge mechanics, gasless relayer. Compatible with Claude Code, OpenClaw, any agent supporting skill files.",
+        "skillFormat": "pure-docs"
+      }
+    ]
+  },
+  {
+    "name": "Kalshi",
+    "website": "https://kalshi.com",
+    "twitter": "https://x.com/Kalshi",
+    "description": "CFTC-regulated prediction market exchange. Event contracts on sports, crypto, politics, economics, weather. ~$11B valuation.",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "$30B+ annual, ~$9B/month",
+    "volumeNumeric": 30000000000,
+    "category": "Regulated/CeFi",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full trading API with market data, orders, positions",
+        "docsUrl": "https://trading-api.readme.io",
+        "features": ["list/search markets", "get market details", "fetch orderbook", "place orders", "cancel orders", "check positions", "get fills/settlements", "account balance"]
+      },
+      {
+        "name": "SDK (Python)",
+        "type": "SDK",
+        "languages": ["Python"],
+        "description": "Official Python SDK",
+        "features": ["typed API wrapper", "auth handling"]
+      },
+      {
+        "name": "WebSocket + FIX 4.4",
+        "type": "WebSocket",
+        "description": "Real-time data streams + institutional FIX protocol",
+        "features": ["live market data", "order updates", "institutional-grade FIX 4.4"]
+      },
+      {
+        "name": "Demo Sandbox",
+        "type": "API",
+        "description": "Sandbox environment at demo-api.kalshi.com -- no KYC needed",
+        "docsUrl": "https://demo-api.kalshi.com",
+        "features": ["test trading without real money", "same API as production"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Limitless",
+    "website": "https://limitless.exchange",
+    "twitter": "https://x.com/trylimitless",
+    "description": "Prediction exchange on Base for crypto, sports, and real-world events. Low fees. LMTS token. $1.5B cumulative volume.",
+    "chain": "Base",
+    "status": "Live",
+    "volumeEstimate": "$1.5B cumulative",
+    "volumeNumeric": 1500000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full REST API for markets, trading, portfolio with EIP-712 auth",
+        "docsUrl": "https://docs.limitless.exchange/api-reference",
+        "features": ["list markets", "place orders", "manage positions", "portfolio data", "navigation"]
+      },
+      {
+        "name": "SDK (TypeScript, Python)",
+        "type": "SDK",
+        "languages": ["TypeScript", "Python"],
+        "description": "Official SDKs for CLOB and NegRisk markets",
+        "githubUrls": ["https://github.com/limitless-labs-group/limitless-exchange-ts-sdk", "https://github.com/limitless-labs-group/limitless-sdk"],
+        "features": ["market data", "order management", "position tracking", "async-first (Python)"]
+      },
+      {
+        "name": "WebSocket",
+        "type": "WebSocket",
+        "description": "Real-time price updates, orderbook streaming, position notifications",
+        "docsUrl": "https://docs.limitless.exchange/developers/quickstart/websocket.md",
+        "features": ["live price updates", "orderbook streaming", "position notifications"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "Limitless CLI",
+        "type": "CLI",
+        "description": "Rust CLI for markets, orders, positions",
+        "githubUrl": "https://github.com/limitless-labs-group/limitless-cli",
+        "features": ["browse markets", "place orders", "manage positions"],
+        "techDescription": "Rust binary, installs via cargo. Terminal interface for trading."
+      },
+      {
+        "name": "@iqai/mcp-limitless",
+        "type": "MCP",
+        "description": "Community MCP server wrapping Limitless for AI agents",
+        "npmUrl": "https://www.npmjs.com/package/@iqai/mcp-limitless",
+        "features": ["market discovery", "trading", "positions"],
+        "techDescription": "Community-maintained MCP server (v0.0.5) by IQ AI."
+      }
+    ]
+  },
+  {
+    "name": "Opinion",
+    "website": "https://opinion.trade",
+    "twitter": "https://x.com/opinionlabsxyz",
+    "description": "On-chain prediction market on BNB Chain with CLOB. Backed by YZi Labs (Binance Labs). $20M pre-Series A. $8B+ monthly volume at peak.",
+    "chain": "BNB Chain",
+    "status": "Live",
+    "volumeEstimate": "$8B/month peak",
+    "volumeNumeric": 8000000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "REST API for market data, trading, orderbook, token info, user trade history",
+        "docsUrl": "https://docs.opinion.trade/developer-guide/opinion-open-api",
+        "features": ["list markets", "get orderbook", "daily price history", "place orders", "user trade history", "token info"]
+      },
+      {
+        "name": "SDK (Python, TypeScript)",
+        "type": "SDK",
+        "languages": ["Python", "TypeScript"],
+        "description": "Official CLOB SDKs for market data, trading, order management, gas operations, split/merge/redeem",
+        "docsUrls": ["https://docs.opinion.trade/developer-guide/opinion-clob-python-sdk", "https://docs.opinion.trade/developer-guide/opinion-clob-typescript-sdk"],
+        "features": ["market data", "trading operations", "order building", "gas operations", "precision handling", "split/merge/redeem", "user management"]
+      },
+      {
+        "name": "WebSocket",
+        "type": "WebSocket",
+        "description": "Real-time data via user and market channels",
+        "docsUrl": "https://docs.opinion.trade/developer-guide/opinion-websocket",
+        "features": ["user channels", "market channels", "real-time updates"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Myriad",
+    "website": "https://myriad.markets",
+    "twitter": "https://x.com/MyriadMarkets",
+    "description": "Decentralized PM with browser extension for contextual trading from news/social content. Points system today; $MYR token planned at future TGE (no date announced). Markets settle in USDC. 511K+ users, $385M cumulative volume.",
+    "chain": "Multi-EVM (Abstract, Linea, Celo, Arbitrum, BNB)",
+    "status": "Live",
+    "volumeEstimate": "$385M cumulative",
+    "volumeNumeric": 385000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "Myriad API",
+        "type": "API",
+        "description": "General platform REST API for market data, trading, and user data",
+        "docsUrl": "https://docs.myriad.markets/builders/myriad-api-reference",
+        "features": ["market data", "trading", "portfolio"]
+      },
+      {
+        "name": "Order Book API",
+        "type": "API",
+        "description": "REST API for orderbook operations — orders, positions, trades, split/merge",
+        "docsUrl": "https://docs.myriad.markets/builders/myriad-order-book/order-book-api",
+        "features": ["limit orders", "orderbook depth", "positions", "trades"]
+      },
+      {
+        "name": "polkamarkets-js",
+        "type": "SDK",
+        "languages": ["JavaScript"],
+        "description": "JavaScript SDK for Myriad smart contract interactions — buy/sell shares, approvals, claims",
+        "docsUrl": "https://docs.myriad.markets/builders/javascript-sdk",
+        "npmUrl": "https://www.npmjs.com/package/polkamarkets-js",
+        "features": ["buy/sell shares", "ERC-20 approvals", "claim winnings", "portfolio data"]
+      },
+      {
+        "name": "Order Book SDK",
+        "type": "SDK",
+        "languages": ["JavaScript"],
+        "description": "JavaScript SDK for on-chain orderbook — EIP-712 signing, order hashing, split/merge/redeem",
+        "docsUrl": "https://docs.myriad.markets/builders/myriad-order-book/order-book-sdk",
+        "features": ["EIP-712 signing", "order hashing", "split/merge collateral", "redeem positions"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "@myriadmarkets/cli",
+        "type": "CLI",
+        "description": "CLI and MCP server for AI agents — market discovery, AMM + orderbook trading, wallet management",
+        "docsUrl": "https://docs.myriad.markets/builders/ai-agents-and-llms",
+        "npmUrl": "https://www.npmjs.com/package/@myriadmarkets/cli",
+        "githubUrl": "https://github.com/MyriadProtocol/myriad-cli",
+        "features": ["market discovery", "AMM trading", "orderbook trading", "portfolio", "MCP server mode"],
+        "techDescription": "@myriadmarkets/cli on npm. MCP config: {\"command\": \"myriad\", \"args\": [\"mcp\"]}. Default chain: BNB (chainId=56)."
+      }
+    ]
+  },
+  {
+    "name": "SX Bet",
+    "website": "https://sx.bet",
+    "twitter": "https://x.com/SX_Bet",
+    "description": "Largest on-chain sports betting app. Own EVM blockchain (SX Network). P2P parlays. $1.1B cumulative volume.",
+    "chain": "SX Network (own L2)",
+    "status": "Live",
+    "volumeEstimate": "$1.1B cumulative",
+    "volumeNumeric": 1100000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full open API for markets, odds, betting. Free, no surcharges. No API key needed for reads. Testnet at toronto.sx.bet.",
+        "docsUrl": "https://api.docs.sx.bet",
+        "features": ["list markets/odds", "place bets", "check positions", "no API key needed for reads", "testnet available"]
+      },
+      {
+        "name": "WebSocket",
+        "type": "WebSocket",
+        "description": "Real-time odds and market updates via Ably SDK",
+        "docsUrl": "https://api.docs.sx.bet",
+        "features": ["live odds updates", "real-time market data", "requires API key from dashboard"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Sapience",
+    "website": "https://sapience.xyz",
+    "twitter": "https://x.com/sapiencemarkets",
+    "description": "AI-first prediction market on Ethereal chain + Arbitrum. Uses Ethena USDe collateral. Agent vaults, auction system (RFQ). Beta.",
+    "chain": "Ethereal + Arbitrum",
+    "status": "Beta",
+    "volumeEstimate": "~18.6 USDe cumulative (very early)",
+    "volumeNumeric": 19,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "GraphQL API",
+        "type": "API",
+        "description": "Public GraphQL with 32 query types, no auth required",
+        "docsUrl": "https://docs.sapience.xyz/builder-guide/api/graphql",
+        "features": ["list markets/conditions", "get categories", "fetch trades", "protocol stats", "leaderboard", "positions"]
+      },
+      {
+        "name": "@sapience/sdk",
+        "type": "SDK",
+        "languages": ["TypeScript"],
+        "description": "SDK with 55 exports including GraphQL client, MCP client, auction WS, forecasting/trading helpers",
+        "githubUrls": ["https://github.com/sapiencexyz/sapience"],
+        "features": ["GraphQL wrapper", "contract ABIs", "auction helpers", "forecast submission", "transaction building"]
+      },
+      {
+        "name": "Auction Relayer WebSocket",
+        "type": "WebSocket",
+        "description": "RFQ-style trading via WebSocket at wss://relayer.sapience.xyz/auction",
+        "docsUrl": "https://docs.sapience.xyz/builder-guide/api/auction-relayer",
+        "features": ["start auctions", "submit/receive bids", "EIP-712 signed execution"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "SKILL.md",
+        "type": "Skill",
+        "description": "SDK guide — GraphQL queries, WebSocket auction flows, EIP-712 signing instructions, @sapience/sdk code templates. Agent reads docs, constructs API calls and contract interactions. More structured than pure docs but still 'figure it out'.",
+        "docsUrl": "https://sapience.xyz/SKILL.md",
+        "features": ["prediction trading via EIP-712 auctions", "probability forecasting", "secondary market trading", "position management"],
+        "techDescription": "SKILL.md with YAML frontmatter + SDK-dependent executable patterns. GraphQL API at api.sapience.xyz/graphql, WebSocket at wss://relayer.sapience.xyz/auction, on-chain via viem/ethers + @sapience/sdk. All trades require explicit wallet signing. Compatible with Claude Code, Codex, OpenClaw.",
+        "skillFormat": "sdk-guide"
+      },
+      {
+        "name": "ElizaOS Plugin",
+        "type": "Framework",
+        "description": "ElizaOS integration with 4 actions",
+        "features": ["CALL_SAPIENCE_TOOL", "READ_SAPIENCE_RESOURCE", "SIMULATE_TRANSACTION", "SUBMIT_TRANSACTION"],
+        "techDescription": "@sapiencexyz/elizaos-plugin v1.0.7 on npm. Requires full ElizaOS framework."
+      },
+      {
+        "name": "SKILL.md + llms.txt",
+        "type": "Skill",
+        "description": "LLM context files — llms.txt and llms-full.txt providing full API surface and contract ABIs in LLM-friendly format. Complementary to the main SKILL.md.",
+        "docsUrl": "https://docs.sapience.xyz/llms-full.txt",
+        "features": ["agent onboarding", "API endpoints", "signing schemes", "contract ABIs"],
+        "techDescription": "llms.txt and llms-full.txt for LLM context. Companion to sapience.xyz/SKILL.md. Provides same info in a flattened, LLM-optimized format.",
+        "skillFormat": "llm-context"
+      }
+    ]
+  },
+  {
+    "name": "Baozi",
+    "website": "https://baozi.bet",
+    "twitter": "https://x.com/baozibet",
+    "description": "Solana-native prediction market purpose-built for AI agents. 76 MCP tools. Boolean and race markets with SOL payouts.",
+    "chain": "Solana",
+    "status": "Live",
+    "volumeEstimate": "Unknown",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [],
+    "aiTools": [
+      {
+        "name": "MCP Server (76 tools)",
+        "type": "MCP",
+        "description": "Comprehensive MCP for market creation, trading, resolution, data access",
+        "githubUrl": "https://github.com/bolivian-peru/baozi-mcp",
+        "features": ["create markets", "place bets", "check positions", "market resolution", "SOL payouts", "quote/pricing", "creator tools"],
+        "techDescription": "npx @baozi.bet/mcp-server. 76 tools across 6 categories: Quote/Pricing, Market Creation, Trading, Resolution, Creator Tools, Data Access."
+      },
+      {
+        "name": "OpenClaw Skill",
+        "type": "Skill",
+        "description": "Executable scripts — 10 pre-built scripts the agent runs directly: list-markets, place-bet, create-market, get-odds, get-portfolio, etc. Closest to a CLI. Agent calls scripts with flags, not writes code.",
+        "githubUrl": "https://github.com/bolivian-peru/baozi-openclaw",
+        "features": ["list-markets", "get-odds", "place-bet", "create-market", "create-race-market", "get-portfolio", "analyze-market", "claim-winnings"],
+        "techDescription": "SKILL.md with YAML frontmatter, 10 scripts across 4 groups: reading (list-markets, get-odds, get-portfolio, analyze-market), trading (place-bet), creation (create-profile, create-market, create-race-market), claiming (claim-winnings, claim-affiliate, claim-creator-fees). Pari-mutuel pricing, SOL denominated. Requires SOLANA_PRIVATE_KEY + SOLANA_RPC_URL env vars.",
+        "skillFormat": "executable-scripts"
+      },
+      {
+        "name": "Agent Arena + AgentBook",
+        "type": "Framework",
+        "description": "Agent competitive platform: weekly leaderboards, social board for agent analysis, paper trading, delegated mandates",
+        "docsUrl": "https://baozi.bet/arena",
+        "features": ["agent arena (weekly leaderboard)", "AgentBook (agent social board)", "paper trading", "market intelligence", "delegated mandates"],
+        "techDescription": "baozi.bet/arena, baozi.bet/agentbook, baozi.bet/mandates. Also: .well-known/agents.json (agentspec v1), /api/skill, /api/agent/idl endpoints."
+      }
+    ]
+  },
+  {
+    "name": "Context Markets",
+    "website": "https://context.markets",
+    "twitter": "https://x.com/context",
+    "description": "Prediction market on Base with real-time markets across esports, sports, weather, crypto. Comprehensive developer and agent tooling.",
+    "chain": "Base",
+    "status": "Live",
+    "volumeEstimate": "Unknown",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API v2",
+        "type": "API",
+        "description": "Full REST API for markets, orders, portfolio, balance, gasless ops, questions",
+        "docsUrl": "https://docs.context.markets/api-reference",
+        "features": ["list/search markets", "place/cancel orders", "portfolio/positions", "orderbook", "price history", "trading simulation", "gasless operations", "question submission"]
+      },
+      {
+        "name": "SDK (TypeScript, React)",
+        "type": "SDK",
+        "languages": ["TypeScript", "React"],
+        "description": "Core TS SDK + React hooks SDK with TanStack Query",
+        "githubUrls": ["https://github.com/contextwtf/context-sdk", "https://github.com/contextwtf/context-react"],
+        "features": ["market data", "order management", "wallet operations", "React hooks for Markets/Orders/Portfolio"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "MCP Server (25 tools)",
+        "type": "MCP",
+        "description": "MCP server for browsing, trading, creating, and managing prediction markets",
+        "githubUrl": "https://github.com/contextwtf/context-mcp",
+        "docsUrl": "https://docs.context.markets/agents",
+        "features": ["browse markets", "place trades", "create markets", "portfolio management", "read-only mode (no wallet)"],
+        "techDescription": "Install via: claude mcp add context-markets -- npx context-markets-mcp. 25 tools. Guided onboarding for wallet setup."
+      },
+      {
+        "name": "context-markets-cli",
+        "type": "CLI",
+        "description": "Command-line interface with interactive shell mode and JSON output",
+        "githubUrl": "https://github.com/contextwtf/context-cli",
+        "features": ["browse/search markets", "place limit orders", "manage positions", "interactive shell", "agent-ready JSON output"],
+        "techDescription": "npm install -g context-markets-cli. 35+ commands. Tables in terminal, JSON when piped."
+      },
+      {
+        "name": "Agent Skills",
+        "type": "Skill",
+        "description": "Navigation hub — router SKILL.md links to 5 workflow subskills. Lists 25 MCP tools + 6 CLI commands. Organized instruction set that references their MCP server and CLI. The skill is partly instructions on how to use their existing tools.",
+        "githubUrl": "https://github.com/contextwtf/context-skills",
+        "features": ["Trade skills", "Research skills", "Build skills (React)", "Create skills (natural language market creation)"],
+        "techDescription": "Router SKILL.md with prerequisites (MCP server, API key, private key, funded account). Trade subskill covers price/size encoding, SDK constructor, 25 MCP tools in 5 categories (Markets, Orders, Portfolio, Account, Questions), 6 CLI commands. Install via Claude Code marketplace, Skills CLI (npx skills add), or direct repo.",
+        "skillFormat": "navigation-hub"
+      }
+    ]
+  },
+  {
+    "name": "predict.fun",
+    "website": "https://predict.fun",
+    "twitter": "https://x.com/predictdotfun",
+    "description": "Yield-bearing prediction market on BNB Chain. Staked funds generate DeFi yield while markets open. Ex-Binance team, YZi Labs incubated.",
+    "chain": "BNB Chain",
+    "status": "Live",
+    "volumeEstimate": "Early stage",
+    "volumeNumeric": 300000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "API at api.predict.fun (240 req/min)",
+        "docsUrl": "https://dev.predict.fun",
+        "features": ["list markets", "place orders", "positions", "market data"]
+      },
+      {
+        "name": "SDK (TypeScript, Python)",
+        "type": "SDK",
+        "languages": ["TypeScript", "Python"],
+        "description": "Official SDKs for predict.fun",
+        "githubUrls": ["https://github.com/PredictDotFun/sdk", "https://github.com/PredictDotFun/sdk-python"],
+        "features": ["typed API wrapper", "order management"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Manifold",
+    "website": "https://manifold.markets",
+    "twitter": "https://x.com/ManifoldMarkets",
+    "description": "Social prediction market where anyone can create markets. Play money (Mana). ~20K weekly active users. Open source. Most developer-friendly PM.",
+    "chain": "None (centralized)",
+    "status": "Live",
+    "volumeEstimate": "Play money only",
+    "volumeNumeric": 0,
+    "category": "Play Money",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full REST API for markets, bets, comments, users",
+        "docsUrl": "https://docs.manifold.markets/api",
+        "features": ["list/search markets", "place bets", "create markets", "get comments", "user data", "leaderboards"]
+      },
+      {
+        "name": "SDK (TypeScript, Python)",
+        "type": "SDK",
+        "languages": ["TypeScript", "Python"],
+        "description": "Official TS SDK + community Python SDK (manifoldpy) with accuracy metrics",
+        "githubUrls": ["https://github.com/nicholasgasior/manifold-sdk", "https://github.com/vluzko/manifoldpy"],
+        "features": ["typed API wrappers", "accuracy metrics (Brier score, calibration)"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "MCP Server",
+        "type": "MCP",
+        "description": "MCP server for AI agent integration",
+        "githubUrl": "https://github.com/bmorphism/manifold-mcp-server",
+        "features": ["market data", "place bets", "create markets"],
+        "techDescription": "manifold-mcp-server on npm. Full open-source codebase on GitHub."
+      }
+    ]
+  },
+  {
+    "name": "Metaculus",
+    "website": "https://www.metaculus.com",
+    "twitter": "https://x.com/metaculus",
+    "description": "Collective intelligence forecasting platform. Reputation-based scoring. AI Forecasting Benchmark competitions with prizes. Academic/EA community.",
+    "chain": "None (centralized)",
+    "status": "Live",
+    "volumeEstimate": "N/A (reputation-based)",
+    "volumeNumeric": 0,
+    "category": "Play Money",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full API for reading questions and submitting forecasts",
+        "docsUrl": "https://www.metaculus.com/api",
+        "features": ["list questions", "submit forecasts", "get resolution data", "binary/MC/numeric/date question types"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "forecasting-tools",
+        "type": "Framework",
+        "description": "Python framework for building AI forecasting bots",
+        "githubUrl": "https://github.com/Metaculus/forecasting-tools",
+        "features": ["bot template", "question parsing", "forecast submission", "AI benchmark competitions"],
+        "techDescription": "Python framework (62 stars). Includes bot template. Hosts AI benchmarking competitions with Anthropic/OpenAI API credits."
+      }
+    ]
+  },
+  {
+    "name": "worm.wtf",
+    "website": "https://worm.wtf",
+    "description": "AI-powered prediction market on Solana. Permissionless community-driven markets. AI copilot for market creation. UMA oracle. $4.5M pre-seed. 3x margin trading.",
+    "chain": "Solana",
+    "status": "Live",
+    "volumeEstimate": "Unknown",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "Overtime",
+    "website": "https://overtimemarkets.xyz",
+    "description": "Crypto sportsbook with live odds, in-play markets, instant settlements. 20+ sports. Multi-chain.",
+    "chain": "Base, Arbitrum, Optimism",
+    "status": "Live",
+    "volumeEstimate": "Unknown",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "Seer",
+    "website": "https://seer.pm",
+    "twitter": "https://x.com/seer_pm",
+    "description": "Decentralized prediction marketplace using Conditional Tokens framework. Reality.eth for resolution, Kleros for disputes. Gnosis ecosystem.",
+    "chain": "Gnosis, Ethereum",
+    "status": "Live",
+    "volumeEstimate": "Low",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [],
+    "aiTools": [
+      {
+        "name": "Gnosis prediction-market-agent-tooling",
+        "type": "Framework",
+        "description": "Python agent framework shared with Gnosis ecosystem",
+        "githubUrl": "https://github.com/gnosis/prediction-market-agent-tooling",
+        "features": ["deploy agents", "benchmark accuracy", "multi-platform support (Omen, Manifold, Polymarket)"],
+        "techDescription": "Python framework. 300+ daily active agents, 79% accuracy. Not Seer-specific but compatible via Conditional Tokens."
+      }
+    ]
+  },
+  {
+    "name": "AIOmen / Presagio",
+    "website": "https://presagio.pages.dev",
+    "description": "Prediction market on Gnosis chain built for AI agent participation. AIOmen is the agent-focused PM, Presagio is the revitalized Omen 2.0 frontend. Backed by GnosisDAO.",
+    "chain": "Gnosis",
+    "status": "Live",
+    "volumeEstimate": "Low",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [],
+    "aiTools": [
+      {
+        "name": "Gnosis prediction-market-agent-tooling",
+        "type": "Framework",
+        "description": "Python agent framework for deploying PM agents on Gnosis chain",
+        "githubUrl": "https://github.com/gnosis/prediction-market-agent-tooling",
+        "features": ["deploy autonomous agents", "benchmark accuracy", "multi-platform (Omen, Manifold, Polymarket)"],
+        "techDescription": "Python framework. 300+ daily active agents on Gnosis, 340K+ monthly txns. Shared with Seer."
+      }
+    ]
+  },
+  {
+    "name": "Rain Protocol",
+    "website": "https://rain.one",
+    "twitter": "https://x.com/Rain__Protocol",
+    "description": "Permissionless prediction market on Arbitrum. AI oracle (Delphi, 5-agent system). 'Uniswap of prediction markets.' Backed by Enlivex (Nasdaq-listed, $212M RAIN treasury).",
+    "chain": "Arbitrum",
+    "status": "Live",
+    "volumeEstimate": "~$18M cumulative, ~$3.96M TVL, ~30K users",
+    "volumeNumeric": 18000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "Rain SDK (TypeScript)",
+        "type": "SDK",
+        "languages": ["TypeScript"],
+        "description": "Full PM lifecycle SDK — market creation, trading, liquidity, settlement, analytics, WebSocket live data. Account abstraction via Alchemy.",
+        "githubUrl": "https://github.com/rain1-labs/rain-sdk",
+        "docsUrl": "https://rain.one/docs/For-Developers/Rain-Builders",
+        "features": ["create markets", "trade", "liquidity management", "analytics", "WebSocket events", "account abstraction (gasless)"],
+        "techDescription": "Two classes: Rain (stateless, unsigned txs) and RainAA (smart accounts with gas sponsorship). Peer dep: viem ^2.0.0. Returns RawTransaction compatible with wagmi/ethers."
+      },
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full REST API with Swagger docs for market data, trading, and platform operations",
+        "docsUrl": "https://stg-api.rain.one/api-docs/",
+        "features": ["market data", "trading", "user data", "Swagger UI"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "AI Agent Docs + OpenClaw Skills",
+        "type": "Skill",
+        "description": "OpenClaw format — standardized skill manifest compatible with Claude Code, Cursor, Windsurf, OpenClaw framework. Agent setup guides + market creation and trading skills.",
+        "docsUrl": "https://rain.one/docs/For-Developers/Rain-for-Ai-Agents/Agent-Skills",
+        "features": ["OpenClaw skills", "agent setup guides (Claude Code, Cursor, Windsurf)", "create markets via single prompt"],
+        "techDescription": "$5M grant program. Positions as 'first machine-readable infrastructure for AI agents.' OpenClaw-compatible skill manifest with setup guides for multiple AI coding tools. Docs at rain.one/docs (403 on direct SKILL.md access).",
+        "skillFormat": "openclaw"
+      }
+    ]
+  },
+  {
+    "name": "Probable",
+    "website": "https://probable.markets",
+    "twitter": "https://x.com/0xProbable",
+    "description": "Zero-fee on-chain PM on BNB Chain. Incubated by PancakeSwap/YZi Labs. UMA Optimistic Oracle. Acquired by predict.fun March 2026.",
+    "chain": "BNB Chain",
+    "status": "Live (acquired by predict.fun)",
+    "volumeEstimate": "$3B cumulative",
+    "volumeNumeric": 3000000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "REST APIs for market data, trading, orderbook",
+        "docsUrl": "https://developer.probable.markets/api/overview",
+        "features": ["list markets", "place orders", "orderbook data", "market data"]
+      },
+      {
+        "name": "SDK (TypeScript)",
+        "type": "SDK",
+        "languages": ["TypeScript"],
+        "description": "TypeScript SDK with built-in auth and order management",
+        "docsUrl": "https://developer.probable.markets",
+        "features": ["auth handling", "order management", "market data"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Alpha Arcade",
+    "website": "https://alphaarcade.com",
+    "twitter": "https://x.com/AlphaArcade69",
+    "description": "Decentralized PM on Algorand. 3rd largest by daily tx count (behind Polymarket/Kalshi). Founded by Lofty.ai team. $ALPHA token.",
+    "chain": "Algorand",
+    "status": "Live",
+    "volumeEstimate": "$10M+ cumulative",
+    "volumeNumeric": 10000000,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "API at platform.alphaarcade.com/api. Key via Account > Partners tab.",
+        "docsUrl": "https://www.mintlify.com/phara23/alpha-sdk/api/alpha-client",
+        "features": ["list markets", "get market", "get orderbook", "get wallet orders", "trading", "positions"],
+        "techDescription": "SDK docs on Mintlify: 19 methods across Trading (5), Positions (4), Orderbook (3), Markets (7). x-api-key header auth. WebSocket at wss://wss.platform.alphaarcade.com."
+      },
+      {
+        "name": "TypeScript SDK",
+        "type": "SDK",
+        "languages": ["TypeScript"],
+        "description": "@alpha-arcade/sdk on npm for orderbook, orders, positions",
+        "githubUrls": ["https://github.com/phara23/alpha-sdk"],
+        "features": ["place limit/market orders", "read orderbooks", "manage positions", "split/merge tokens", "claim winnings"]
+      }
+    ],
+    "aiTools": [
+      {
+        "name": "MCP Server (18 tools)",
+        "type": "MCP",
+        "description": "MCP server for Claude, Cursor, Copilot",
+        "githubUrl": "https://github.com/phara23/alpha-mcp",
+        "features": ["get_live_markets", "get_orderbook", "create_limit_order", "stream_orderbook (WebSocket)", "market monitoring"],
+        "techDescription": "@alpha-arcade/mcp on npm (8 stars). 18 MCP tools including WebSocket streaming. Works with Claude, Cursor, Copilot. Published under @alpha-arcade npm scope."
+      }
+    ]
+  },
+  {
+    "name": "Trueo",
+    "website": "https://trueo.com",
+    "twitter": "https://x.com/trueo_app",
+    "description": "Decentralized prediction market on Base with yield-bearing markets. Resolution via AI agents + economic security + decentralized jury. Vitalik bought 400 Patron NFTs (32 ETH).",
+    "chain": "Base",
+    "status": "Beta",
+    "volumeEstimate": "Low/early",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "Smart Contracts (open source)",
+        "type": "SDK",
+        "languages": ["Solidity"],
+        "description": "Open-source prediction market contracts",
+        "githubUrls": ["https://github.com/trueo-protocol/trueo-contracts"],
+        "features": ["market creation", "trading", "resolution"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Robinhood Prediction Markets",
+    "website": "https://robinhood.com/us/en/prediction-markets/",
+    "twitter": "https://x.com/RobinhoodApp",
+    "description": "CFTC-regulated prediction markets from major US brokerage. 12B+ contracts traded in 2025. Sports, politics, economics.",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "12B+ contracts/yr",
+    "volumeNumeric": 12000000000,
+    "category": "Regulated/CeFi",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "OG (by Crypto.com)",
+    "website": "https://og.com",
+    "twitter": "https://x.com/cryptocom",
+    "description": "CFTC-regulated standalone prediction markets app spun out from Crypto.com in Feb 2026 ahead of Super Bowl LX. Margin/leverage trading, 49 US states. Crypto.com reported 40x growth in its internal event-contracts business in the six months pre-launch (absolute volume undisclosed).",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "Undisclosed",
+    "volumeNumeric": 0,
+    "category": "Regulated/CeFi",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "DraftKings Predictions",
+    "website": "https://www.draftkings.com",
+    "twitter": "https://x.com/DraftKings",
+    "description": "CFTC-registered prediction markets app. Sports, finance. Available in 38 US states. Powered by CME + Crypto.com exchanges.",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "Early stage",
+    "volumeNumeric": 0,
+    "category": "Regulated/CeFi",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "FanDuel Predicts",
+    "website": "https://www.fanduel.com/predicts",
+    "description": "Prediction market from FanDuel + CME Group joint venture. CFTC-regulated. Sports, finance, politics.",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "Early stage",
+    "volumeNumeric": 0,
+    "category": "Regulated/CeFi",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "PredictIt",
+    "website": "https://www.predictit.org",
+    "description": "Legacy political prediction market. Continuous double auction. CFTC no-action letter revoked but still operational.",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "Declining",
+    "volumeNumeric": 0,
+    "category": "Regulated/CeFi",
+    "coreTools": [],
+    "aiTools": []
+  },
+  {
+    "name": "XO Market",
+    "website": "https://xo.market",
+    "twitter": "https://x.com/xodotmarket",
+    "description": "Permissionless conviction market protocol on sovereign rollup with Celestia DA. AI-driven oracle (MODRA). Sub-second execution. $500K pre-seed from Delphi Ventures.",
+    "chain": "Sovereign rollup (Celestia DA)",
+    "status": "Beta",
+    "volumeEstimate": "Early stage",
+    "volumeNumeric": 0,
+    "category": "Decentralized",
+    "coreTools": [
+      {
+        "name": "REST API",
+        "type": "API",
+        "description": "Full trading API with sub-50ms execution. HMAC-SHA256 auth.",
+        "docsUrl": "https://xotrade.co/documentation.html",
+        "features": ["list markets", "place orders", "cancel orders", "positions", "orderbook", "settlement tracking", "trade history"]
+      },
+      {
+        "name": "SDK (Python, TypeScript, C++)",
+        "type": "SDK",
+        "languages": ["Python", "TypeScript", "C++"],
+        "description": "Official SDKs: xo-trade (Python), @xo-trade/sdk (TypeScript), C++ via vcpkg.",
+        "docsUrl": "https://xotrade.co/documentation.html#sdks",
+        "features": ["typed API wrapper", "order management", "real-time data"],
+        "techDescription": "Python: pip install xo-trade. TypeScript: npm install @xo-trade/sdk. C++: vcpkg install xo-trade."
+      },
+      {
+        "name": "Community SDKs (Go, Rust, Java)",
+        "type": "SDK",
+        "languages": ["Go", "Rust", "Java"],
+        "description": "Community-maintained SDKs listed on official docs page",
+        "docsUrl": "https://xotrade.co/documentation.html#sdks",
+        "features": ["Go SDK", "Rust crate", "Java Maven package"],
+        "techDescription": "Go: github.com/xo-trade/go-sdk. Rust: xo-trade on crates.io. Java: com.xotrade:sdk on Maven."
+      },
+      {
+        "name": "FIX Protocol (enterprise)",
+        "type": "API",
+        "description": "FIX 4.4 protocol for institutional/HFT access with SSL",
+        "docsUrl": "https://xotrade.co/documentation.html",
+        "features": ["FIX 4.4", "SSL encrypted", "enterprise tier"],
+        "techDescription": "fix.xotrade.co:4433 (prod), fix-sandbox.xotrade.co:4433 (sandbox). Requires enterprise tier."
+      },
+      {
+        "name": "WebSocket",
+        "type": "WebSocket",
+        "description": "Real-time streaming for market data and updates",
+        "docsUrl": "https://xotrade.co/documentation.html",
+        "features": ["live market data", "order updates", "real-time streaming"]
+      }
+    ],
+    "aiTools": []
+  },
+  {
+    "name": "Interactive Brokers (ForecastTrader)",
+    "website": "https://forecasttrader.interactivebrokers.com",
+    "twitter": "https://x.com/IBKR",
+    "description": "CFTC-regulated prediction markets from major US brokerage via ForecastEx (owned subsidiary) + CME Event Contracts. Binary contracts $0.02-$0.99. 3.14% APY daily incentive. Nearly 24/6 trading.",
+    "chain": "CeFi",
+    "status": "Live",
+    "volumeEstimate": "Unknown",
+    "volumeNumeric": 0,
+    "category": "Regulated/CeFi",
+    "coreTools": [
+      {
+        "name": "REST API (Web API)",
+        "type": "API",
+        "description": "Modern REST API for trading event/forecast contracts",
+        "docsUrl": "https://www.interactivebrokers.com/campus/ibkr-api-page/event-contracts",
+        "features": ["list event contracts", "place orders", "account data", "market data"]
+      },
+      {
+        "name": "TWS API + FIX",
+        "type": "API",
+        "description": "Trader Workstation API (Java, C++, Python, C#) + institutional FIX 4.2 protocol",
+        "docsUrl": "https://www.interactivebrokers.com/campus/ibkr-api-page/ibkr-api-home",
+        "features": ["programmatic trading", "real-time data", "multi-language support", "institutional FIX protocol"]
+      }
+    ],
+    "aiTools": []
+  }
+]
