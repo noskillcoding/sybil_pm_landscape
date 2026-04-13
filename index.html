@@ -87,7 +87,7 @@ input { font: inherit; color: inherit; }
 table { border-collapse: collapse; width: 100%; }
 
 /* --- Layout shell ----------------------------------------- */
-.t-shell { max-width: 1440px; margin: 0 auto; padding: 32px 32px 80px; }
+.t-shell { max-width: 1200px; margin: 0 auto; padding: 32px 32px 80px; }
 
 /* --- Topbar ----------------------------------------------- */
 .t-topbar {
@@ -350,7 +350,6 @@ table { border-collapse: collapse; width: 100%; }
 .t-cat-play { color: var(--cyan); border-color: color-mix(in srgb, var(--cyan) 35%, transparent); }
 
 /* Chain and volume */
-.t-chain { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-dim); }
 .t-vol { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); text-align: right; }
 .t-vol-muted { color: var(--ink-muted); font-style: italic; font-size: 11px; }
 
@@ -597,28 +596,24 @@ table { border-collapse: collapse; width: 100%; }
 
 /* --- Stable table layout (no column shift on expand) ------ */
 .t-table { table-layout: fixed; width: 100%; }
-.t-table col.col-chev    { width: 22px; }
-.t-table col.col-pm      { width: 280px; }
-.t-table col.col-cat     { width: 130px; }
-.t-table col.col-chain   { width: 85px; }
-.t-table col.col-vol     { width: 130px; }
-.t-table col.col-dev     { width: 170px; }
-.t-table col.col-agent   { width: auto; }
+.t-table col.col-chev    { width: 28px;  }
+.t-table col.col-pm      { width: 320px; }
+.t-table col.col-cat     { width: 120px; }
+.t-table col.col-vol     { width: 180px; }
+.t-table col.col-dev     { width: 188px; }
+.t-table col.col-agent   { width: 300px; }
 .t-table td, .t-table th { overflow: hidden; }
 .t-table td .t-tools { overflow: visible; }
 .t-pm > div:last-child { min-width: 0; flex: 1 1 auto; }
 .t-pm-name, .t-pm-meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.t-vol, .t-chain { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-vol { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .t-cat { white-space: nowrap; }
 
-/* Right-align numeric + tool cluster so content hugs the right edge */
-/* Landscape table: volume (5), dev tools (6), agent tools (7) */
-#pmTable thead th:nth-child(5),
-#pmTable thead th:nth-child(6),
-#pmTable thead th:nth-child(7) { text-align: right; }
+/* Right-align volume only (numeric); dev + agent tool pill clusters
+   stay left-aligned under their header labels for a consistent
+   vertical gridline. */
+#pmTable thead th.num,
 #pmTable tbody td.t-vol { text-align: right; }
-#pmTable tbody td:nth-child(6) .t-tools,
-#pmTable tbody td:nth-child(7) .t-tools { justify-content: flex-end; }
 
 /* Testing table: dev tools count (4), AA (5), cli (6), skill (7), framework (8) */
 #testTable thead th:nth-child(n+4),
@@ -708,7 +703,6 @@ table { border-collapse: collapse; width: 100%; }
           <col class="col-chev">
           <col class="col-pm">
           <col class="col-cat">
-          <col class="col-chain">
           <col class="col-vol">
           <col class="col-dev">
           <col class="col-agent">
@@ -965,7 +959,6 @@ const Sort = {
   comparators: {
     name:     (a, b) => a.name.localeCompare(b.name),
     category: (a, b) => (a.category || '').localeCompare(b.category || ''),
-    chain:    (a, b) => (a.chain || '').localeCompare(b.chain || ''),
     volume:   (a, b) => (a.volumeNumeric || 0) - (b.volumeNumeric || 0),
   },
   apply(rows) {
@@ -2083,10 +2076,9 @@ function render() {
   };
   document.getElementById('tableHead').innerHTML = `
     <tr>
-      <th style="width:22px"></th>
+      <th></th>
       <th class="sortable" data-sort="name">Market${arrow('name')}</th>
       <th class="sortable" data-sort="category">Category${arrow('category')}</th>
-      <th class="sortable" data-sort="chain">Chain${arrow('chain')}</th>
       <th class="num sortable" data-sort="volume">Volume${arrow('volume')}</th>
       <th>Dev tools</th>
       <th>Agent tools</th>
@@ -2122,6 +2114,9 @@ function render() {
       ? `<div class="t-tools">${pm.aiTools.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
       : `<span class="t-pill t-pill-none">—</span>`;
 
+    const domain = (pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const chainShort = pm.chain && pm.chain.length > 22 ? pm.chain.split(/[(,]/)[0].trim() : (pm.chain || '');
+    const metaLine = chainShort ? `${domain} · ${chainShort}` : domain;
     const rowHtml = `
   <tr class="t-row" data-pm="${esc(pm.name)}">
     <td class="t-chev">▶</td>
@@ -2130,12 +2125,11 @@ function render() {
         <div class="t-pm-glyph">${initial}</div>
         <div>
           <div class="t-pm-name">${esc(pm.name)}</div>
-          <div class="t-pm-meta">${esc((pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}</div>
+          <div class="t-pm-meta">${esc(metaLine)}</div>
         </div>
       </div>
     </td>
     <td><span class="t-cat ${catClass}">${esc(pm.category)}</span></td>
-    <td class="t-chain">${esc(pm.chain || '—')}</td>
     <td class="t-vol">${volDisplay}</td>
     <td>${devToolsHtml}</td>
     <td>${aiToolsHtml}</td>
@@ -2167,7 +2161,7 @@ function render() {
 
     const detailHtml = `
   <tr class="t-detail" data-pm="${esc(pm.name)}">
-    <td colspan="7">
+    <td colspan="6">
       <div class="t-detail-inner">
         <div class="t-detail-about">
           <div class="t-detail-h">about</div>
