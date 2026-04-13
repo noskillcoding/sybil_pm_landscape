@@ -50,19 +50,4 @@ export function initViewNav() {
     });
   });
 
-  // Static methodology panel tabs (legacy — the panel is hidden by CSS but
-  // still in the DOM, and this handler keeps its mContent-* toggles working).
-  document.querySelectorAll('#mTabs .m-tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      const target = this.dataset.mtab;
-      document.querySelectorAll('#mTabs .m-tab').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-      ['mContent-aa','mContent-cli','mContent-skill','mContent-framework'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.classList.remove('open');
-      });
-      const content = document.getElementById('mContent-' + target);
-      if (content) content.classList.add('open');
-    });
-  });
 }

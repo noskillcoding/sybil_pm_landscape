@@ -60,9 +60,6 @@
   line-height: 1.5;
 }
 
-/* --- Hide legacy static methodology panel on testing view -- */
-#testingView > .methodology { display: none; }
-
 /* --- Testing detail row ----------------------------------- */
 .t-detail .methodology { margin-top: 0; padding-top: 0; border-top: 0; }
 .t-detail .m-tabs {
