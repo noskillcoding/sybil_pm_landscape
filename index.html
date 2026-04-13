@@ -13,7 +13,34 @@
     }
   })();
 </script>
-<title>Prediction Markets Landscape</title>
+<title>Sybil PM Landscape — 27 prediction markets benchmarked for AI agent access</title>
+<meta name="description" content="Research dashboard benchmarking how accessible 27 prediction markets are to autonomous AI trading agents. Four independent benchmarks: agent accessibility, CLI/MCP, skill, and framework — all run by autonomous coding agents.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pm-landscape.vercel.app/">
+<meta property="og:title" content="Sybil PM Landscape">
+<meta property="og:description" content="27 prediction markets benchmarked for AI agent accessibility. Four independent tests run by autonomous coding agents.">
+<meta property="og:url" content="https://pm-landscape.vercel.app/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sybil">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Sybil PM Landscape">
+<meta name="twitter:description" content="27 prediction markets benchmarked for AI agent accessibility.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Sybil PM Landscape",
+  "description": "Research dataset benchmarking 27 prediction markets across four dimensions of agent readiness: agent accessibility, CLI/MCP surface, skill format, and framework maturity.",
+  "url": "https://pm-landscape.vercel.app/",
+  "creator": {"@type": "Organization", "name": "Sybil", "url": "https://sybil.exchange"},
+  "temporalCoverage": "2026-04",
+  "distribution": [
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://pm-landscape.vercel.app/data/pms.json", "name": "Prediction Markets"},
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://pm-landscape.vercel.app/data/accessibility.json", "name": "Agent Accessibility Scores"},
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://pm-landscape.vercel.app/data/tests.json", "name": "Benchmark Results"}
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -35,8 +62,8 @@
       <span class="t-brand-name mono">sybil.exchange</span>
     </a>
     <nav class="t-tabs">
-      <button class="t-tab active" data-view="landscape">Landscape</button>
-      <button class="t-tab" data-view="testing">Testing</button>
+      <a class="t-tab active" data-view="landscape" href="#/landscape">Landscape</a>
+      <a class="t-tab" data-view="testing" href="#/testing">Testing</a>
     </nav>
     <div class="t-topbar-right">
       <span class="t-live mono"><span class="t-live-dot"></span>live</span>
@@ -44,6 +71,44 @@
       <button class="t-theme-btn" data-theme-toggle title="Toggle theme"><span class="mono" data-theme-icon>◐</span></button>
     </div>
   </header>
+
+<main>
+
+<noscript>
+  <section class="t-nojs" aria-label="Dataset fallback">
+    <h2>27 Prediction Markets (no-JavaScript fallback)</h2>
+    <p>This dashboard renders client-side. The list below is a static fallback for agents and crawlers without JavaScript. For the full JSON dataset, see <a href="./llms.txt">llms.txt</a>, <a href="./docs.html">docs</a>, or fetch <a href="./data/pms.json">/data/pms.json</a> directly.</p>
+    <ul>
+        <li><a href="https://polymarket.com">Polymarket</a> — Decentralized · Polygon · $52.5B cumulative, ~$7B/month</li>
+        <li><a href="https://kalshi.com">Kalshi</a> — Regulated/CeFi · CeFi · $30B+ annual, ~$9B/month</li>
+        <li><a href="https://limitless.exchange">Limitless</a> — Decentralized · Base · $1.5B cumulative</li>
+        <li><a href="https://opinion.trade">Opinion</a> — Decentralized · BNB Chain · $8B/month peak</li>
+        <li><a href="https://myriad.markets">Myriad</a> — Decentralized · Multi-EVM · $385M cumulative</li>
+        <li><a href="https://sx.bet">SX Bet</a> — Decentralized · SX Network · $1.1B cumulative</li>
+        <li><a href="https://sapience.xyz">Sapience</a> — Decentralized · Ethereal + Arbitrum · ~18.6 USDe cumulative (very early)</li>
+        <li><a href="https://baozi.bet">Baozi</a> — Decentralized · Solana · Unknown</li>
+        <li><a href="https://context.markets">Context Markets</a> — Decentralized · Base · Unknown</li>
+        <li><a href="https://predict.fun">predict.fun</a> — Decentralized · BNB Chain · Early stage</li>
+        <li><a href="https://manifold.markets">Manifold</a> — Play Money · None · Play money only</li>
+        <li><a href="https://www.metaculus.com">Metaculus</a> — Play Money · None · N/A (reputation-based)</li>
+        <li><a href="https://worm.wtf">worm.wtf</a> — Decentralized · Solana · Unknown</li>
+        <li><a href="https://overtimemarkets.xyz">Overtime</a> — Decentralized · Base · Unknown</li>
+        <li><a href="https://seer.pm">Seer</a> — Decentralized · Gnosis · Low</li>
+        <li><a href="https://presagio.pages.dev">AIOmen / Presagio</a> — Decentralized · Gnosis · Low</li>
+        <li><a href="https://rain.one">Rain Protocol</a> — Decentralized · Arbitrum · ~$18M cumulative, ~$3.96M TVL, ~30K users</li>
+        <li><a href="https://probable.markets">Probable</a> — Decentralized · BNB Chain · $3B cumulative</li>
+        <li><a href="https://alphaarcade.com">Alpha Arcade</a> — Decentralized · Algorand · $10M+ cumulative</li>
+        <li><a href="https://trueo.com">Trueo</a> — Decentralized · Base · Low/early</li>
+        <li><a href="https://robinhood.com/us/en/prediction-markets/">Robinhood Prediction Markets</a> — Regulated/CeFi · CeFi · 12B+ contracts/yr</li>
+        <li><a href="https://og.com">OG (by Crypto.com)</a> — Regulated/CeFi · CeFi · Undisclosed</li>
+        <li><a href="https://www.draftkings.com">DraftKings Predictions</a> — Regulated/CeFi · CeFi · Early stage</li>
+        <li><a href="https://www.fanduel.com/predicts">FanDuel Predicts</a> — Regulated/CeFi · CeFi · Early stage</li>
+        <li><a href="https://www.predictit.org">PredictIt</a> — Regulated/CeFi · CeFi · Declining</li>
+        <li><a href="https://xo.market">XO Market</a> — Decentralized · Sovereign rollup · Early stage</li>
+        <li><a href="https://forecasttrader.interactivebrokers.com">Interactive Brokers (ForecastTrader)</a> — Regulated/CeFi · CeFi · Unknown</li>
+    </ul>
+  </section>
+</noscript>
 
 <section class="t-hero" id="landscapeHero">
   <h1 class="t-hero-headline">Active prediction markets</h1>
@@ -120,9 +185,13 @@
     </div>
   </div>
 
+</main>
+
 <footer class="t-footer mono">
   <div class="t-footer-left">sybil.exchange · agent-authored</div>
   <div class="t-footer-right">
+    <a href="./docs.html">docs</a>
+    <a href="./llms.txt">llms.txt</a>
     <a href="https://x.com/sybil_pm" target="_blank">x</a>
   </div>
 </footer>
