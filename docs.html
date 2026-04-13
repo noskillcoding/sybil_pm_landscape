@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+  (function() { try { var s = localStorage.getItem('theme'); document.documentElement.setAttribute('data-theme', s || 'dark'); } catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); } })();
+</script>
+<title>Docs — Sybil PM Landscape</title>
+<meta name="description" content="Data endpoints, schema, methodology, and agent quickstart for the Sybil PM Landscape research dashboard.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://pm-landscape.vercel.app/docs.html">
+<meta property="og:title" content="Docs — Sybil PM Landscape">
+<meta property="og:description" content="Data endpoints, schema, methodology, and agent quickstart.">
+<meta property="og:url" content="https://pm-landscape.vercel.app/docs.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sybil">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./assets/css/tokens.css">
+<link rel="stylesheet" href="./assets/css/base.css">
+<link rel="stylesheet" href="./assets/css/layout.css">
+<style>
+  .t-docs { max-width: 760px; margin: 0; }
+  .t-docs h1 { font-family: "Inter", -apple-system, sans-serif; font-size: 36px; font-weight: 600; letter-spacing: -0.03em; color: var(--ink); margin-bottom: 8px; }
+  .t-docs .t-hero-meta { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--ink-faint); margin-bottom: 22px; }
+  .t-docs h2 { font-family: "Inter", -apple-system, sans-serif; font-size: 20px; font-weight: 600; color: var(--ink); margin-top: 36px; margin-bottom: 10px; }
+  .t-docs h3 { font-family: "Inter", -apple-system, sans-serif; font-size: 14px; font-weight: 600; color: var(--ink); margin-top: 18px; margin-bottom: 6px; }
+  .t-docs p, .t-docs li { color: var(--ink-dim); font-size: 13.5px; line-height: 1.65; }
+  .t-docs p { margin-bottom: 10px; max-width: 680px; }
+  .t-docs ul { list-style: none; padding: 0; margin: 8px 0 14px; }
+  .t-docs ul li { padding: 3px 0; }
+  .t-docs a { color: var(--accent); border-bottom: 1px solid transparent; }
+  .t-docs a:hover { border-bottom-color: var(--accent); }
+  .t-docs code { font-family: "JetBrains Mono", monospace; font-size: 12.5px; color: var(--ink); background: var(--bg-1); padding: 1px 5px; border: 1px solid var(--line); }
+  .t-docs pre { font-family: "JetBrains Mono", monospace; font-size: 11.5px; line-height: 1.55; color: var(--ink-dim); background: var(--bg-1); border: 1px solid var(--line); padding: 14px 16px; overflow-x: auto; margin: 10px 0 18px; }
+  .t-docs pre code { background: transparent; border: 0; padding: 0; color: inherit; }
+</style>
+</head>
+<body>
+<div id="dashboard">
+<div class="t-shell">
+
+  <header class="t-topbar">
+    <a class="t-brand" href="https://sybil.exchange/" target="_blank" rel="noopener">
+      <span class="t-prompt mono">$</span>
+      <span class="t-brand-name mono">sybil.exchange</span>
+    </a>
+    <nav class="t-tabs">
+      <a class="t-tab" href="./index.html#/landscape">Landscape</a>
+      <a class="t-tab" href="./index.html#/testing">Testing</a>
+      <a class="t-tab active" href="./docs.html">Docs</a>
+    </nav>
+    <div class="t-topbar-right">
+      <button class="t-theme-btn" onclick="(function(){var t=localStorage.getItem('theme')==='dark'?'light':'dark';localStorage.setItem('theme',t);document.documentElement.setAttribute('data-theme',t);})()" title="Toggle theme"><span class="mono">◐</span></button>
+    </div>
+  </header>
+
+  <main class="t-docs">
+    <h1>Documentation</h1>
+    <div class="t-hero-meta">april 2026 · data · methodology · agents</div>
+
+    <p>This research dashboard benchmarks 27 prediction markets on how accessible they are to autonomous AI trading agents. Every score, summary, and finding on this site was produced by autonomous coding agents. All data is static JSON — no API key, no CORS, no rate limits, no JavaScript required.</p>
+
+    <h2>Dataset</h2>
+    <ul>
+      <li><code>/data/pms.json</code> — <a href="./data/pms.json">27 prediction markets</a> (name, category, chain, volume, website, coreTools, aiTools)</li>
+      <li><code>/data/accessibility.json</code> — <a href="./data/accessibility.json">15-check agent accessibility grades</a></li>
+      <li><code>/data/tests.json</code> — <a href="./data/tests.json">CLI/MCP, skill, framework test results</a></li>
+    </ul>
+
+    <h3>Schema: a single pms.json entry</h3>
+    <pre><code>{
+  "name": "Polymarket",
+  "website": "https://polymarket.com",
+  "twitter": "https://x.com/Polymarket",
+  "description": "...",
+  "chain": "Polygon",
+  "status": "Live",
+  "volumeEstimate": "$52.5B cumulative, ~$7B/month",
+  "volumeNumeric": 52500000000,
+  "category": "Decentralized",
+  "coreTools": [
+    { "name": "CLOB API", "type": "API", "docsUrl": "...", "features": [...] }
+  ],
+  "aiTools": [
+    { "name": "polymarket-mcp", "type": "MCP", "githubUrl": "...", "features": [...] }
+  ]
+}</code></pre>
+
+    <h2>Methodology</h2>
+    <p>Each of the four benchmarks has its own methodology document with scoring criteria:</p>
+    <ul>
+      <li><a href="./methodology/agent-accessibility.md">Agent Accessibility (15 checks across 4 dimensions)</a></li>
+      <li><a href="./methodology/cli-mcp-test.md">CLI/MCP Test (18 checks across 4 sections)</a></li>
+      <li><a href="./methodology/skill-test.md">Skill Test (8 trade-cycle milestones)</a></li>
+      <li><a href="./methodology/framework-assessment.md">Framework Assessment (5 categories)</a></li>
+    </ul>
+
+    <h2>For autonomous agents</h2>
+    <p>This site is designed for programmatic access. Quick links:</p>
+    <ul>
+      <li><a href="./llms.txt">llms.txt</a> — LLM-friendly site summary + index of all JSON endpoints</li>
+      <li><a href="./robots.txt">robots.txt</a> — explicitly allows ClaudeBot, GPTBot, PerplexityBot, Google-Extended</li>
+      <li><a href="./sitemap.xml">sitemap.xml</a> — full URL list</li>
+    </ul>
+    <p>The main dashboard at <code>/</code> renders client-side but includes a <code>&lt;noscript&gt;</code> fallback with all 27 markets as a plain HTML list, so a simple <code>curl</code> still returns a readable document.</p>
+
+    <h2>Source</h2>
+    <ul>
+      <li><a href="https://github.com/noskillcoding/sybil_pm_landscape">GitHub</a></li>
+      <li><a href="https://x.com/sybil_pm">Twitter</a></li>
+      <li><a href="https://sybil.exchange">Parent project: sybil.exchange</a></li>
+    </ul>
+  </main>
+
+  <footer class="t-footer mono">
+    <div class="t-footer-left">sybil.exchange · agent-authored</div>
+    <div class="t-footer-right">
+      <a href="./index.html">home</a>
+      <a href="./llms.txt">llms.txt</a>
+      <a href="https://x.com/sybil_pm" target="_blank">x</a>
+    </div>
+  </footer>
+</div>
+</div>
+</body>
+</html>

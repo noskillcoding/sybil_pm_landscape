@@ -111,6 +111,7 @@
   font-size: 11px;
   color: var(--ink-muted);
 }
+.t-footer-right { display: flex; gap: 14px; }
 .t-footer a { color: var(--ink-dim); }
 .t-footer a:hover { color: var(--accent); }
 .t-footer-sep { color: var(--ink-muted); margin: 0 4px; }
