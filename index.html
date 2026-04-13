@@ -589,6 +589,27 @@ table { border-collapse: collapse; width: 100%; }
     margin-top: 12px;
   }
   .t-detail-tools-grid { grid-template-columns: 1fr; }
+
+  /* Testing table: labeled key-value rows in mobile card mode.
+     Landscape cells are self-describing (Polygon, $52.5B), so labels
+     only apply to #testTable. */
+  #testTable tbody tr.t-row td[data-label] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0 !important;
+    text-align: left;
+  }
+  #testTable tbody tr.t-row td[data-label]::before {
+    content: attr(data-label);
+    font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+  }
 }
 /* --- View visibility (fix merged-pages bug) --------------- */
 #landscapeView { display: none; }
@@ -717,7 +738,6 @@ table { border-collapse: collapse; width: 100%; }
 
   <!-- TESTING VIEW -->
   <div id="testingView">
-    <div id="testStats"></div>
     <div class="t-filters" id="testFilters">
       <div class="t-filter-group" id="testCatFilters"></div>
       <div class="t-filter-sep"></div>
@@ -3746,39 +3766,6 @@ function renderTesting() {
 
   const total = pms.length;
 
-  // Results-oriented stats
-  const gradeVal = {A:4,B:3,C:2,D:1,F:0};
-  const gradeFromVal = v => v >= 3.5 ? 'A' : v >= 2.5 ? 'B' : v >= 1.5 ? 'C' : v >= 0.5 ? 'D' : 'F';
-  const summarizeGrade = keyFn => {
-    const grades = [];
-    pms.forEach(pm => { const g = keyFn(pm); if (g) grades.push(g); });
-    if (!grades.length) return { avg: '—', count: 0, best: 0 };
-    const avg = grades.reduce((a,g)=>a+(gradeVal[g]||0),0) / grades.length;
-    const best = grades.filter(g => g === 'A' || g === 'B').length;
-    return { avg: gradeFromVal(avg), count: grades.length, best };
-  };
-  const aa   = summarizeGrade(pm => (AA_RESULTS[pm.name] || {}).grade);
-  const cli  = summarizeGrade(pm => ((TEST_RESULTS[pm.name] || {}).cliMcp || {}).grade);
-  const skill= summarizeGrade(pm => ((TEST_RESULTS[pm.name] || {}).skill  || {}).grade);
-  // Framework is categorical (Production/Usable/Experimental)
-  let fwProduction = 0, fwUsable = 0, fwTested = 0;
-  pms.forEach(pm => {
-    const fw = ((TEST_RESULTS[pm.name] || {}).framework || {});
-    if (fw.grade) {
-      fwTested++;
-      if (fw.grade === 'Production') fwProduction++;
-      else if (fw.grade === 'Usable') fwUsable++;
-    }
-  });
-
-  document.getElementById('testStats').className = 't-stats';
-  document.getElementById('testStats').innerHTML = `
-  <div class="t-stat"><div class="t-stat-label">agent accessibility</div><div class="t-stat-value mono">${aa.avg}</div><div class="t-stat-detail">avg grade · ${aa.count} tested · ${aa.best} a/b</div></div>
-  <div class="t-stat"><div class="t-stat-label">cli / mcp</div><div class="t-stat-value mono">${cli.avg}</div><div class="t-stat-detail">avg grade · ${cli.count} tested · ${cli.best} a/b</div></div>
-  <div class="t-stat"><div class="t-stat-label">skill</div><div class="t-stat-value mono">${skill.avg}</div><div class="t-stat-detail">avg grade · ${skill.count} tested · ${skill.best} a/b</div></div>
-  <div class="t-stat"><div class="t-stat-label">frameworks</div><div class="t-stat-value mono">${fwProduction}/${fwTested}</div><div class="t-stat-detail">production-grade${fwUsable ? ' · ' + fwUsable + ' usable' : ''}</div></div>
-`;
-
   document.getElementById('testResultsCount').textContent = `${total} decentralized & play-money PMs with dev tools`;
 
   // Table head
@@ -3831,36 +3818,47 @@ function renderTesting() {
         </div>
       </div>
     </td>
-    <td><span class="t-cat ${catClass}">${esc(pm.category)}</span></td>
-    <td class="t-vol">${devToolCount}</td>
-    <td><span class="t-cell">${aaCell}</span></td>
-    <td>${tcell('cliMcp')}</td>
-    <td>${tcell('skill')}</td>
-    <td>${tcell('framework')}</td>
+    <td data-label="category"><span class="t-cat ${catClass}">${esc(pm.category)}</span></td>
+    <td class="t-vol" data-label="dev tools">${devToolCount}</td>
+    <td data-label="agent access"><span class="t-cell">${aaCell}</span></td>
+    <td data-label="cli / mcp">${tcell('cliMcp')}</td>
+    <td data-label="skill">${tcell('skill')}</td>
+    <td data-label="framework">${tcell('framework')}</td>
   </tr>
 `;
 
     // Detail row
     bodyHtml += `<tr class="t-detail" data-pm="${esc(pm.name)}"><td colspan="8"><div class="t-detail-inner" style="grid-template-columns: 1fr;">`;
 
-    // Dev tools list
-    const allTools = [...pm.coreTools, ...pm.aiTools];
-    if (allTools.length > 0) {
-      bodyHtml += `<div class="tools-section"><div class="tools-section-title">Dev Tools (${allTools.length})</div>`;
-      bodyHtml += `<div class="test-detail-grid">`;
-      allTools.forEach(t => {
-        bodyHtml += `<div class="test-tool-card"><div class="ttc-header"><span class="ttc-name">${esc(t.name)}</span><span class="ttc-type ${toolTypeBadgeClass(t.type)}">${esc(t.type)}</span></div>`;
-        bodyHtml += `<div class="ttc-status">${esc(t.description)}</div>`;
-        const tlinks = [];
-        if (t.docsUrl) tlinks.push(`<a href="${esc(t.docsUrl)}" target="_blank" onclick="event.stopPropagation()">Docs</a>`);
-        if (t.docsUrls) t.docsUrls.forEach(u => { if (u) tlinks.push(`<a href="${esc(u)}" target="_blank" onclick="event.stopPropagation()">Docs</a>`); });
-        if (t.githubUrl) tlinks.push(`<a href="${esc(t.githubUrl)}" target="_blank" onclick="event.stopPropagation()">GitHub</a>`);
-        if (t.githubUrls) t.githubUrls.forEach(u => { if (u) tlinks.push(`<a href="${esc(u)}" target="_blank" onclick="event.stopPropagation()">GitHub</a>`); });
-        if (t.npmUrl) tlinks.push(`<a href="${esc(t.npmUrl)}" target="_blank" onclick="event.stopPropagation()">npm</a>`);
-        if (tlinks.length > 0) bodyHtml += `<div class="tool-card-links">${tlinks.join('')}</div>`;
-        bodyHtml += `</div>`;
-      });
-      bodyHtml += `</div></div>`;
+    // Dev + agent tool sections using the same template as Landscape
+    const tToolLinks = (t) => {
+      const links = [];
+      if (t.docsUrl) links.push(`<a href="${esc(t.docsUrl)}" target="_blank" onclick="event.stopPropagation()">docs</a>`);
+      if (Array.isArray(t.docsUrls)) t.docsUrls.forEach(u => { if (u) links.push(`<a href="${esc(u)}" target="_blank" onclick="event.stopPropagation()">docs</a>`); });
+      if (t.githubUrl) links.push(`<a href="${esc(t.githubUrl)}" target="_blank" onclick="event.stopPropagation()">github</a>`);
+      if (Array.isArray(t.githubUrls)) t.githubUrls.forEach(u => { if (u) links.push(`<a href="${esc(u)}" target="_blank" onclick="event.stopPropagation()">github</a>`); });
+      if (t.npmUrl) links.push(`<a href="${esc(t.npmUrl)}" target="_blank" onclick="event.stopPropagation()">npm</a>`);
+      return links.length ? `<div class="t-dt-links">${links.join('')}</div>` : '';
+    };
+    const tRenderToolCard = (t) => `
+  <div class="t-detail-tool">
+    <div class="t-dt-type">${esc((t.type || '').toLowerCase())}</div>
+    <div class="t-dt-name">${esc(t.name)}</div>
+    <div class="t-dt-desc">${esc(t.description || '')}</div>
+    ${tToolLinks(t)}
+  </div>
+`;
+    if (pm.coreTools.length) {
+      bodyHtml += `<div class="t-detail-section">
+        <div class="t-detail-h">dev tools · ${pm.coreTools.length}</div>
+        <div class="t-detail-tools-grid">${pm.coreTools.map(tRenderToolCard).join('')}</div>
+      </div>`;
+    }
+    if (pm.aiTools.length) {
+      bodyHtml += `<div class="t-detail-section">
+        <div class="t-detail-h">agent tools · ${pm.aiTools.length}</div>
+        <div class="t-detail-tools-grid">${pm.aiTools.map(tRenderToolCard).join('')}</div>
+      </div>`;
     }
 
     // Tabbed test results
