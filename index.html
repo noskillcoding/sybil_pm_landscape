@@ -16,10 +16,9 @@
 <title>Sybil PM Landscape — 27 prediction markets benchmarked for AI agent access</title>
 <meta name="description" content="Research dashboard benchmarking how accessible 27 prediction markets are to autonomous AI trading agents. Four independent benchmarks: agent accessibility, CLI/MCP, skill, and framework — all run by autonomous coding agents.">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://pm-landscape.vercel.app/">
+<!-- TODO: restore canonical/og:url/JSON-LD with production origin once domain is decided. -->
 <meta property="og:title" content="Sybil PM Landscape">
 <meta property="og:description" content="27 prediction markets benchmarked for AI agent accessibility. Four independent tests run by autonomous coding agents.">
-<meta property="og:url" content="https://pm-landscape.vercel.app/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Sybil">
 <meta name="twitter:card" content="summary">
@@ -31,13 +30,12 @@
   "@type": "Dataset",
   "name": "Sybil PM Landscape",
   "description": "Research dataset benchmarking 27 prediction markets across four dimensions of agent readiness: agent accessibility, CLI/MCP surface, skill format, and framework maturity.",
-  "url": "https://pm-landscape.vercel.app/",
   "creator": {"@type": "Organization", "name": "Sybil", "url": "https://sybil.exchange"},
   "temporalCoverage": "2026-04",
   "distribution": [
-    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://pm-landscape.vercel.app/data/pms.json", "name": "Prediction Markets"},
-    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://pm-landscape.vercel.app/data/accessibility.json", "name": "Agent Accessibility Scores"},
-    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://pm-landscape.vercel.app/data/tests.json", "name": "Benchmark Results"}
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "/data/pms.json", "name": "Prediction Markets"},
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "/data/accessibility.json", "name": "Agent Accessibility Scores"},
+    {"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "/data/tests.json", "name": "Benchmark Results"}
   ]
 }
 </script>
@@ -68,6 +66,7 @@
     <div class="t-topbar-right">
       <span class="t-live mono"><span class="t-live-dot"></span>live</span>
       <span class="t-mcount mono" id="topbarCount">27 markets</span>
+      <button class="t-ai-btn mono" data-ai-copy title="Copy site summary to clipboard for your AI assistant">give it to your AI</button>
       <button class="t-theme-btn" data-theme-toggle title="Toggle theme"><span class="mono" data-theme-icon>◐</span></button>
     </div>
   </header>
@@ -77,7 +76,7 @@
 <noscript>
   <section class="t-nojs" aria-label="Dataset fallback">
     <h2>27 Prediction Markets (no-JavaScript fallback)</h2>
-    <p>This dashboard renders client-side. The list below is a static fallback for agents and crawlers without JavaScript. For the full JSON dataset, see <a href="./llms.txt">llms.txt</a>, <a href="./docs.html">docs</a>, or fetch <a href="./data/pms.json">/data/pms.json</a> directly.</p>
+    <p>This dashboard renders client-side. The list below is a static fallback for agents and crawlers without JavaScript. For the full JSON dataset, see <a href="./llms.txt">llms.txt</a> or fetch <a href="./data/pms.json">/data/pms.json</a> directly.</p>
     <ul>
         <li><a href="https://polymarket.com">Polymarket</a> — Decentralized · Polygon · $52.5B cumulative, ~$7B/month</li>
         <li><a href="https://kalshi.com">Kalshi</a> — Regulated/CeFi · CeFi · $30B+ annual, ~$9B/month</li>
@@ -190,7 +189,6 @@
 <footer class="t-footer mono">
   <div class="t-footer-left">sybil.exchange · agent-authored</div>
   <div class="t-footer-right">
-    <a href="./docs.html">docs</a>
     <a href="./llms.txt">llms.txt</a>
     <a href="https://x.com/sybil_pm" target="_blank">x</a>
   </div>
@@ -198,5 +196,6 @@
 </div>
 </div>
 <script type="module" src="./assets/js/main.js"></script>
+<script type="module" src="./assets/js/ai-copy.js"></script>
 </body>
 </html>

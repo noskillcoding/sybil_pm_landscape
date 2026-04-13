@@ -19,6 +19,7 @@
   .t-tabs { order: 3; flex: 1 0 100%; justify-content: flex-start; }
   .t-topbar-right { gap: 10px; }
   .t-mcount { display: none; }
+  .t-live { display: none; }
 
   .t-hero-headline { font-size: 26px; letter-spacing: -0.6px; }
   .t-hero-sub { font-size: 13px; }

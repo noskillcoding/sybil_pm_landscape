@@ -15,5 +15,3 @@ Allow: /
 
 User-agent: Google-Extended
 Allow: /
-
-Sitemap: https://pm-landscape.vercel.app/sitemap.xml

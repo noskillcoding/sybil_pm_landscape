@@ -57,6 +57,48 @@
   transition: color 0.1s, border-color 0.1s;
 }
 .t-theme-btn:hover { color: var(--ink); border-color: var(--line-2); }
+
+/* --- AI copy button + toast ------------------------------- */
+.t-ai-btn {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 4px 10px;
+  cursor: pointer;
+  text-transform: lowercase;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  min-width: 142px;
+  text-align: center;
+  transition: color 0.15s, border-color 0.15s;
+}
+.t-ai-btn:hover { color: var(--ink); border-color: var(--line-2); }
+.t-ai-btn.is-copied { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+
+.t-ai-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  transform: translateX(-50%) translateY(20px);
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--accent) 15%, var(--bg-1));
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: 4px;
+  padding: 8px 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 1000;
+}
+.t-ai-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
 /* --- Hero ------------------------------------------------- */
 .t-hero { margin-bottom: 36px; }
 .t-hero-headline {

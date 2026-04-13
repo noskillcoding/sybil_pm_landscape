@@ -2,7 +2,7 @@
 
 Interactive dashboard tracking 29 prediction markets and their AI agent tooling. Evaluates how accessible each PM is to autonomous trading agents across four dimensions.
 
-**Live:** [pm-landscape.vercel.app](https://pm-landscape.vercel.app)
+**Live:** _(deployment URL pending — run locally with `python3 -m http.server 8765` from the repo root)_
 
 ## Testing Categories
 
