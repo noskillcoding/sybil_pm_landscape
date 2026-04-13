@@ -135,6 +135,16 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* The list primitive */
 .t-detail .m-list { list-style: none; margin: 0; padding: 0; }
+.t-detail .m-list-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 32px;
+}
+.t-detail .m-list-grid .m-group + .m-group { margin-top: 0; }
+@media (max-width: 900px) {
+  .t-detail .m-list-grid { grid-template-columns: 1fr; }
+  .t-detail .m-list-grid .m-group + .m-group { margin-top: 14px; }
+}
 .t-detail .m-group + .m-group { margin-top: 14px; }
 .t-detail .m-group-label {
   font-family: "JetBrains Mono", monospace;
@@ -152,17 +162,12 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 }
 .t-detail .m-item {
   display: grid;
-  grid-template-columns: 32px 16px 1fr;
-  gap: 6px;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
   align-items: baseline;
   padding: 3px 0;
   font-size: 12px;
   color: var(--ink-dim);
-}
-.t-detail .m-num {
-  font-family: "JetBrains Mono", monospace;
-  font-size: 10px;
-  color: var(--ink-muted);
 }
 .t-detail .m-ico {
   font-family: "JetBrains Mono", monospace;
@@ -268,7 +273,15 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 }
 @media (max-width: 900px) { .t-methodology-body { grid-template-columns: 1fr; } }
 .t-methodology-section { min-width: 0; }
-.t-methodology-section .t-detail-h { margin-bottom: 8px; }
+.t-methodology-section .t-detail-h {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--ink);
+  margin-bottom: 8px;
+  text-transform: none;
+}
+.t-methodology-section .t-detail-h::before { content: none; }
 .t-methodology-lede {
   font-size: 12px;
   color: var(--ink-dim);
@@ -310,17 +323,12 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 }
 .t-methodology .m-item {
   display: grid;
-  grid-template-columns: 32px 16px 1fr;
-  gap: 6px;
+  grid-template-columns: 16px 1fr;
+  gap: 8px;
   align-items: baseline;
   padding: 3px 0;
   font-size: 12px;
   color: var(--ink-dim);
-}
-.t-methodology .m-num {
-  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
-  font-size: 10px;
-  color: var(--ink-muted);
 }
 .t-methodology .m-ico {
   font-family: "JetBrains Mono", "IBM Plex Mono", monospace;

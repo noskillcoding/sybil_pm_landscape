@@ -154,24 +154,18 @@ export function render() {
         ${toolLinks(t)}
       </li>`;
     };
-    const devToolsDetailHtml = pm.coreTools.map(renderToolRow).join('');
-    const agentToolsDetailHtml = pm.aiTools.map(renderToolRow).join('');
+    const allTools = [...pm.coreTools, ...pm.aiTools];
+    const toolsHtml = allTools.map(renderToolRow).join('');
 
     const linksHtml = [
       pm.website ? `<a href="${esc(pm.website)}" target="_blank">website</a>` : '',
       pm.twitter ? `<a href="${esc(pm.twitter)}" target="_blank">twitter</a>` : ''
     ].filter(Boolean).join('');
 
-    const devSection = pm.coreTools.length
+    const toolsSection = allTools.length
       ? `<div class="t-detail-section">
-           <div class="t-detail-h">dev tools · ${pm.coreTools.length}</div>
-           <ul class="t-dt-list">${devToolsDetailHtml}</ul>
-         </div>`
-      : '';
-    const agentSection = pm.aiTools.length
-      ? `<div class="t-detail-section">
-           <div class="t-detail-h">agent tools · ${pm.aiTools.length}</div>
-           <ul class="t-dt-list">${agentToolsDetailHtml}</ul>
+           <div class="t-detail-h">tools · ${allTools.length}</div>
+           <ul class="t-dt-list">${toolsHtml}</ul>
          </div>`
       : '';
 
@@ -185,8 +179,7 @@ export function render() {
           <div class="t-detail-links">${linksHtml}</div>
         </div>
         <div class="t-detail-toolchain">
-          ${devSection}
-          ${agentSection}
+          ${toolsSection}
         </div>
       </div>
     </td>

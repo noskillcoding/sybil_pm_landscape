@@ -26,21 +26,23 @@ const STATUS_CLASS = {
 };
 const STATUS_ICON = { PASS: '✓', PARTIAL: '●', FAIL: '✗', BLOCKED: '▪' };
 
-// items: [{ num?, label, status?, detail? }]
+// items: [{ label, status?, detail? }]   // num is ignored (was never useful to readers)
 function renderItems(items, twoCol = false) {
   const cls = twoCol ? 'm-items m-items--two-col' : 'm-items';
   return `<ul class="${cls}">` + items.map(it => {
     const sc = STATUS_CLASS[it.status] || 'is-na';
     const ic = STATUS_ICON[it.status]  || '○';
-    const num = `<span class="m-num">${it.num ? esc(it.num) : ''}</span>`;
     const det = it.detail ? `<span class="m-why">${esc(it.detail)}</span>` : '';
-    return `<li class="m-item ${sc}">${num}<span class="m-ico">${ic}</span><span class="m-label">${esc(it.label)}${det}</span></li>`;
+    return `<li class="m-item ${sc}"><span class="m-ico">${ic}</span><span class="m-label">${esc(it.label)}${det}</span></li>`;
   }).join('') + `</ul>`;
 }
 
 // groups: [{ title, items, twoCol? }]
-function renderGroups(groups) {
-  return `<ul class="m-list">` + groups.map(g =>
+// asGrid: lay the groups themselves out in a 2-column grid (good for
+// AA / CLI tabs that have 4+ groups and would otherwise be a long column).
+function renderGroups(groups, asGrid = false) {
+  const listCls = asGrid ? 'm-list m-list-grid' : 'm-list';
+  return `<ul class="${listCls}">` + groups.map(g =>
     `<li class="m-group"><div class="m-group-label">${esc(g.title)}</div>${renderItems(g.items, g.twoCol)}</li>`
   ).join('') + `</ul>`;
 }
@@ -301,16 +303,11 @@ export function renderTesting() {
         ${tToolLinks(t)}
       </li>`;
     };
-    if (pm.coreTools.length) {
+    const tAllTools = [...pm.coreTools, ...pm.aiTools];
+    if (tAllTools.length) {
       bodyHtml += `<div class="t-detail-section">
-        <div class="t-detail-h">dev tools · ${pm.coreTools.length}</div>
-        <ul class="t-dt-list">${pm.coreTools.map(tRenderToolRow).join('')}</ul>
-      </div>`;
-    }
-    if (pm.aiTools.length) {
-      bodyHtml += `<div class="t-detail-section">
-        <div class="t-detail-h">agent tools · ${pm.aiTools.length}</div>
-        <ul class="t-dt-list">${pm.aiTools.map(tRenderToolRow).join('')}</ul>
+        <div class="t-detail-h">tools · ${tAllTools.length}</div>
+        <ul class="t-dt-list">${tAllTools.map(tRenderToolRow).join('')}</ul>
       </div>`;
     }
 
@@ -356,7 +353,7 @@ export function renderTesting() {
         }));
         bodyHtml += `<div class="methodology-content${firstTab==='aa'?' open':''}" id="${uid}-aa">
           ${head(`<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span>`, 'Agent Accessibility', `${aaRes.score}/${AA_TOTAL_CHECKS} checks passed`)}
-          ${renderGroups(groups)}
+          ${renderGroups(groups, true)}
           <button class="m-show-more" data-show-more>Show details</button>
         </div>`;
       }
@@ -417,7 +414,7 @@ export function renderTesting() {
 
           bodyHtml += head(`<span class="${gradeClass(tt.grade)}">${tt.grade}</span>`, tt.tool, tt.type);
           bodyHtml += renderMeta(pills);
-          bodyHtml += renderGroups(groups);
+          bodyHtml += renderGroups(groups, true);
           bodyHtml += `<button class="m-show-more" data-show-more>Show details</button>`;
           bodyHtml += renderFindings('Key findings', tt.keyFindings, 'info');
           bodyHtml += renderFindings('Blockers', tt.blockers, 'red');
