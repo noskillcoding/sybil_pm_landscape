@@ -1,0 +1,48 @@
+/* ============================================================
+ * Sybil PM Landscape — terminal-density design system
+ * Spec: docs/superpowers/specs/2026-04-12-frontend-redesign-design.md
+ * ============================================================ */
+
+/* --- Design tokens ---------------------------------------- */
+:root, [data-theme="dark"] {
+  --bg: #000;
+  --bg-1: #07090c;
+  --bg-2: #0c1015;
+  --line: #1a1f27;
+  --line-2: #242a33;
+  --ink: #e6e8eb;
+  --ink-dim: #8a919b;
+  --ink-muted: #5a626c;
+  --accent: #4ade80;
+  --accent-soft: rgba(74, 222, 128, 0.06);
+  --warn: #f59e0b;
+  --cyan: #22d3ee;
+  --red: #ef4444;
+  --pill-api: #93c5fd;     --pill-api-bd: #1e3a5f;
+  --pill-sdk: #c4b5fd;     --pill-sdk-bd: #3a2d5f;
+  --pill-cli: #4ade80;     --pill-cli-bd: #2a5039;
+  --pill-mcp: #f0abfc;     --pill-mcp-bd: #5a1e5f;
+  --pill-skill: #22d3ee;   --pill-skill-bd: #1e4a52;
+  --pill-fw: #f59e0b;      --pill-fw-bd: #503d1e;
+}
+[data-theme="light"] {
+  --bg: #f6f7f9;
+  --bg-1: #ffffff;
+  --bg-2: #eef0f3;
+  --line: #d8dde3;
+  --line-2: #c2c8d0;
+  --ink: #1f2328;
+  --ink-dim: #5b626d;
+  --ink-muted: #8a919b;
+  --accent: #16a34a;
+  --accent-soft: rgba(22, 163, 74, 0.08);
+  --warn: #b45309;
+  --cyan: #0891b2;
+  --red: #b91c1c;
+  --pill-api: #1d4ed8;     --pill-api-bd: #c2d4f5;
+  --pill-sdk: #6d28d9;     --pill-sdk-bd: #d6cbf0;
+  --pill-cli: #15803d;     --pill-cli-bd: #b9e5cb;
+  --pill-mcp: #be185d;     --pill-mcp-bd: #f0c5d9;
+  --pill-skill: #0e7490;   --pill-skill-bd: #b8e0e8;
+  --pill-fw: #b45309;      --pill-fw-bd: #f2dcb9;
+}

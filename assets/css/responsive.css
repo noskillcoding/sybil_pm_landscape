@@ -1,0 +1,95 @@
+/* --- Tablet (640–1023px) ---------------------------------- */
+@media (max-width: 1023px) {
+  .t-shell { padding: 24px 20px 80px; }
+  .t-stats { grid-template-columns: 1fr 1fr; }
+  .t-stat:nth-child(2) { border-right: 0; }
+  .t-stat:nth-child(1), .t-stat:nth-child(2) { border-bottom: 1px solid var(--line); }
+  .t-filters { flex-wrap: wrap; }
+  .t-filter-spacer { display: none; }
+  .t-search { flex: 1 0 100%; margin-top: 8px; }
+  .t-table thead th { padding: 12px 8px 9px; font-size: 9.5px; }
+  .t-table tbody td { padding: 12px 8px; }
+  .t-detail-inner { padding: 18px 16px 22px 40px; gap: 24px; }
+}
+
+/* --- Mobile (<640px) -------------------------------------- */
+@media (max-width: 639px) {
+  .t-shell { padding: 16px 16px 60px; }
+  .t-topbar { flex-wrap: wrap; gap: 12px; row-gap: 16px; }
+  .t-tabs { order: 3; flex: 1 0 100%; justify-content: flex-start; }
+  .t-topbar-right { gap: 10px; }
+  .t-mcount { display: none; }
+
+  .t-hero-headline { font-size: 26px; letter-spacing: -0.6px; }
+  .t-hero-sub { font-size: 13px; }
+
+  .t-stats { grid-template-columns: 1fr; }
+  .t-stat { border-right: 0; border-bottom: 1px solid var(--line); }
+  .t-stat:last-child { border-bottom: 0; }
+
+  .t-filters { padding: 10px 0 12px; gap: 6px; }
+  .t-filter-group { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .t-filter-sep { display: none; }
+  .t-search { flex: 1 0 100%; margin-top: 6px; }
+
+  /* Card list layout: hide table chrome, render rows as cards */
+  .t-table thead { display: none; }
+  .t-table, .t-table tbody, .t-table tr, .t-table td { display: block; width: 100%; }
+  /* Hide detail rows by default on mobile (the universal 'tr' rule
+     above would otherwise make them visible). */
+  .t-table tbody tr.t-detail { display: none; }
+  .t-table tbody tr.t-detail.open { display: block; }
+  .t-table tbody tr.t-row {
+    border: 1px solid var(--line);
+    margin-bottom: 12px;
+    padding: 14px 14px 12px;
+    position: relative;
+  }
+  .t-table tbody tr.t-row:hover { background: var(--bg-1); }
+  .t-table tbody tr.t-row td {
+    padding: 0;
+    border: 0;
+  }
+  .t-table tbody tr.t-row td.t-chev {
+    position: absolute;
+    top: 14px; right: 14px;
+    width: auto;
+  }
+  .t-table tbody tr.t-row td:not(.t-chev) {
+    margin-bottom: 8px;
+  }
+  .t-table tbody tr.t-row td:last-child { margin-bottom: 0; }
+
+  /* Detail row in card mode */
+  .t-detail.open { display: block; }
+  .t-detail td { padding: 0; border: 0; background: transparent; }
+  .t-detail-inner {
+    padding: 14px 0 0;
+    grid-template-columns: 1fr !important;
+    gap: 16px;
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+  }
+  .t-detail-tools-grid { grid-template-columns: 1fr; }
+
+  /* Testing table: labeled key-value rows in mobile card mode.
+     Landscape cells are self-describing (Polygon, $52.5B), so labels
+     only apply to #testTable. */
+  #testTable tbody tr.t-row td[data-label] {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 0 !important;
+    text-align: left;
+  }
+  #testTable tbody tr.t-row td[data-label]::before {
+    content: attr(data-label);
+    font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-muted);
+    flex-shrink: 0;
+  }
+}

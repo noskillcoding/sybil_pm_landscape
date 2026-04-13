@@ -1,0 +1,141 @@
+/* --- Expanded detail row (Landscape) ---------------------- */
+.t-detail { display: none; }
+.t-detail.open { display: table-row; }
+.t-row.expanded { background: var(--bg-1) !important; }
+.t-row.expanded .t-chev { color: var(--accent); }
+.t-detail td { padding: 0; background: var(--bg-1); border-bottom: 1px solid var(--line); }
+.t-detail-inner {
+  padding: 20px 24px 24px 58px;
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 32px;
+}
+.t-detail-h {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink-muted);
+  margin-bottom: 10px;
+}
+.t-detail-h::before { content: "// "; }
+.t-detail-about p {
+  font-size: 13px;
+  color: var(--ink-dim);
+  line-height: 1.65;
+}
+.t-detail-links {
+  margin-top: 16px;
+  display: flex;
+  gap: 14px;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+}
+.t-detail-links a { color: var(--ink-dim); border-bottom: 1px solid transparent; }
+.t-detail-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.t-detail-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.t-detail-toolchain { display: flex; flex-direction: column; gap: 24px; }
+.t-detail-section + .t-detail-section { padding-top: 4px; }
+.t-detail-tool {
+  border-left: 2px solid var(--line-2);
+  padding: 6px 0 6px 12px;
+}
+.t-detail-tool .t-dt-type {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--ink-muted);
+  margin-bottom: 2px;
+}
+.t-detail-tool .t-dt-name {
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+.t-detail-tool .t-dt-desc {
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.5;
+}
+
+/* --- Hide legacy static methodology panel on testing view -- */
+#testingView > .methodology { display: none; }
+
+/* --- Testing detail row ----------------------------------- */
+.t-detail .methodology { margin-top: 0; padding-top: 0; border-top: 0; }
+.t-detail .m-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.t-detail .m-tab {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-dim);
+  text-transform: lowercase;
+  letter-spacing: 0.4px;
+  padding: 6px 14px;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+.t-detail .m-tab:hover { color: var(--ink); }
+.t-detail .m-tab.active { color: var(--ink); border-bottom-color: var(--accent); }
+.t-detail .methodology-content { display: none; }
+.t-detail .methodology-content.open { display: block; }
+
+.t-detail .m-checks-list,
+.t-detail .m-dim-block,
+.t-detail .m-check-item {
+  color: var(--ink-dim);
+  font-size: 12px;
+}
+.t-detail .m-dim-label {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-muted);
+  margin: 12px 0 6px;
+}
+.t-detail .m-check-num { color: var(--ink-muted); margin-right: 8px; }
+.t-detail .m-check-name { color: var(--ink); }
+.t-detail .m-check-why { color: var(--ink-dim); display: none; margin-left: 8px; }
+.t-detail .m-check-why.visible { display: inline; }
+.t-detail .m-show-more {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+.t-detail .m-show-more:hover { color: var(--ink); border-color: var(--line-2); }
+
+/* --- Tool-card external links (in expanded detail row) ---- */
+.t-dt-links {
+  margin-top: 6px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.t-dt-links a {
+  color: var(--ink-dim);
+  border-bottom: 1px solid var(--line-2);
+  padding-bottom: 1px;
+}
+.t-dt-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* --- Tighter detail layout (less width for description) --- */
+.t-detail-inner { grid-template-columns: 1fr 2fr; }
+.t-detail-about p { max-width: 480px; }
