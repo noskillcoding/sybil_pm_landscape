@@ -7,15 +7,16 @@
   (function() {
     try {
       var stored = localStorage.getItem('theme');
-      var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
-      var theme = stored || (prefersLight ? 'light' : 'dark');
-      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.setAttribute('data-theme', stored || 'dark');
     } catch (e) {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
   })();
 </script>
 <title>Prediction Markets Landscape</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./assets/css/tokens.css">
 <link rel="stylesheet" href="./assets/css/base.css">
 <link rel="stylesheet" href="./assets/css/layout.css">
@@ -29,10 +30,10 @@
 <div class="t-shell">
 
   <header class="t-topbar">
-    <div class="t-brand">
+    <a class="t-brand" href="https://sybil.exchange/" target="_blank" rel="noopener">
       <span class="t-prompt mono">$</span>
-      <span class="t-brand-name mono">sybil.pm_landscape</span>
-    </div>
+      <span class="t-brand-name mono">sybil.exchange</span>
+    </a>
     <nav class="t-tabs">
       <button class="t-tab active" data-view="landscape">Landscape</button>
       <button class="t-tab" data-view="testing">Testing</button>
@@ -45,8 +46,8 @@
   </header>
 
 <section class="t-hero" id="landscapeHero">
-  <div class="t-hero-kicker mono">// the landscape · 2026</div>
   <h1 class="t-hero-headline">Active prediction markets</h1>
+  <div class="t-hero-meta mono">april 2026 · 27 markets · agent research</div>
   <p class="t-hero-sub">27 live prediction markets surveyed across volume, chain, developer surface, and AI-agent tooling. The dataset below is the source for our CLI/MCP, Skill, and Framework benchmarks.</p>
   <div class="t-caveat">
     <span class="t-caveat-icon">⚠</span>
@@ -55,8 +56,8 @@
 </section>
 
 <section class="t-hero" id="testingHero" style="display:none;">
-  <div class="t-hero-kicker mono">// the benchmarks · 2026</div>
   <h1 class="t-hero-headline">Which prediction markets are <em>actually usable</em> by autonomous trading agents?</h1>
+  <div class="t-hero-meta mono">april 2026 · 4 benchmarks · agent-run</div>
   <p class="t-hero-sub">Four independent benchmarks — agent accessibility, CLI/MCP, skill, and framework — run by autonomous coding agents against every PM with a developer surface. Per-check evidence is available in the expanded rows.</p>
   <div class="t-caveat">
     <span class="t-caveat-icon">⚠</span>
@@ -120,7 +121,7 @@
   </div>
 
 <footer class="t-footer mono">
-  <div class="t-footer-left">sybil_pm_landscape · agent-authored</div>
+  <div class="t-footer-left">sybil.exchange · agent-authored</div>
   <div class="t-footer-right">
     <a href="https://x.com/sybil_pm" target="_blank">x</a>
   </div>

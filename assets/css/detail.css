@@ -55,7 +55,7 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 .t-dt-sep { color: var(--ink-muted); }
 
 /* --- Testing detail row (unified) ------------------------- */
-.t-detail .methodology { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.t-detail .methodology { margin-top: 20px; }
 .t-detail .m-tabs {
   display: flex;
   gap: 0;

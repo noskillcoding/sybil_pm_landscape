@@ -106,8 +106,8 @@
 .t-grade-fwprod   { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .t-grade-fwusable { color: var(--cyan);   border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
 .t-grade-fwexp    { color: var(--warn);   border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
-.t-cell-tools { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink-muted); margin-left: 6px; }
-.t-cell { display: inline-flex; align-items: center; gap: 4px; }
+.t-cell-tools { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink-muted); min-width: 32px; text-align: left; }
+.t-cell { display: inline-flex; align-items: center; gap: 6px; }
 
 /* --- Stable table layout (no column shift on expand) ------ */
 .t-table { table-layout: fixed; width: 100%; }

@@ -1,5 +1,5 @@
 /* --- Layout shell ----------------------------------------- */
-.t-shell { max-width: 1200px; margin: 0 auto; padding: 32px 32px 80px; }
+.t-shell { max-width: 1200px; margin: 0 auto; padding: 32px 32px 32px; }
 
 /* --- Topbar ----------------------------------------------- */
 .t-topbar {
@@ -59,26 +59,26 @@
 .t-theme-btn:hover { color: var(--ink); border-color: var(--line-2); }
 /* --- Hero ------------------------------------------------- */
 .t-hero { margin-bottom: 36px; }
-.t-hero-kicker {
-  font-size: 10px;
-  color: var(--ink-muted);
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  margin-bottom: 10px;
-}
 .t-hero-headline {
-  font-size: 34px;
-  line-height: 1.15;
-  letter-spacing: -1px;
-  font-weight: 700;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  font-size: 44px;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 600;
   color: var(--ink);
   max-width: 860px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .t-hero-headline em {
   font-style: normal;
   color: var(--ink-muted);
   font-weight: 500;
+}
+.t-hero-meta {
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0;
+  margin-bottom: 16px;
 }
 .t-hero-sub {
   color: var(--ink-dim);
@@ -102,9 +102,9 @@
 .t-caveat strong { color: var(--warn); font-weight: 500; font-size: 10.5px; text-transform: lowercase; letter-spacing: 0.4px; }
 /* --- Footer ----------------------------------------------- */
 .t-footer {
-  margin-top: 60px;
-  padding-top: 20px;
-  border-top: 1px solid var(--line);
+  margin-top: 20px;
+  padding-top: 0;
+  border-top: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;

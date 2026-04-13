@@ -176,9 +176,9 @@ export function renderTesting() {
     `<button class="t-chip${state.testCatFilter === null ? ' active' : ''}" data-tcat="">all</button>` +
     tcats.map(c => `<button class="t-chip${state.testCatFilter === c ? ' active' : ''}" data-tcat="${c}">${c.toLowerCase()}</button>`).join('');
   document.getElementById('testHasFilters').innerHTML = [
-    { key: 'aa', label: 'has agent access' },
     { key: 'cli', label: 'has cli/mcp' },
     { key: 'skill', label: 'has skill' },
+    { key: 'framework', label: 'has framework' },
   ].map(t => `<button class="t-chip${state.testHasFilter === t.key ? ' active' : ''}" data-thas="${t.key}">${t.label}</button>`).join('');
   const tsb = document.getElementById('testSearchBox');
   if (tsb) tsb.value = state.testSearchQ;
@@ -202,9 +202,9 @@ export function renderTesting() {
 
   let displayed = pms;
   if (state.testCatFilter) displayed = displayed.filter(p => p.category === state.testCatFilter);
-  if (state.testHasFilter === 'aa') displayed = displayed.filter(p => AA_RESULTS[p.name]);
   if (state.testHasFilter === 'cli') displayed = displayed.filter(p => (TEST_RESULTS[p.name]||{}).cliMcp);
   if (state.testHasFilter === 'skill') displayed = displayed.filter(p => (TEST_RESULTS[p.name]||{}).skill);
+  if (state.testHasFilter === 'framework') displayed = displayed.filter(p => (TEST_RESULTS[p.name]||{}).framework);
   if (state.testSearchQ) {
     const q = state.testSearchQ.toLowerCase();
     displayed = displayed.filter(p => p.name.toLowerCase().includes(q) || (p.chain || '').toLowerCase().includes(q));

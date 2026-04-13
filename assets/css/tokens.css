@@ -5,16 +5,17 @@
 
 /* --- Design tokens ---------------------------------------- */
 :root, [data-theme="dark"] {
-  --bg: #000;
-  --bg-1: #11161f;
-  --bg-2: #171d28;
-  --line: #1a1f27;
-  --line-2: #242a33;
+  --bg: #0a0e12;
+  --bg-1: #141a20;
+  --bg-2: #1a2028;
+  --line: #1e262e;
+  --line-2: #2a333d;
   --ink: #e6e8eb;
-  --ink-dim: #8a919b;
-  --ink-muted: #5a626c;
-  --accent: #4ade80;
-  --accent-soft: rgba(74, 222, 128, 0.06);
+  --ink-dim: #7d8590;
+  --ink-muted: #5a6672;
+  --ink-faint: #3a4050;
+  --accent: #00dc82;
+  --accent-soft: rgba(0, 220, 130, 0.06);
   --warn: #f59e0b;
   --cyan: #22d3ee;
   --red: #ef4444;
@@ -34,6 +35,7 @@
   --ink: #1f2328;
   --ink-dim: #5b626d;
   --ink-muted: #8a919b;
+  --ink-faint: #b0b6bf;
   --accent: #16a34a;
   --accent-soft: rgba(22, 163, 74, 0.08);
   --warn: #b45309;
