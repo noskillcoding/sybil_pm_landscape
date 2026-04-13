@@ -2,6 +2,7 @@
 
 import { state } from './state.js';
 import { Router } from './router.js';
+import { render } from './landscape.js';
 import { getTestablePMs, renderTesting } from './testing.js';
 
 export function setSubtitle(view) {
@@ -46,6 +47,7 @@ export function initViewNav() {
       setSubtitle(view);
       applyViewVisibility(view);
       if (view === 'testing') renderTesting();
+      else render();
       Router.push();
     });
   });
