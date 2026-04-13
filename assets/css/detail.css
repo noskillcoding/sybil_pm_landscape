@@ -33,32 +33,46 @@
 }
 .t-detail-links a { color: var(--ink-dim); border-bottom: 1px solid transparent; }
 .t-detail-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-.t-detail-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .t-detail-toolchain { display: flex; flex-direction: column; gap: 24px; }
 .t-detail-section + .t-detail-section { padding-top: 4px; }
-.t-detail-tool {
-  border-left: 2px solid var(--line-2);
-  padding: 6px 0 6px 12px;
+
+/* Compact single-line tool rows — replaces the old card grid. */
+.t-dt-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.t-dt-row {
+  display: grid;
+  grid-template-columns: 38px 1fr auto;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: 12.5px;
 }
-.t-detail-tool .t-dt-type {
+.t-dt-row:last-child { border-bottom: 0; }
+.t-dt-glyph {
   font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
-  font-size: 10px;
+  font-size: 9.5px;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.5px;
+  text-align: right;
   color: var(--ink-muted);
-  margin-bottom: 2px;
+  padding-top: 1px;
 }
-.t-detail-tool .t-dt-name {
-  font-size: 13px;
+.t-dt-glyph-api  { color: var(--pill-api);   }
+.t-dt-glyph-sdk  { color: var(--pill-sdk);   }
+.t-dt-glyph-cli  { color: var(--pill-cli);   }
+.t-dt-glyph-mcp  { color: var(--pill-mcp);   }
+.t-dt-glyph-ws   { color: var(--pill-api);   }
+.t-dt-glyph-skl  { color: var(--pill-skill); }
+.t-dt-glyph-fw   { color: var(--pill-fw);    }
+.t-dt-name {
   color: var(--ink);
   font-weight: 500;
-  margin-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.t-detail-tool .t-dt-desc {
-  font-size: 12px;
-  color: var(--ink-dim);
-  line-height: 1.5;
-}
+a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
 /* --- Testing detail row (unified) ------------------------- */
 .t-detail .methodology { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
@@ -212,6 +226,14 @@
   padding-bottom: 1px;
 }
 .t-dt-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* Inline variant when .t-dt-links sits inside a .t-dt-row (compact list) */
+.t-dt-row .t-dt-links {
+  margin-top: 0;
+  display: inline-flex;
+  gap: 10px;
+  font-size: 10px;
+}
 
 /* --- Tighter detail layout (less width for description) --- */
 .t-detail-inner { grid-template-columns: 1fr 2fr; }

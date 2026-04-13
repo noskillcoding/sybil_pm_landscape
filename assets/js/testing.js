@@ -1,7 +1,7 @@
 // assets/js/testing.js
 
 import { state } from './state.js';
-import { esc, gradeClass } from './helpers.js';
+import { esc, gradeClass, toolTypeGlyphClass, toolTypeGlyphLabel } from './helpers.js';
 import {
   TEST_COLS,
   TOOL_COL_MAP,
@@ -190,24 +190,36 @@ export function renderTesting() {
       if (t.npmUrl) links.push(`<a href="${esc(t.npmUrl)}" target="_blank" onclick="event.stopPropagation()">npm</a>`);
       return links.length ? `<div class="t-dt-links">${links.join('')}</div>` : '';
     };
-    const tRenderToolCard = (t) => `
-  <div class="t-detail-tool">
-    <div class="t-dt-type">${esc((t.type || '').toLowerCase())}</div>
-    <div class="t-dt-name">${esc(t.name)}</div>
-    <div class="t-dt-desc">${esc(t.description || '')}</div>
-    ${tToolLinks(t)}
-  </div>
-`;
+    const tPrimaryUrl = (t) => {
+      if (t.docsUrl) return t.docsUrl;
+      if (Array.isArray(t.docsUrls) && t.docsUrls[0]) return t.docsUrls[0];
+      if (t.githubUrl) return t.githubUrl;
+      if (Array.isArray(t.githubUrls) && t.githubUrls[0]) return t.githubUrls[0];
+      if (t.npmUrl) return t.npmUrl;
+      return null;
+    };
+    const tRenderToolRow = (t) => {
+      const url = tPrimaryUrl(t);
+      const nameEl = url
+        ? `<a class="t-dt-name" href="${esc(url)}" target="_blank" onclick="event.stopPropagation()">${esc(t.name)}</a>`
+        : `<span class="t-dt-name">${esc(t.name)}</span>`;
+      const tipAttr = t.description ? ` title="${esc(t.description)}"` : '';
+      return `<li class="t-dt-row"${tipAttr}>
+        <span class="${toolTypeGlyphClass(t.type)}">${esc(toolTypeGlyphLabel(t.type))}</span>
+        ${nameEl}
+        ${tToolLinks(t)}
+      </li>`;
+    };
     if (pm.coreTools.length) {
       bodyHtml += `<div class="t-detail-section">
         <div class="t-detail-h">dev tools · ${pm.coreTools.length}</div>
-        <div class="t-detail-tools-grid">${pm.coreTools.map(tRenderToolCard).join('')}</div>
+        <ul class="t-dt-list">${pm.coreTools.map(tRenderToolRow).join('')}</ul>
       </div>`;
     }
     if (pm.aiTools.length) {
       bodyHtml += `<div class="t-detail-section">
         <div class="t-detail-h">agent tools · ${pm.aiTools.length}</div>
-        <div class="t-detail-tools-grid">${pm.aiTools.map(tRenderToolCard).join('')}</div>
+        <ul class="t-dt-list">${pm.aiTools.map(tRenderToolRow).join('')}</ul>
       </div>`;
     }
 

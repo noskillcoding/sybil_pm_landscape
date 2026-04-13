@@ -55,6 +55,27 @@ export function toolTypeBadgeClass(type) {
   return 'tool-type-api';
 }
 
+export function toolTypeGlyphClass(type) {
+  switch ((type || '').toLowerCase()) {
+    case 'api':       return 't-dt-glyph t-dt-glyph-api';
+    case 'sdk':       return 't-dt-glyph t-dt-glyph-sdk';
+    case 'websocket': return 't-dt-glyph t-dt-glyph-ws';
+    case 'cli':       return 't-dt-glyph t-dt-glyph-cli';
+    case 'mcp':       return 't-dt-glyph t-dt-glyph-mcp';
+    case 'skill':     return 't-dt-glyph t-dt-glyph-skl';
+    case 'framework': return 't-dt-glyph t-dt-glyph-fw';
+    default:          return 't-dt-glyph';
+  }
+}
+
+export function toolTypeGlyphLabel(type) {
+  const t = (type || '').toLowerCase();
+  if (t === 'websocket') return 'WS';
+  if (t === 'framework') return 'FW';
+  if (t === 'skill') return 'SKL';
+  return (type || '').toUpperCase();
+}
+
 export function aaGrade(score) {
   if (score >= 13) return 'A';
   if (score >= 10) return 'B';

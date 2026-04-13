@@ -1,7 +1,7 @@
 // assets/js/landscape.js
 
 import { state } from './state.js';
-import { esc, toolPillClass, toolPillLabel } from './helpers.js';
+import { esc, toolPillClass, toolPillLabel, toolTypeGlyphClass, toolTypeGlyphLabel } from './helpers.js';
 import { Sort } from './sort.js';
 import { Router } from './router.js';
 
@@ -134,16 +134,28 @@ export function render() {
       if (t.npmUrl) links.push(`<a href="${esc(t.npmUrl)}" target="_blank">npm</a>`);
       return links.length ? `<div class="t-dt-links">${links.join('')}</div>` : '';
     };
-    const renderToolCardLocal = (t) => `
-  <div class="t-detail-tool">
-    <div class="t-dt-type">${esc((t.type || '').toLowerCase())}</div>
-    <div class="t-dt-name">${esc(t.name)}</div>
-    <div class="t-dt-desc">${esc(t.description || '')}</div>
-    ${toolLinks(t)}
-  </div>
-`;
-    const devToolsDetailHtml = pm.coreTools.map(renderToolCardLocal).join('');
-    const agentToolsDetailHtml = pm.aiTools.map(renderToolCardLocal).join('');
+    const primaryUrl = (t) => {
+      if (t.docsUrl) return t.docsUrl;
+      if (Array.isArray(t.docsUrls) && t.docsUrls[0]) return t.docsUrls[0];
+      if (t.githubUrl) return t.githubUrl;
+      if (Array.isArray(t.githubUrls) && t.githubUrls[0]) return t.githubUrls[0];
+      if (t.npmUrl) return t.npmUrl;
+      return null;
+    };
+    const renderToolRow = (t) => {
+      const url = primaryUrl(t);
+      const nameEl = url
+        ? `<a class="t-dt-name" href="${esc(url)}" target="_blank">${esc(t.name)}</a>`
+        : `<span class="t-dt-name">${esc(t.name)}</span>`;
+      const tipAttr = t.description ? ` title="${esc(t.description)}"` : '';
+      return `<li class="t-dt-row"${tipAttr}>
+        <span class="${toolTypeGlyphClass(t.type)}">${esc(toolTypeGlyphLabel(t.type))}</span>
+        ${nameEl}
+        ${toolLinks(t)}
+      </li>`;
+    };
+    const devToolsDetailHtml = pm.coreTools.map(renderToolRow).join('');
+    const agentToolsDetailHtml = pm.aiTools.map(renderToolRow).join('');
 
     const linksHtml = [
       pm.website ? `<a href="${esc(pm.website)}" target="_blank">website</a>` : '',
@@ -153,13 +165,13 @@ export function render() {
     const devSection = pm.coreTools.length
       ? `<div class="t-detail-section">
            <div class="t-detail-h">dev tools · ${pm.coreTools.length}</div>
-           <div class="t-detail-tools-grid">${devToolsDetailHtml}</div>
+           <ul class="t-dt-list">${devToolsDetailHtml}</ul>
          </div>`
       : '';
     const agentSection = pm.aiTools.length
       ? `<div class="t-detail-section">
            <div class="t-detail-h">agent tools · ${pm.aiTools.length}</div>
-           <div class="t-detail-tools-grid">${agentToolsDetailHtml}</div>
+           <ul class="t-dt-list">${agentToolsDetailHtml}</ul>
          </div>`
       : '';
 
