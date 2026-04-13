@@ -21,9 +21,10 @@
 .t-table tbody tr {
   border-bottom: 1px solid var(--line);
   transition: background 0.08s;
-  cursor: pointer;
 }
-.t-table tbody tr:hover { background: var(--bg-1); }
+.t-table tbody tr.t-row { cursor: pointer; }
+.t-table tbody tr.t-row:hover { background: var(--bg-1); }
+.t-table tbody tr.t-detail { cursor: default; }
 .t-table tbody td { padding: 14px 12px; vertical-align: middle; }
 .t-chev {
   width: 22px;

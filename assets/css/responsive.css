@@ -61,15 +61,32 @@
   }
   .t-table tbody tr.t-row td:last-child { margin-bottom: 0; }
 
-  /* Detail row in card mode */
-  .t-detail.open { display: block; }
-  .t-detail td { padding: 0; border: 0; background: transparent; }
-  .t-detail-inner {
+  /* Detail row in card mode — merged with the row above into one cohesive card */
+  .t-table tbody tr.t-row.expanded {
+    background: var(--bg-1);
+    margin-bottom: 0;
+    border-bottom-color: transparent;
+  }
+  .t-table tbody tr.t-detail { -webkit-tap-highlight-color: transparent; }
+  .t-table tbody tr.t-detail.open {
+    display: block;
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-top: 0;
+    margin-bottom: 12px;
+    padding: 0 14px 14px;
+  }
+  .t-table tbody tr.t-detail.open td {
+    padding: 0;
+    border: 0;
+    background: transparent;
+  }
+  .t-table tbody tr.t-detail.open .t-detail-inner {
     padding: 14px 0 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
     grid-template-columns: 1fr !important;
     gap: 16px;
-    border-top: 1px solid var(--line);
-    margin-top: 12px;
   }
   .t-detail-tools-grid { grid-template-columns: 1fr; }
 
