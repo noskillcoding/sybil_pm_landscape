@@ -238,3 +238,107 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
 /* --- Tighter detail layout (less width for description) --- */
 .t-detail-inner { grid-template-columns: 1fr 2fr; }
 .t-detail-about p { max-width: 480px; }
+
+/* --- Testing methodology overview (restored) -------------- */
+.t-methodology {
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  margin: 18px 0 22px;
+}
+.t-methodology-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.t-methodology-summary::-webkit-details-marker { display: none; }
+.t-methodology-chev { color: var(--accent); width: 12px; transition: transform 0.15s; }
+.t-methodology[open] .t-methodology-chev { transform: rotate(90deg); }
+.t-methodology-title { color: var(--ink); font-size: 12px; letter-spacing: 0.4px; }
+.t-methodology-meta  { color: var(--ink-muted); font-size: 10.5px; margin-left: auto; }
+.t-methodology-body {
+  border-top: 1px solid var(--line);
+  padding: 18px 24px 22px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 36px;
+}
+@media (max-width: 900px) { .t-methodology-body { grid-template-columns: 1fr; } }
+.t-methodology-section { min-width: 0; }
+.t-methodology-section .t-detail-h { margin-bottom: 8px; }
+.t-methodology-lede {
+  font-size: 12px;
+  color: var(--ink-dim);
+  line-height: 1.55;
+  margin: 0 0 12px;
+  max-width: 56ch;
+}
+.t-methodology-scale {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--line);
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-muted);
+  align-items: center;
+}
+.t-methodology-scale .t-grade { margin-right: 4px; }
+
+/* The unified .m-list primitive is used inside the methodology panel too —
+   scope its inner-cell tokens so they render outside .t-detail as well. */
+.t-methodology .m-list { list-style: none; margin: 0; padding: 0; }
+.t-methodology .m-group + .m-group { margin-top: 14px; }
+.t-methodology .m-group-label {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-muted);
+  margin-bottom: 6px;
+}
+.t-methodology .m-items { list-style: none; margin: 0; padding: 0; }
+.t-methodology .m-items--two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 24px;
+}
+.t-methodology .m-item {
+  display: grid;
+  grid-template-columns: 32px 16px 1fr;
+  gap: 6px;
+  align-items: baseline;
+  padding: 3px 0;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.t-methodology .m-num {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+.t-methodology .m-ico {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  text-align: center;
+  color: var(--ink-muted);
+}
+.t-methodology .m-label { color: var(--ink); }
+.t-methodology .m-why { display: none; color: var(--ink-dim); margin-left: 6px; }
+.t-methodology .m-why.visible { display: inline; }
+.t-methodology .m-show-more {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-dim);
+  background: transparent;
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+.t-methodology .m-show-more:hover { color: var(--ink); border-color: var(--line-2); }
