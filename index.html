@@ -345,9 +345,9 @@ table { border-collapse: collapse; width: 100%; }
   display: inline-block;
   color: var(--ink-dim);
 }
-.t-cat-dec { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
-.t-cat-cefi { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
-.t-cat-play { color: var(--cyan); border-color: color-mix(in srgb, var(--cyan) 35%, transparent); }
+.t-cat-dec,
+.t-cat-cefi,
+.t-cat-play { color: var(--ink-dim); border-color: var(--line-2); }
 
 /* Chain and volume */
 .t-vol { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 12.5px; color: var(--ink); text-align: right; }
@@ -409,6 +409,8 @@ table { border-collapse: collapse; width: 100%; }
 .t-detail-links a { color: var(--ink-dim); border-bottom: 1px solid transparent; }
 .t-detail-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 .t-detail-tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.t-detail-toolchain { display: flex; flex-direction: column; gap: 24px; }
+.t-detail-section + .t-detail-section { padding-top: 4px; }
 .t-detail-tool {
   border-left: 2px solid var(--line-2);
   padding: 6px 0 6px 12px;
@@ -662,7 +664,7 @@ table { border-collapse: collapse; width: 100%; }
     </nav>
     <div class="t-topbar-right">
       <span class="t-live mono"><span class="t-live-dot"></span>live</span>
-      <span class="t-mcount mono" id="topbarCount">28 markets</span>
+      <span class="t-mcount mono" id="topbarCount">27 markets</span>
       <button class="t-theme-btn" data-theme-toggle title="Toggle theme"><span class="mono" data-theme-icon>◐</span></button>
     </div>
   </header>
@@ -670,7 +672,7 @@ table { border-collapse: collapse; width: 100%; }
 <section class="t-hero" id="landscapeHero">
   <div class="t-hero-kicker mono">// the landscape · 2026</div>
   <h1 class="t-hero-headline">Active prediction markets</h1>
-  <p class="t-hero-sub">28 live prediction markets surveyed across volume, chain, developer surface, and AI-agent tooling. The dataset below is the source for our CLI/MCP, Skill, and Framework benchmarks.</p>
+  <p class="t-hero-sub">27 live prediction markets surveyed across volume, chain, developer surface, and AI-agent tooling. The dataset below is the source for our CLI/MCP, Skill, and Framework benchmarks.</p>
   <div class="t-caveat">
     <span class="t-caveat-icon">⚠</span>
     <span><strong class="mono">agent-generated research</strong> — every test, score, and summary on this site was produced by autonomous coding agents. treat findings accordingly.</span>
@@ -694,7 +696,7 @@ table { border-collapse: collapse; width: 100%; }
       <div class="t-filter-sep"></div>
       <div class="t-filter-group" id="toolFilters"></div>
       <div class="t-filter-spacer"></div>
-      <input type="text" class="t-search mono" id="searchBox" placeholder="/ search 28 markets…">
+      <input type="text" class="t-search mono" id="searchBox" placeholder="/ search 27 markets…">
     </div>
     <div class="t-results-count mono" id="resultsCount"></div>
     <div class="t-table-wrap">
@@ -1176,6 +1178,7 @@ const DATA = [
   {
     "name": "Limitless",
     "website": "https://limitless.exchange",
+    "twitter": "https://x.com/trylimitless",
     "description": "Prediction exchange on Base for crypto, sports, and real-world events. Low fees. LMTS token. $1.5B cumulative volume.",
     "chain": "Base",
     "status": "Live",
@@ -1228,6 +1231,7 @@ const DATA = [
   {
     "name": "Opinion",
     "website": "https://opinion.trade",
+    "twitter": "https://x.com/opinionlabsxyz",
     "description": "On-chain prediction market on BNB Chain with CLOB. Backed by YZi Labs (Binance Labs). $20M pre-Series A. $8B+ monthly volume at peak.",
     "chain": "BNB Chain",
     "status": "Live",
@@ -1347,6 +1351,7 @@ const DATA = [
   {
     "name": "Sapience",
     "website": "https://sapience.xyz",
+    "twitter": "https://x.com/sapiencemarkets",
     "description": "AI-first prediction market on Ethereal chain + Arbitrum. Uses Ethena USDe collateral. Agent vaults, auction system (RFQ). Beta.",
     "chain": "Ethereal + Arbitrum",
     "status": "Beta",
@@ -1408,6 +1413,7 @@ const DATA = [
   {
     "name": "Baozi",
     "website": "https://baozi.bet",
+    "twitter": "https://x.com/baozibet",
     "description": "Solana-native prediction market purpose-built for AI agents. 76 MCP tools. Boolean and race markets with SOL payouts.",
     "chain": "Solana",
     "status": "Live",
@@ -1446,6 +1452,7 @@ const DATA = [
   {
     "name": "Context Markets",
     "website": "https://context.markets",
+    "twitter": "https://x.com/context",
     "description": "Prediction market on Base with real-time markets across esports, sports, weather, crypto. Comprehensive developer and agent tooling.",
     "chain": "Base",
     "status": "Live",
@@ -1911,19 +1918,6 @@ const DATA = [
     "aiTools": []
   },
   {
-    "name": "Delphi (Gensyn)",
-    "website": "https://delphi.gensyn.ai",
-    "twitter": "https://x.com/gensynai",
-    "description": "Prediction market for machine intelligence by Gensyn. Trade stakes in LLMs competing on live benchmarks. On-chain LMSR pricing. Mainnet April 2026.",
-    "chain": "Gensyn (Ethereum rollup)",
-    "status": "Testnet",
-    "volumeEstimate": "Testnet only",
-    "volumeNumeric": 0,
-    "category": "Decentralized",
-    "coreTools": [],
-    "aiTools": []
-  },
-  {
     "name": "Interactive Brokers (ForecastTrader)",
     "website": "https://forecasttrader.interactivebrokers.com",
     "twitter": "https://x.com/IBKR",
@@ -2135,7 +2129,6 @@ function render() {
     <td>${aiToolsHtml}</td>
   </tr>
 `;
-    const allTools = [...pm.coreTools, ...pm.aiTools];
     const toolLinks = (t) => {
       const links = [];
       if (t.docsUrl) links.push(`<a href="${esc(t.docsUrl)}" target="_blank">docs</a>`);
@@ -2145,19 +2138,34 @@ function render() {
       if (t.npmUrl) links.push(`<a href="${esc(t.npmUrl)}" target="_blank">npm</a>`);
       return links.length ? `<div class="t-dt-links">${links.join('')}</div>` : '';
     };
-    const detailToolsHtml = allTools.map(t => `
+    const renderToolCard = (t) => `
   <div class="t-detail-tool">
     <div class="t-dt-type">${esc((t.type || '').toLowerCase())}</div>
     <div class="t-dt-name">${esc(t.name)}</div>
     <div class="t-dt-desc">${esc(t.description || '')}</div>
     ${toolLinks(t)}
   </div>
-`).join('');
+`;
+    const devToolsDetailHtml = pm.coreTools.map(renderToolCard).join('');
+    const agentToolsDetailHtml = pm.aiTools.map(renderToolCard).join('');
 
     const linksHtml = [
       pm.website ? `<a href="${esc(pm.website)}" target="_blank">website</a>` : '',
       pm.twitter ? `<a href="${esc(pm.twitter)}" target="_blank">twitter</a>` : ''
     ].filter(Boolean).join('');
+
+    const devSection = pm.coreTools.length
+      ? `<div class="t-detail-section">
+           <div class="t-detail-h">dev tools · ${pm.coreTools.length}</div>
+           <div class="t-detail-tools-grid">${devToolsDetailHtml}</div>
+         </div>`
+      : '';
+    const agentSection = pm.aiTools.length
+      ? `<div class="t-detail-section">
+           <div class="t-detail-h">agent tools · ${pm.aiTools.length}</div>
+           <div class="t-detail-tools-grid">${agentToolsDetailHtml}</div>
+         </div>`
+      : '';
 
     const detailHtml = `
   <tr class="t-detail" data-pm="${esc(pm.name)}">
@@ -2168,9 +2176,9 @@ function render() {
           <p>${esc(pm.description || '')}</p>
           <div class="t-detail-links">${linksHtml}</div>
         </div>
-        <div>
-          <div class="t-detail-h">toolchain · ${allTools.length}</div>
-          <div class="t-detail-tools-grid">${detailToolsHtml}</div>
+        <div class="t-detail-toolchain">
+          ${devSection}
+          ${agentSection}
         </div>
       </div>
     </td>
@@ -3636,8 +3644,6 @@ const AA_RESULTS = {
   'Alpha Arcade': { score: 6, grade: 'D', reachability: 'cf-blocked', checks: { '1.1': { pass: false, note: 'alphaarcade.com/llms.txt returns HTTP error. docs.alphaarcade.com does not exist' }, '1.2': { pass: false, note: 'Accept: text/markdown header returns 403 Cloudflare challenge. No markdown conte' }, '1.3': { pass: true, note: 'Has meta description (Predict sports, crypto, politics & more. 100% of trading ' }, '2.1': { pass: false, note: 'React SPA with #root container. No SSR/prerendering detected. Cloudflare challen' }, '2.2': { pass: true, note: 'Uses nav (1), main (1), header (1), footer (1) = 4 semantic HTML elements. Meets' }, '2.3': { pass: true, note: 'Clean readable slugs: /market/bitcoin-hit-80k-mar-2026, /market/march-madness-wi' }, '2.4': { pass: true, note: 'Valid sitemap.xml at /sitemap.xml with 100+ URLs covering homepage, markets, how' }, '2.5': { pass: false, note: '/this-does-not-exist-xyz123 returns 200 with full homepage content. No 404 statu' }, '3.1': { pass: false, note: 'No developer documentation found. docs.alphaarcade.com does not resolve (ECONNRE' }, '3.2': { pass: false, note: 'No documentation links found in navigation or footer. Footer has only social lin' }, '3.3': { pass: false, note: 'No REST API, SDK, or MCP server documentation found. No developer-facing program' }, '3.4': { pass: true, note: '102 standard <a href> links on homepage. Navigation includes Build a Parlay, How' }, '4.1': { pass: true, note: 'robots.txt: User-agent: * / Disallow: (empty) / Sitemap: https://www.alphaarcade' }, '4.2': { pass: false, note: 'Cloudflare challenge (cf-mitigated: challenge) blocks all non-browser HTTP clien' }, '4.3': { pass: false, note: 'No MCP server, agent guide, or bot policy found. No developer or agent-facing do' } } },
   'Baozi': { score: 11, grade: 'B', reachability: 'open', checks: { '1.1': { pass: true, note: 'baozi.bet/llms.txt returns rich markdown starting with # Baozi - AI Agent Predi' }, '1.2': { pass: false, note: 'Accept: text/markdown returns text/html (content-type: text/html; charset=utf-8)' }, '1.3': { pass: true, note: 'Three JSON-LD schemas in HTML head: Organization (name, contact, founding), WebS' }, '2.1': { pass: false, note: 'Next.js SPA - body contains only React hydration scripts. No visible text conten' }, '2.2': { pass: false, note: 'No <nav>, <main>, <article>, <header>, or <footer> tags in static HTML source. A' }, '2.3': { pass: true, note: 'Market URLs use date-based readable slugs: /events/2025/12/nba-cup-2025-champion' }, '2.4': { pass: true, note: 'Valid XML sitemap at /sitemap.xml with 42 URL entries. Includes homepage, events' }, '2.5': { pass: true, note: '/this-does-not-exist-xyz123 returns HTTP 404 status code.' }, '3.1': { pass: true, note: '/docs serves documentation page. /agents/docs provides comprehensive agent docum' }, '3.2': { pass: true, note: 'Documentation discoverable within 2 hops: homepage JSON-LD references site, /llm' }, '3.3': { pass: true, note: 'Exceptionally well-documented: MCP server with 76 tools (@baozi.bet/mcp-server),' }, '3.4': { pass: false, note: 'Static HTML contains no <a href> navigation links - all content is JS-rendered. ' }, '4.1': { pass: true, note: 'robots.txt explicitly allows AI crawlers (GPTBot, ClaudeBot, PerplexityBot) with' }, '4.2': { pass: true, note: 'No CAPTCHA scripts detected. No recaptcha, hcaptcha, or Cloudflare challenge. Si' }, '4.3': { pass: true, note: 'Comprehensive agent support: /.well-known/agents.json (agentspec v1), /llms.txt,' } } },
   'Context Markets': { score: 14, grade: 'A', reachability: 'open', checks: { '1.1': { pass: true, note: 'Both context.markets/llms.txt and docs.context.markets/llms.txt return markdown ' }, '1.2': { pass: false, note: 'Accept: text/markdown header ignored. Server returns HTML/Next.js SSR content re' }, '1.3': { pass: true, note: 'meta name=description (Internet prediction markets), OG tags (title, descripti' }, '2.1': { pass: true, note: 'SSR delivers market listings, probabilities, categories, and text content in ini' }, '2.2': { pass: true, note: 'Uses <html lang=en>, <main>, <header>, <nav>, <section>, <article> — well over 3' }, '2.3': { pass: true, note: 'Market URLs are human-readable slugs, e.g. /markets/will-eth-hit-2500, /markets/' }, '2.4': { pass: true, note: 'Valid XML sitemap at /sitemap.xml with 4 entries (/, /create, /privacy, /terms) ' }, '2.5': { pass: true, note: '/this-does-not-exist-xyz123 returns HTTP 404 status code.' }, '3.1': { pass: true, note: 'Comprehensive docs at docs.context.markets (built with Mintlify). Covers API ref' }, '3.2': { pass: true, note: '/build page is linked from main nav (API link). /build links directly to docs.' }, '3.3': { pass: true, note: 'REST API v2 with OpenAPI spec (api.context.markets/v2/openapi.json), TypeScript ' }, '3.4': { pass: true, note: 'Standard <a href> links throughout: nav links (/, /market-updates, /build, /crea' }, '4.1': { pass: true, note: 'robots.txt allows all user agents with User-Agent: * / Allow: /. Only blocks /' }, '4.2': { pass: true, note: 'No CAPTCHA or challenge page encountered. Direct HTTP 200 response with full con' }, '4.3': { pass: true, note: 'Extensive agent-first documentation: MCP server with 17 tools, Claude Code plugi' } } },
-  'Delphi (Gensyn)': { score: 8, grade: 'C', reachability: 'cf-blocked', checks: { '1.1': { pass: false, note: 'delphi.gensyn.ai/llms.txt returns 404. docs.delphi.gensyn.ai does not exist (ECO' }, '1.2': { pass: false, note: 'Accept: text/markdown header returns text/html; charset=utf-8. No markdown conte' }, '1.3': { pass: true, note: 'Rich meta tags present: meta description (Delphi is a prediction market over mo' }, '2.1': { pass: false, note: 'Next.js app with empty body in raw HTML source. All content is JS-rendered. The ' }, '2.2': { pass: true, note: 'Rendered DOM includes 4 semantic elements: navigation (nav bar), main (content a' }, '2.3': { pass: true, note: 'URLs are reasonably readable: /market/active, /market/9, /account. Market IDs ar' }, '2.4': { pass: false, note: 'sitemap.xml returns HTTP 404.' }, '2.5': { pass: true, note: '/this-does-not-exist-xyz123 returns proper HTTP 404 status code.' }, '3.1': { pass: true, note: 'Documentation exists at docs.gensyn.ai/intelligence-market/what-is-delphi coveri' }, '3.2': { pass: true, note: 'Docs link is in the main navigation bar (1 click away), pointing to https://docs' }, '3.3': { pass: false, note: 'No API documentation, no contract addresses, no SDK, no developer integration do' }, '3.4': { pass: true, note: 'Standard anchor tags with href attributes throughout: nav links to /market/activ' }, '4.1': { pass: false, note: 'robots.txt (Cloudflare Managed) explicitly blocks AI crawlers: ClaudeBot, GPTBot' }, '4.2': { pass: true, note: 'No CAPTCHA encountered. Cloudflare is present but did not trigger a challenge fo' }, '4.3': { pass: false, note: 'robots.txt includes Cloudflares Content-Signal framework (search=yes, ai-train=' } } },
-
   'Limitless': { score: 10, grade: 'B', reachability: 'open', checks: { '1.1': { pass: true, note: 'docs.limitless.exchange/llms.txt returns markdown with # heading, Mintlify-built' }, '1.2': { pass: false, note: 'Accept: text/markdown returns HTML (Next.js app), no content negotiation' }, '1.3': { pass: true, note: 'meta description: Forecast the future on Limitless, financial prediction market' }, '2.1': { pass: false, note: 'Raw HTML is JS shell with script tags only, no real text content' }, '2.2': { pass: false, note: 'No semantic HTML; rendered DOM uses only generic divs, no nav/main/article' }, '2.3': { pass: true, note: 'Readable slugs: /markets/will-a-penalty-be-taken-in-rayo-vallecano-...' }, '2.4': { pass: true, note: 'Sitemap index with 3 sub-sitemaps: general, markets, blog' }, '2.5': { pass: true, note: '/this-does-not-exist-xyz123 returns HTTP 404' }, '3.1': { pass: true, note: 'docs.limitless.exchange exists with API ref, SDK docs, developer guides' }, '3.2': { pass: true, note: 'Rendered homepage footer has Docs link to docs.limitless.exchange' }, '3.3': { pass: true, note: 'REST API endpoints, WebSocket, Python/TS/Java SDKs, EIP-712 signing docs' }, '3.4': { pass: false, note: 'Raw HTML has zero <a href> navigation links; all routing is JS-only' }, '4.1': { pass: true, note: 'robots.txt: User-agent: * Allow: / -- no AI bot blocks' }, '4.2': { pass: true, note: 'No CAPTCHA or Cloudflare challenge on any public page' }, '4.3': { pass: false, note: 'No bot/agent policy, no MCP docs, no agent quickstart section' } } },
   'Manifold': { score: 11, grade: 'B', reachability: 'open', checks: { '1.1': { pass: false, note: 'manifold.markets/llms.txt returns HTTP 200 but body is HTML 404 page (404: Oops' }, '1.2': { pass: false, note: 'Accept: text/markdown returns same HTML page (content-type: text/html; charset=u' }, '1.3': { pass: true, note: 'Has meta name=description (Manifold is a social prediction game. Bet on news,' }, '2.1': { pass: true, note: 'Next.js SSR delivers real HTML content without JS. Navigation links (Browse, Pre' }, '2.2': { pass: false, note: 'Only 2 semantic tags found: <nav> (sidebar + mobile bottom nav) and <main>. Miss' }, '2.3': { pass: true, note: 'Markets use /{username}/{slug} pattern, e.g. /MartinRandall/will-joe-biden-win-t' }, '2.4': { pass: true, note: 'Valid XML sitemap at /sitemap.xml with proper XML declaration, urlset namespace,' }, '2.5': { pass: false, note: 'Known false-200 pattern confirmed. /this-does-not-exist-xyz123 returns HTTP 200 ' }, '3.1': { pass: true, note: 'docs.manifold.markets hosts documentation hub with API docs, FAQ, and data resou' }, '3.2': { pass: true, note: 'Homepage -> About (1 click) -> docs.manifold.markets/faq link (2 clicks). About ' }, '3.3': { pass: true, note: 'REST API fully documented at docs.manifold.markets/api. Endpoints: /v0/user, /v0' }, '3.4': { pass: true, note: 'Extensive <a href> links throughout: /, /browse, /predictle, /about, /terms, /pr' }, '4.1': { pass: true, note: 'robots.txt: User-agent: * / Allow: /. All crawlers permitted. Sitemaps declared.' }, '4.2': { pass: true, note: 'No CAPTCHA, challenge pages, or bot detection encountered across all fetches. Si' }, '4.3': { pass: true, note: 'API docs explicitly list building bots, automated trading systems, algorithmic ' } } },
   'Metaculus': { score: 10, grade: 'B', reachability: 'cf-blocked', checks: { '1.1': { pass: false, note: 'metaculus.com/llms.txt returns HTTP 404 with a Page not found message. docs.me' }, '1.2': { pass: false, note: 'Accept: text/markdown returns HTTP 200 with content-type: text/markdown and head' }, '1.3': { pass: true, note: 'Has meta name=description (Metaculus is an online forecasting platform and ag' }, '2.1': { pass: false, note: 'Homepage is a Next.js SPA behind Cloudflare challenge. curl and WebFetch receive' }, '2.2': { pass: true, note: 'Rendered page uses header (1), main (1), section (7), footer (1) semantic HTML e' }, '2.3': { pass: true, note: 'URLs follow /questions/{id}/{slug}/ pattern, e.g. /questions/25730/us-controls-t' }, '2.4': { pass: false, note: 'sitemap.xml returns Cloudflare managed challenge (403) via curl. WebFetch return' }, '2.5': { pass: true, note: 'Via Playwright, /this-does-not-exist-xyz123 renders a Page not found page with' }, '3.1': { pass: true, note: '/api/ serves Swagger/OpenAPI documentation titled Metaculus API 2.0.0 OAS3 wit' }, '3.2': { pass: true, note: 'Footer contains direct link to API (/api/), FAQ (/faq/), Forecasting Resour' }, '3.3': { pass: true, note: 'API docs include endpoints: GET /api/posts/ (retrieve posts feed), GET /api/post' }, '3.4': { pass: true, note: '146 <a href> links on homepage including Questions, Tournaments, Services, News,' }, '4.1': { pass: true, note: 'robots.txt contains User-Agent: * / Allow: / -- fully permissive. No AI-specif' }, '4.2': { pass: false, note: 'Cloudflare managed challenge (JS challenge) blocks non-browser agents on most pa' }, '4.3': { pass: true, note: 'Footer links to Tournaments for AI bots (/aib/) which redirects to /futureeval' } } },
