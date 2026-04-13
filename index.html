@@ -585,6 +585,50 @@ table { border-collapse: collapse; width: 100%; }
   }
   .t-detail-tools-grid { grid-template-columns: 1fr; }
 }
+/* --- View visibility (fix merged-pages bug) --------------- */
+#landscapeView { display: none; }
+#testingView { display: none; }
+#landscapeView.is-active { display: block; }
+#testingView.is-active { display: block; }
+
+/* --- Stable table layout (no column shift on expand) ------ */
+.t-table { table-layout: fixed; width: 100%; }
+.t-table col.col-chev    { width: 22px; }
+.t-table col.col-pm      { width: 28%; }
+.t-table col.col-cat     { width: 130px; }
+.t-table col.col-chain   { width: 100px; }
+.t-table col.col-vol     { width: 110px; }
+.t-table col.col-dev     { width: 16%; }
+.t-table col.col-agent   { width: auto; }
+.t-table td, .t-table th { overflow: hidden; text-overflow: ellipsis; }
+.t-table td .t-tools, .t-table td .t-pm { overflow: visible; }
+
+/* Testing table column widths */
+.t-table col.col-tdev    { width: 90px; }
+.t-table col.col-grade   { width: 92px; }
+
+/* --- Tool-card external links (in expanded detail row) ---- */
+.t-dt-links {
+  margin-top: 6px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.t-dt-links a {
+  color: var(--ink-dim);
+  border-bottom: 1px solid var(--line-2);
+  padding-bottom: 1px;
+}
+.t-dt-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* --- Tighter detail layout (less width for description) --- */
+.t-detail-inner { grid-template-columns: 1fr 2fr; }
+.t-detail-about p { max-width: 480px; }
+
 </style>
 </head>
 <body>
@@ -595,8 +639,6 @@ table { border-collapse: collapse; width: 100%; }
     <div class="t-brand">
       <span class="t-prompt mono">$</span>
       <span class="t-brand-name mono">sybil.pm_landscape</span>
-      <span class="t-brand-sep mono">//</span>
-      <span class="t-brand-ver mono">v4 · apr 2026</span>
     </div>
     <nav class="t-tabs">
       <button class="t-tab active" data-view="landscape">Landscape</button>
@@ -611,7 +653,7 @@ table { border-collapse: collapse; width: 100%; }
 
 <section class="t-hero" id="landscapeHero">
   <div class="t-hero-kicker mono">// the landscape · 2026</div>
-  <h1 class="t-hero-headline">Prediction markets, <em>ranked by how well an AI agent can actually use them.</em></h1>
+  <h1 class="t-hero-headline">Active prediction markets</h1>
   <p class="t-hero-sub">28 live prediction markets surveyed across volume, chain, developer surface, and AI-agent tooling. The dataset below is the source for our CLI/MCP, Skill, and Framework benchmarks.</p>
   <div class="t-caveat">
     <span class="t-caveat-icon">⚠</span>
@@ -631,7 +673,6 @@ table { border-collapse: collapse; width: 100%; }
 
   <!-- LANDSCAPE VIEW -->
   <div id="landscapeView">
-    <div id="stats"></div>
     <div class="t-filters" id="filters">
       <div class="t-filter-group" id="catFilters"></div>
       <div class="t-filter-sep"></div>
@@ -642,6 +683,15 @@ table { border-collapse: collapse; width: 100%; }
     <div class="t-results-count mono" id="resultsCount"></div>
     <div class="t-table-wrap">
       <table class="t-table" id="pmTable">
+        <colgroup>
+          <col class="col-chev">
+          <col class="col-pm">
+          <col class="col-cat">
+          <col class="col-chain">
+          <col class="col-vol">
+          <col class="col-dev">
+          <col class="col-agent">
+        </colgroup>
         <thead id="tableHead"></thead>
         <tbody id="tableBody"></tbody>
       </table>
@@ -843,6 +893,16 @@ table { border-collapse: collapse; width: 100%; }
     <div class="t-results-count mono" id="testResultsCount"></div>
     <div class="t-table-wrap">
       <table class="t-table" id="testTable">
+        <colgroup>
+          <col class="col-chev">
+          <col class="col-pm">
+          <col class="col-cat">
+          <col class="col-tdev">
+          <col class="col-grade">
+          <col class="col-grade">
+          <col class="col-grade">
+          <col class="col-grade">
+        </colgroup>
         <thead id="testTableHead"></thead>
         <tbody id="testTableBody"></tbody>
       </table>
@@ -850,13 +910,9 @@ table { border-collapse: collapse; width: 100%; }
   </div>
 
 <footer class="t-footer mono">
-  <div class="t-footer-left">sybil_pm_landscape · agent-authored · <span id="footerVersion">apr 2026</span></div>
+  <div class="t-footer-left">sybil_pm_landscape · agent-authored</div>
   <div class="t-footer-right">
-    <a href="https://github.com/noskillcoding/sybil_pm_landscape/tree/main/methodology" target="_blank">methodology</a>
-    <span class="t-footer-sep">·</span>
-    <a href="https://github.com/noskillcoding/sybil_pm_landscape" target="_blank">source</a>
-    <span class="t-footer-sep">·</span>
-    <a href="#" target="_blank"><!-- TODO: replace # with project X handle when available -->x</a>
+    <a href="https://x.com/sybil_pm" target="_blank">x</a>
   </div>
 </footer>
 </div>
@@ -1980,13 +2036,6 @@ function render() {
 
   const topbarCount = document.getElementById('topbarCount');
   if (topbarCount) topbarCount.textContent = `${total} markets`;
-  document.getElementById('stats').className = 't-stats';
-  document.getElementById('stats').innerHTML = `
-  <div class="t-stat"><div class="t-stat-label">markets</div><div class="t-stat-value mono">${total}</div><div class="t-stat-detail">verified live</div></div>
-  <div class="t-stat"><div class="t-stat-label">with dev tools</div><div class="t-stat-value mono">${withDev}</div><div class="t-stat-detail">api · sdk · ws</div></div>
-  <div class="t-stat"><div class="t-stat-label">with agent tools</div><div class="t-stat-value mono">${withAi}</div><div class="t-stat-detail">cli · mcp · skill · fw</div></div>
-  <div class="t-stat"><div class="t-stat-label">decen · cefi · play</div><div class="t-stat-value mono">${decen}/${cefi}/${play}</div><div class="t-stat-detail">category mix</div></div>
-`;
 
   // Category filters
   const cats = ['Decentralized', 'Regulated/CeFi', 'Play Money'];
@@ -2072,11 +2121,21 @@ function render() {
   </tr>
 `;
     const allTools = [...pm.coreTools, ...pm.aiTools];
+    const toolLinks = (t) => {
+      const links = [];
+      if (t.docsUrl) links.push(`<a href="${esc(t.docsUrl)}" target="_blank">docs</a>`);
+      if (Array.isArray(t.docsUrls)) t.docsUrls.forEach(u => { if (u) links.push(`<a href="${esc(u)}" target="_blank">docs</a>`); });
+      if (t.githubUrl) links.push(`<a href="${esc(t.githubUrl)}" target="_blank">github</a>`);
+      if (Array.isArray(t.githubUrls)) t.githubUrls.forEach(u => { if (u) links.push(`<a href="${esc(u)}" target="_blank">github</a>`); });
+      if (t.npmUrl) links.push(`<a href="${esc(t.npmUrl)}" target="_blank">npm</a>`);
+      return links.length ? `<div class="t-dt-links">${links.join('')}</div>` : '';
+    };
     const detailToolsHtml = allTools.map(t => `
   <div class="t-detail-tool">
     <div class="t-dt-type">${esc((t.type || '').toLowerCase())}</div>
     <div class="t-dt-name">${esc(t.name)}</div>
     <div class="t-dt-desc">${esc(t.description || '')}</div>
+    ${toolLinks(t)}
   </div>
 `).join('');
 
@@ -2232,9 +2291,27 @@ function setSubtitle(view) {
     el.textContent = `${DATA.length} verified prediction markets — April 2026`;
   }
 }
+function applyViewVisibility(view) {
+  const lv = document.getElementById('landscapeView');
+  const tv = document.getElementById('testingView');
+  const lh = document.getElementById('landscapeHero');
+  const th = document.getElementById('testingHero');
+  if (view === 'landscape') {
+    if (lv) lv.classList.add('is-active');
+    if (tv) tv.classList.remove('is-active');
+    if (lh) lh.style.display = '';
+    if (th) th.style.display = 'none';
+  } else {
+    if (lv) lv.classList.remove('is-active');
+    if (tv) tv.classList.add('is-active');
+    if (lh) lh.style.display = 'none';
+    if (th) th.style.display = '';
+  }
+}
+
 function initViewNav() {
-  document.getElementById('footerVersion').textContent = 'April 2026';
   setSubtitle('landscape');
+  applyViewVisibility('landscape');
   document.querySelectorAll('.t-tab').forEach(tab => {
     tab.addEventListener('click', () => {
       const view = tab.dataset.view;
@@ -2243,20 +2320,8 @@ function initViewNav() {
       document.querySelectorAll('.t-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       setSubtitle(view);
-      const lh = document.getElementById('landscapeHero');
-      const th = document.getElementById('testingHero');
-      if (view === 'landscape') {
-        document.getElementById('landscapeView').classList.remove('hidden');
-        document.getElementById('testingView').classList.remove('active');
-        if (lh) lh.style.display = '';
-        if (th) th.style.display = 'none';
-      } else {
-        document.getElementById('landscapeView').classList.add('hidden');
-        document.getElementById('testingView').classList.add('active');
-        if (lh) lh.style.display = 'none';
-        if (th) th.style.display = '';
-        renderTesting();
-      }
+      applyViewVisibility(view);
+      if (view === 'testing') renderTesting();
       Router.push();
     });
   });
