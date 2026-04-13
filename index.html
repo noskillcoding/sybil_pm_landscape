@@ -594,14 +594,18 @@ table { border-collapse: collapse; width: 100%; }
 /* --- Stable table layout (no column shift on expand) ------ */
 .t-table { table-layout: fixed; width: 100%; }
 .t-table col.col-chev    { width: 22px; }
-.t-table col.col-pm      { width: 28%; }
+.t-table col.col-pm      { width: auto; }
 .t-table col.col-cat     { width: 130px; }
-.t-table col.col-chain   { width: 100px; }
-.t-table col.col-vol     { width: 110px; }
-.t-table col.col-dev     { width: 16%; }
-.t-table col.col-agent   { width: auto; }
-.t-table td, .t-table th { overflow: hidden; text-overflow: ellipsis; }
-.t-table td .t-tools, .t-table td .t-pm { overflow: visible; }
+.t-table col.col-chain   { width: 85px; }
+.t-table col.col-vol     { width: 140px; }
+.t-table col.col-dev     { width: 170px; }
+.t-table col.col-agent   { width: 260px; }
+.t-table td, .t-table th { overflow: hidden; }
+.t-table td .t-tools { overflow: visible; }
+.t-pm > div:last-child { min-width: 0; flex: 1 1 auto; }
+.t-pm-name, .t-pm-meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-vol, .t-chain { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.t-cat { white-space: nowrap; }
 
 /* Testing table column widths */
 .t-table col.col-tdev    { width: 90px; }
