@@ -4,36 +4,79 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A research project that benchmarks prediction markets (PMs) on how accessible they are to autonomous AI trading agents. There is **no build system, no package.json, no tests** — the "product" is a single static dashboard (`index.html`) plus a corpus of methodology docs, subagent templates, and raw test results.
+A research project that benchmarks prediction markets (PMs) on how accessible they are to autonomous AI trading agents. There is **no build system, no package.json, no tests** — the "product" is a static dashboard plus a corpus of methodology docs, subagent templates, and raw test results.
 
 ## Deploy / run
 
-- Local preview: open `index.html` directly in a browser, or `python3 -m http.server` in the repo root.
-- Production deploy: `npx vercel deploy --prod` (Vercel static hosting).
-- The dashboard is password-gated client-side: `index.html` stores a SHA-256 hash in a `HASH` constant and unlocks on match (`tryUnlock` near line 514). This is obfuscation, not security — don't put secrets behind it.
+- **Local preview:** `python3 -m http.server 8765` from the repo root, then open `http://localhost:8765/index.html`.
+- **Production deploy:** `npx vercel deploy --prod` (Vercel static hosting).
+- **Important:** opening `index.html` via `file://` no longer works. The dashboard uses ES modules and `fetch()` against local JSON files, both of which are CORS-blocked from the `file://` origin. You need an HTTP server.
 
 ## Architecture
 
-### The dashboard (`index.html`, ~3400 lines, single file)
+Static directory deployable as-is. `index.html` is a ~130-line shell: `<head>` has a synchronous no-flash theme script + seven `<link>` tags to the CSS files, `<body>` has the static markup for topbar / hero / view containers / footer, and a single `<script type="module" src="./assets/js/main.js">` entry at the end.
 
-Everything — styles, data, rendering logic — is inlined. The structure:
+### File layout
 
-1. **CSS + gate markup** (top).
-2. **`const DATA = [...]`** (starts ~line 518): the canonical in-repo dataset. One object per PM with fields like `name`, `chain`, `volumeNumeric`, `coreTools[]`, plus nested scores for the four test categories (accessibility, cli-mcp, skill, framework). **The dashboard reads only from this embedded array — it does not fetch `results/*.json` at runtime.** When you update a test result, you must also update the corresponding entry in `DATA` or the dashboard won't reflect it.
-3. **Render/filter/sort code** (bottom): builds the stats bar, filter chips, and the main PM table; framework-assessment rendering walks `fw.categories` (~line 3376).
+```
+sybil_pm_landscape/
+├── index.html                       (~130-line shell)
+├── assets/
+│   ├── css/
+│   │   ├── tokens.css               design tokens (dark + light)
+│   │   ├── base.css                 reset, typography, .mono helper
+│   │   ├── layout.css               .t-shell, topbar, hero, footer, view visibility
+│   │   ├── filters.css              .t-filters, .t-chip, .t-search
+│   │   ├── table.css                .t-table, colgroup widths, pills, badges, grades
+│   │   ├── detail.css               expanded detail row, tool cards, methodology tabs
+│   │   └── responsive.css           tablet + mobile media queries
+│   └── js/
+│       ├── main.js                  entry point — fetches data, wires everything
+│       ├── state.js                 shared mutable UI state object
+│       ├── constants.js             TEST_COLS, TOOL_COL_MAP, AA_DIMS, etc.
+│       ├── helpers.js                esc, toolPillClass, gradeClass, etc.
+│       ├── theme.js                 Theme module (light/dark toggle)
+│       ├── sort.js                  Sort module (column sort)
+│       ├── router.js                Router module (hash-based state)
+│       ├── view.js                  initViewNav, applyViewVisibility, setSubtitle
+│       ├── landscape.js             render() for the landscape view
+│       └── testing.js               renderTesting() + testing-page helpers
+├── data/
+│   ├── pms.json                     the 27 PM entries
+│   ├── accessibility.json           agent-accessibility test results
+│   └── tests.json                   { current, legacy } for cli-mcp / skill / framework tests
+├── methodology/                     markdown docs for each of the 4 test categories
+├── results/                         raw per-run subagent outputs (historical record)
+├── templates/                       subagent instruction templates
+├── mocks/a-terminal.html            frozen reference of the chosen visual direction
+└── docs/superpowers/                specs + plans for design work
+```
 
-When editing `index.html`, prefer surgical edits inside `DATA` entries. Avoid reformatting the file — diffs on a 3400-line single-file app are painful to review.
+**Load order matters for CSS:** tokens first (defines the custom properties), responsive last (media queries override base rules). The seven `<link>` tags in `index.html` are in that order.
+
+**No build step.** CSS and JS are hand-authored and served directly. Data is fetched at runtime from `data/*.json`.
+
+### Runtime flow
+
+1. Browser loads `index.html`.
+2. The synchronous `<head>` script sets `data-theme` on `<html>` based on `localStorage.theme` / `prefers-color-scheme` — before any CSS parses, preventing flash.
+3. Browser parses the seven `<link>` stylesheets in cascade order.
+4. Browser loads `assets/js/main.js` as a module (auto-deferred). The module graph resolves: state → constants → helpers → theme / sort / (router ↔ landscape/testing) → view.
+5. `main.js` registers a `DOMContentLoaded` handler.
+6. On `DOMContentLoaded`, `boot()` fetches `data/pms.json`, `data/accessibility.json`, `data/tests.json` in parallel, assigns them to `window.DATA / window.AA_RESULTS / window.TEST_RESULTS`, then calls `Theme.init()`, `initViewNav()`, `Router.init()`. Router reads the URL hash and calls `render()` or `renderTesting()` for the appropriate view.
+
+**Why `window` globals?** The `render()` and `renderTesting()` internals historically read `DATA`, `AA_RESULTS`, `TEST_RESULTS` as bare identifiers. ES modules don't share module-scope variables, so `main.js` publishes the fetched data onto `window` to preserve that pattern without refactoring the render internals. `state.js` is the opposite — proper ES module sharing for mutable UI state (`catFilter`, `searchQ`, `currentView`, etc.).
 
 ### The four test categories
 
 Each has its own methodology doc, and (except accessibility) its own subagent template. They are independent — a PM can be scored in some categories and not others.
 
-| Category | Methodology | Template | Results dir |
+| Category | Methodology | Template | Raw results dir |
 |---|---|---|---|
 | Agent Accessibility (15 checks) | `methodology/agent-accessibility.md` | — | `results/agent-accessibility/<pm>.json` |
 | CLI/MCP Test (18 checks) | `methodology/cli-mcp-test.md` | `templates/cli-mcp/` | `results/cli-mcp/<pm>-{cli,mcp}/` |
 | Skill Test (8 milestones) | `methodology/skill-test.md` | `templates/skill/` | `results/skill/<pm>-skill/` |
-| Framework Assessment (5 categories) | `methodology/framework-assessment.md` | — | (dashboard-only, no raw dir) |
+| Framework Assessment (5 categories) | `methodology/framework-assessment.md` | — | (inlined in `data/tests.json` only) |
 
 ### Subagent templates
 
@@ -43,12 +86,21 @@ Each has its own methodology doc, and (except accessibility) its own subagent te
 
 These are run as live tests against real markets with real money, so the templates enforce: record exact commands, cap tool calls, write `raw-log.md` after each section, never fabricate results.
 
-### Results convention
+### Dual source of truth (known issue)
 
-For cli-mcp and skill runs, each result directory contains two files: `raw-log.md` (the subagent's command/output trace) and `result.json` (schema-conformant scored output). Agent-accessibility results are a single `<pm>.json` file per PM.
+`results/*.json` holds raw per-run subagent outputs (authoritative historical record) and `data/tests.json` / `data/accessibility.json` hold the dashboard's copy. They can drift — updating a raw result file does NOT update the dashboard automatically. When you add or update a test result:
 
-## Working on this repo
+1. Write the raw `result.json` + `raw-log.md` under `results/`.
+2. Also hand-copy the relevant scored fields into `data/tests.json` (or `data/accessibility.json`).
+3. Verify in the dashboard that the row shows the new grade.
 
-- **Adding a new PM or test result**: write the raw files under `results/...`, then reflect the scores into the `DATA` array in `index.html`. Don't rely on a build step — there isn't one.
-- **Editing methodology**: if you change check counts or milestone definitions, update both the methodology doc and the README coverage table, and audit the `DATA` entries since their score shapes are tied to the methodology.
-- **Don't introduce a bundler or framework** unless explicitly asked — the single-file static site is a deliberate deployment choice.
+A future improvement would be a tiny node script that rebuilds `data/tests.json` from the raw files, but that's out of scope today.
+
+## Editing rules
+
+- **Changing visual style?** Edit files under `assets/css/`. Each file has one responsibility (see the table above).
+- **Changing page interaction?** Edit files under `assets/js/`. `render()` lives in `landscape.js`, `renderTesting()` in `testing.js`. Shared state goes in `state.js`. Helpers in `helpers.js`. Constants in `constants.js`.
+- **Changing PM metadata (name, volume, tools, twitter)?** Edit `data/pms.json`. The dashboard picks up the change on next reload.
+- **Changing test results?** Edit `data/accessibility.json` or `data/tests.json`. Remember to also update the raw file under `results/` so the historical record stays honest.
+- **Adding a new PM?** Append to `data/pms.json`. No code changes needed. `getTestablePMs()` in `testing.js` will automatically include decentralized / play-money PMs with non-empty `coreTools` or `aiTools`.
+- **Don't introduce a bundler, framework, or `package.json`** unless explicitly asked — the zero-toolchain static directory is a deliberate choice for a research publication.
