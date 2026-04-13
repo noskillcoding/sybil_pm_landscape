@@ -1,0 +1,1342 @@
+{
+  "AIOmen / Presagio": {
+    "score": 7,
+    "grade": "C",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "All three URLs returned 404: presagio.pages.dev/llms.txt, docs.presagio.pages.de"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown has no effect. Returns Next.js RSC payload regardless of A"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Good meta tags: title=Presagio - Where predictions meet AI agents, meta descri"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "HTML source is an empty Next.js RSC shell with no readable text content. All mar"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Playwright snapshot shows only navigation and region as semantic landmarks. "
+      },
+      "2.3": {
+        "pass": false,
+        "note": "Market URLs use contract addresses: /markets?id=0x7bf86da53495a6f703226e0dc0d0d7"
+      },
+      "2.4": {
+        "pass": false,
+        "note": "presagio.pages.dev/sitemap.xml returns 404."
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404 status code (not a soft 200)."
+      },
+      "3.1": {
+        "pass": false,
+        "note": "No docs section on presagio.pages.dev (/docs returns 404). GitHub repo (SwaprHQ/"
+      },
+      "3.2": {
+        "pass": false,
+        "note": "No link to developer docs from presagio.pages.dev. The Gnosis agent tooling repo"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "gnosis/prediction-market-agent-tooling on GitHub provides comprehensive Python S"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Rendered page has standard <a href> navigation links: /, /chat/new, /leaderboard"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "presagio.pages.dev/robots.txt returned the Cloudflare Pages content signals poli"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA encountered during any fetch or Playwright navigation. Site loads fre"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "Site explicitly positions itself around AI agents: title Where predictions meet"
+      }
+    }
+  },
+  "Alpha Arcade": {
+    "score": 6,
+    "grade": "D",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "alphaarcade.com/llms.txt returns HTTP error. docs.alphaarcade.com does not exist"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown header returns 403 Cloudflare challenge. No markdown conte"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Has meta description (Predict sports, crypto, politics & more. 100% of trading "
+      },
+      "2.1": {
+        "pass": false,
+        "note": "React SPA with #root container. No SSR/prerendering detected. Cloudflare challen"
+      },
+      "2.2": {
+        "pass": true,
+        "note": "Uses nav (1), main (1), header (1), footer (1) = 4 semantic HTML elements. Meets"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Clean readable slugs: /market/bitcoin-hit-80k-mar-2026, /market/march-madness-wi"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid sitemap.xml at /sitemap.xml with 100+ URLs covering homepage, markets, how"
+      },
+      "2.5": {
+        "pass": false,
+        "note": "/this-does-not-exist-xyz123 returns 200 with full homepage content. No 404 statu"
+      },
+      "3.1": {
+        "pass": false,
+        "note": "No developer documentation found. docs.alphaarcade.com does not resolve (ECONNRE"
+      },
+      "3.2": {
+        "pass": false,
+        "note": "No documentation links found in navigation or footer. Footer has only social lin"
+      },
+      "3.3": {
+        "pass": false,
+        "note": "No REST API, SDK, or MCP server documentation found. No developer-facing program"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "102 standard <a href> links on homepage. Navigation includes Build a Parlay, How"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt: User-agent: * / Disallow: (empty) / Sitemap: https://www.alphaarcade"
+      },
+      "4.2": {
+        "pass": false,
+        "note": "Cloudflare challenge (cf-mitigated: challenge) blocks all non-browser HTTP clien"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No MCP server, agent guide, or bot policy found. No developer or agent-facing do"
+      }
+    }
+  },
+  "Baozi": {
+    "score": 11,
+    "grade": "B",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "baozi.bet/llms.txt returns rich markdown starting with # Baozi - AI Agent Predi"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns text/html (content-type: text/html; charset=utf-8)"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Three JSON-LD schemas in HTML head: Organization (name, contact, founding), WebS"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Next.js SPA - body contains only React hydration scripts. No visible text conten"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "No <nav>, <main>, <article>, <header>, or <footer> tags in static HTML source. A"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Market URLs use date-based readable slugs: /events/2025/12/nba-cup-2025-champion"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid XML sitemap at /sitemap.xml with 42 URL entries. Includes homepage, events"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404 status code."
+      },
+      "3.1": {
+        "pass": true,
+        "note": "/docs serves documentation page. /agents/docs provides comprehensive agent docum"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Documentation discoverable within 2 hops: homepage JSON-LD references site, /llm"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "Exceptionally well-documented: MCP server with 76 tools (@baozi.bet/mcp-server),"
+      },
+      "3.4": {
+        "pass": false,
+        "note": "Static HTML contains no <a href> navigation links - all content is JS-rendered. "
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt explicitly allows AI crawlers (GPTBot, ClaudeBot, PerplexityBot) with"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA scripts detected. No recaptcha, hcaptcha, or Cloudflare challenge. Si"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "Comprehensive agent support: /.well-known/agents.json (agentspec v1), /llms.txt,"
+      }
+    }
+  },
+  "Context Markets": {
+    "score": 14,
+    "grade": "A",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "Both context.markets/llms.txt and docs.context.markets/llms.txt return markdown "
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown header ignored. Server returns HTML/Next.js SSR content re"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "meta name=description (Internet prediction markets), OG tags (title, descripti"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "SSR delivers market listings, probabilities, categories, and text content in ini"
+      },
+      "2.2": {
+        "pass": true,
+        "note": "Uses <html lang=en>, <main>, <header>, <nav>, <section>, <article> — well over 3"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Market URLs are human-readable slugs, e.g. /markets/will-eth-hit-2500, /markets/"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid XML sitemap at /sitemap.xml with 4 entries (/, /create, /privacy, /terms) "
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404 status code."
+      },
+      "3.1": {
+        "pass": true,
+        "note": "Comprehensive docs at docs.context.markets (built with Mintlify). Covers API ref"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "/build page is linked from main nav (API link). /build links directly to docs."
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST API v2 with OpenAPI spec (api.context.markets/v2/openapi.json), TypeScript "
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard <a href> links throughout: nav links (/, /market-updates, /build, /crea"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt allows all user agents with User-Agent: * / Allow: /. Only blocks /"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA or challenge page encountered. Direct HTTP 200 response with full con"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "Extensive agent-first documentation: MCP server with 17 tools, Claude Code plugi"
+      }
+    }
+  },
+  "Limitless": {
+    "score": 10,
+    "grade": "B",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "docs.limitless.exchange/llms.txt returns markdown with # heading, Mintlify-built"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns HTML (Next.js app), no content negotiation"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "meta description: Forecast the future on Limitless, financial prediction market"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Raw HTML is JS shell with script tags only, no real text content"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "No semantic HTML; rendered DOM uses only generic divs, no nav/main/article"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Readable slugs: /markets/will-a-penalty-be-taken-in-rayo-vallecano-..."
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Sitemap index with 3 sub-sitemaps: general, markets, blog"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.limitless.exchange exists with API ref, SDK docs, developer guides"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Rendered homepage footer has Docs link to docs.limitless.exchange"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST API endpoints, WebSocket, Python/TS/Java SDKs, EIP-712 signing docs"
+      },
+      "3.4": {
+        "pass": false,
+        "note": "Raw HTML has zero <a href> navigation links; all routing is JS-only"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt: User-agent: * Allow: / -- no AI bot blocks"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA or Cloudflare challenge on any public page"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot/agent policy, no MCP docs, no agent quickstart section"
+      }
+    }
+  },
+  "Manifold": {
+    "score": 11,
+    "grade": "B",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "manifold.markets/llms.txt returns HTTP 200 but body is HTML 404 page (404: Oops"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns same HTML page (content-type: text/html; charset=u"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Has meta name=description (Manifold is a social prediction game. Bet on news,"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "Next.js SSR delivers real HTML content without JS. Navigation links (Browse, Pre"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Only 2 semantic tags found: <nav> (sidebar + mobile bottom nav) and <main>. Miss"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Markets use /{username}/{slug} pattern, e.g. /MartinRandall/will-joe-biden-win-t"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid XML sitemap at /sitemap.xml with proper XML declaration, urlset namespace,"
+      },
+      "2.5": {
+        "pass": false,
+        "note": "Known false-200 pattern confirmed. /this-does-not-exist-xyz123 returns HTTP 200 "
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.manifold.markets hosts documentation hub with API docs, FAQ, and data resou"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Homepage -> About (1 click) -> docs.manifold.markets/faq link (2 clicks). About "
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST API fully documented at docs.manifold.markets/api. Endpoints: /v0/user, /v0"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Extensive <a href> links throughout: /, /browse, /predictle, /about, /terms, /pr"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt: User-agent: * / Allow: /. All crawlers permitted. Sitemaps declared."
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA, challenge pages, or bot detection encountered across all fetches. Si"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "API docs explicitly list building bots, automated trading systems, algorithmic "
+      }
+    }
+  },
+  "Metaculus": {
+    "score": 10,
+    "grade": "B",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "metaculus.com/llms.txt returns HTTP 404 with a Page not found message. docs.me"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns HTTP 200 with content-type: text/markdown and head"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Has meta name=description (Metaculus is an online forecasting platform and ag"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Homepage is a Next.js SPA behind Cloudflare challenge. curl and WebFetch receive"
+      },
+      "2.2": {
+        "pass": true,
+        "note": "Rendered page uses header (1), main (1), section (7), footer (1) semantic HTML e"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "URLs follow /questions/{id}/{slug}/ pattern, e.g. /questions/25730/us-controls-t"
+      },
+      "2.4": {
+        "pass": false,
+        "note": "sitemap.xml returns Cloudflare managed challenge (403) via curl. WebFetch return"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "Via Playwright, /this-does-not-exist-xyz123 renders a Page not found page with"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "/api/ serves Swagger/OpenAPI documentation titled Metaculus API 2.0.0 OAS3 wit"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Footer contains direct link to API (/api/), FAQ (/faq/), Forecasting Resour"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "API docs include endpoints: GET /api/posts/ (retrieve posts feed), GET /api/post"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "146 <a href> links on homepage including Questions, Tournaments, Services, News,"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt contains User-Agent: * / Allow: / -- fully permissive. No AI-specif"
+      },
+      "4.2": {
+        "pass": false,
+        "note": "Cloudflare managed challenge (JS challenge) blocks non-browser agents on most pa"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "Footer links to Tournaments for AI bots (/aib/) which redirects to /futureeval"
+      }
+    }
+  },
+  "Myriad": {
+    "score": 12,
+    "grade": "B",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "Both myriad.markets/llms.txt and docs.myriad.markets/llms.txt return 404"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns HTML, no markdown negotiation"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "meta name=description: Trade predictions on Myriad"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "SSR HTML with market titles, text content without JS"
+      },
+      "2.2": {
+        "pass": true,
+        "note": "nav (3), main (1), header (2), footer (1) = 4 semantic tags"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "e.g. /markets/will-donald-trump-visit-china-before-may-2026"
+      },
+      "2.4": {
+        "pass": false,
+        "note": "/sitemap.xml returns 404"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.myriad.markets has full docs: trading, builders, API, SDK"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Footer links to docs.myriad.markets from homepage"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST API endpoints, JS SDK (polkamarkets-js), CLI documented"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard <a href> links for markets, topics, external pages"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt only disallows /profile; AI crawlers not blocked"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA/challenge in HTML (CF present but not blocking)"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "AI Agents & LLMs page with CLI, MCP tools, npm package docs"
+      }
+    }
+  },
+  "Opinion": {
+    "score": 9,
+    "grade": "C",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "docs.opinion.trade/llms.txt returns markdown starting with # OPINION Docs"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns HTML, not markdown"
+      },
+      "1.3": {
+        "pass": false,
+        "note": "No meta description or JSON-LD in source HTML; only JS-injected"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Pure SPA shell; zero text in raw HTML without JS execution"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Zero semantic HTML tags (no nav, main, article, header, footer)"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "/market/eth-up-or-down-hourly-mar-31-2026-13-00-utc-close"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "docs.opinion.trade/sitemap.xml valid XML sitemap index"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "HTTP 404 returned for /this-does-not-exist-xyz123"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.opinion.trade GitBook with REST API, Python/TS SDK, WebSocket"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Link to docs.opinion.trade found on app homepage"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST API endpoints, Python SDK pip install, TS SDK, WebSocket docs"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Multiple a href links for markets, profiles, terms, docs"
+      },
+      "4.1": {
+        "pass": false,
+        "note": "robots.txt blocks ClaudeBot, GPTBot, CCBot, and 6 other AI bots"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA detected on any page"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy, agent quickstart, or MCP mentions found"
+      }
+    }
+  },
+  "Overtime": {
+    "score": 7,
+    "grade": "C",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "overtimemarkets.xyz/llms.txt returns the SPA shell (no llms.txt file). docs.over"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "No evidence of Accept: text/markdown content negotiation. Site serves the same J"
+      },
+      "1.3": {
+        "pass": false,
+        "note": "No meta description, no Open Graph tags, no JSON-LD structured data found in the"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "No real text content in HTML. The only static content is You need to enable Jav"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "No semantic HTML tags (nav, main, article, header, footer) found. The page is a "
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Sitemap reveals readable URL slugs: /markets, /liquidity-pool, /promotions, /ref"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid sitemap.xml at overtimemarkets.xyz/sitemap.xml with 99 URLs covering marke"
+      },
+      "2.5": {
+        "pass": false,
+        "note": "The /this-does-not-exist-xyz123 path returns the same SPA shell with You need t"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "Comprehensive developer docs at docs.overtime.io (redirected from docs.overtimem"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "docs.overtimemarkets.xyz redirects cleanly to docs.overtime.io. The docs subdoma"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "Well-documented programmatic surface: REST API at api.overtime.io (requires API "
+      },
+      "3.4": {
+        "pass": false,
+        "note": "The main site has zero standard <a href> navigation links in the static HTML. Al"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt at overtimemarkets.xyz has User-agent: * with empty Disallow (all all"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA elements detected on any tested pages."
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No explicit bot policy, AI agent documentation, or terms addressing automated ac"
+      }
+    }
+  },
+  "Polymarket": {
+    "score": 13,
+    "grade": "A",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "docs.polymarket.com/llms.txt returns markdown starting with # Polymarket Documen"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Homepage returns HTML regardless of Accept header, no markdown negotiation"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "meta description + Organization and WebApplication JSON-LD present"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "SSR homepage has real market names, prices, nav labels without JS"
+      },
+      "2.2": {
+        "pass": true,
+        "note": "nav, main, header, footer, section, article, aside all present"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "URLs use /event/descriptive-slug format e.g. /event/2026-fifa-world-cup-winner-5"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Sitemap index at /sitemaps/sitemap-index.xml with base, categories, events XMLs"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.polymarket.com has full dev docs with quickstart, API ref, SDKs"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Footer contains Docs link; APIs link also in footer nav"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST API endpoints, Python/TS/Rust SDKs with pip/npm/cargo install commands"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Homepage nav and footer use standard a href links, not JS-only routing"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt allows all bots (User-agent: *), no blocks on AI crawlers"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA or Cloudflare challenge on public pages"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy, agent quickstart, MCP docs, or dedicated agent section found"
+      }
+    }
+  },
+  "predict.fun": {
+    "score": 9,
+    "grade": "C",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "docs.predict.fun/llms.txt exists, starts with # predict.fun, lists all doc pag"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Cannot test Accept: text/markdown header — site is Cloudflare-blocked (403) for "
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Has <meta name=\"description\"> with content: Bet on future outcomes (and earn re"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Cloudflare blocks non-browser agents with 403. Next.js app behind CF — even if C"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Only 2 semantic tags found: <nav> (1) and <main> (1). No <header>, <footer>, <se"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Market URLs are readable slugs: /market/btc-usd-up-down-2026-03-31-08-45-15-minu"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid XML sitemap at /sitemap.xml with <urlset> containing URLs with priority va"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404 with a custom error page: 404 — Uh"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "Comprehensive docs at docs.predict.fun (GitBook — user guides, how-to, knowledge"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Homepage footer has direct links to Docs (docs.predict.fun) and Developers ("
+      },
+      "3.3": {
+        "pass": true,
+        "note": "Full REST API documented at dev.predict.fun: Authorization (JWT), Markets (GET l"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Extensive <a href> links throughout: nav links (Markets, Points, Invite), market"
+      },
+      "4.1": {
+        "pass": false,
+        "note": "No robots.txt found — /robots.txt renders as the apps 404 page. Without a robot"
+      },
+      "4.2": {
+        "pass": false,
+        "note": "Cloudflare challenge/WAF blocks all non-browser HTTP requests with 403. While no"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No explicit bot policy or robots.txt. However, dev docs FAQ mentions Context7 MC"
+      }
+    }
+  },
+  "Probable": {
+    "score": 6,
+    "grade": "D",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "probable.markets/llms.txt returns 403 (blocked). docs.probable.markets/llms.txt "
+      },
+      "1.2": {
+        "pass": true,
+        "note": "docs.probable.markets returns Content-Type: text/markdown; charset=utf-8 when Ac"
+      },
+      "1.3": {
+        "pass": false,
+        "note": "Main site blocked (403), cannot verify meta tags. Docs site content shows no met"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "docs.probable.markets serves real text content accessible without JavaScript. Ma"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Docs pages use basic HTML (h1, figure, figcaption, ul/li, strong) but lack nav, "
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Docs URLs are clean and readable: /overview/how-it-works, /trade-on-probable/tra"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "docs.probable.markets/sitemap.xml exists with sitemap index pointing to sitemap-"
+      },
+      "2.5": {
+        "pass": false,
+        "note": "probable.markets/this-does-not-exist-xyz123 returns 403 (not a proper 404). Clou"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.probable.markets exists as a GitBook-hosted documentation site with 17 page"
+      },
+      "3.2": {
+        "pass": false,
+        "note": "Main site is entirely blocked (403), so docs are not discoverable from the main "
+      },
+      "3.3": {
+        "pass": false,
+        "note": "No API, SDK, smart contract, subgraph, GraphQL, or any programmatic access docum"
+      },
+      "3.4": {
+        "pass": false,
+        "note": "Docs pages show minimal navigation. Only one external link (Discord) found. No s"
+      },
+      "4.1": {
+        "pass": false,
+        "note": "robots.txt explicitly blocks ClaudeBot, GPTBot, CCBot, Amazonbot, Bytespider, Go"
+      },
+      "4.2": {
+        "pass": false,
+        "note": "Main site returns 403 for all non-browser user agents, effectively acting as a b"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy page, no agent documentation, no terms for automated access. robot"
+      }
+    }
+  },
+  "Rain Protocol": {
+    "score": 10,
+    "grade": "B",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "rain.one/llms.txt returns 404. However rain.one/docs/llms.txt EXISTS and is comp"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns 403 (Cloudflare block). No markdown content negoti"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Rich structured metadata. Meta description: The decentralized prediction market"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Main site returns 403 to non-browser clients (Cloudflare). No real text content "
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Only section tags found (9 instances). Zero nav, main, article, header, footer, "
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Clean readable slugs: /apps, /builders, /liquidity, /builders#program. Docs use "
+      },
+      "2.4": {
+        "pass": false,
+        "note": "rain.one/sitemap.xml returns 403 (Cloudflare block). Not accessible to crawlers."
+      },
+      "2.5": {
+        "pass": true,
+        "note": "Non-existent URL /this-does-not-exist-xyz123 redirects to /404 with dedicated 40"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "Comprehensive docs at rain.one/docs (Mintlify-powered). Sections include: Help C"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Docs reachable via /builders page which links to /docs/For-Developers/Rain-for-A"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "Rain SDK fully documented with sections for trading, liquidity, analytics. AI Ag"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard a href navigation throughout. Main site: /, /apps, /builders, /liquidit"
+      },
+      "4.1": {
+        "pass": false,
+        "note": "robots.txt explicitly blocks all major AI crawlers: ClaudeBot, GPTBot, CCBot, Am"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA encountered during browser navigation. Cloudflare does block non-brow"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "Dedicated AI Agent documentation at /docs/For-Developers/Rain-for-Ai-Agents/. De"
+      }
+    }
+  },
+  "Sapience": {
+    "score": 13,
+    "grade": "A",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "docs.sapience.xyz/llms.txt exists, starts with # Sapience"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns HTML, no markdown negotiation"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "meta description: Forecast the future with next-gen prediction markets"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "Next.js SSR delivers real text content without JS execution"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Only nav and footer found; missing main, article, header (need 3+)"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Clean slugs: /markets, /terminal, /vaults, /skill"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid XML sitemap index at /sitemap.xml referencing sitemap-0.xml"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns HTTP 404"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.sapience.xyz has full Mintlify docs with user + builder guides"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Homepage links directly to docs.sapience.xyz (1 click)"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "GraphQL API at api.sapience.xyz/graphql, @sapience/sdk, auction relayer"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard <a href> links throughout: /markets, /terminal, GitHub, etc."
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt: User-agent: * Allow: / — fully open to all crawlers"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA, Cloudflare challenge, or bot detection found"
+      },
+      "4.3": {
+        "pass": true,
+        "note": "SKILL.md at /SKILL.md, Claude Code agent guide, OpenClaw, Codex docs"
+      }
+    }
+  },
+  "Seer": {
+    "score": 8,
+    "grade": "C",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "seer.pm/llms.txt returns 404. docs.seer.pm does not resolve (ECONNREFUSED). No l"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "No evidence of content negotiation for text/markdown on any endpoint."
+      },
+      "1.3": {
+        "pass": false,
+        "note": "No meta description, og:description, or JSON-LD detected on seer.pm landing page"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "seer.pm landing page has substantial static HTML text content (feature descripti"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "No semantic HTML5 elements (nav, main, article, header, footer) detected in the "
+      },
+      "2.3": {
+        "pass": true,
+        "note": "app.seer.pm uses descriptive question-based slugs for markets, e.g. who-will-wi"
+      },
+      "2.4": {
+        "pass": false,
+        "note": "seer.pm/sitemap.xml returns 404."
+      },
+      "2.5": {
+        "pass": true,
+        "note": "seer.pm/this-does-not-exist-xyz123 returned a proper 404 HTTP status code."
+      },
+      "3.1": {
+        "pass": true,
+        "note": "Documentation exists at seer-3.gitbook.io/seer-documentation covering architectu"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Documentation link is on the seer.pm landing page footer, directly linking to Gi"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "api-gateway repo documents a full REST API for prediction market operations: cre"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Landing page uses standard a href links to app.seer.pm, documentation, blog, Git"
+      },
+      "4.1": {
+        "pass": false,
+        "note": "seer.pm/robots.txt returns 404. No robots.txt found. While absence doesnt block"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA encountered on any page or endpoint."
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy or agent-specific documentation. Seer is NOT listed in Gnosis pred"
+      }
+    }
+  },
+  "SX Bet": {
+    "score": 9,
+    "grade": "C",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": true,
+        "note": "docs.sx.bet/llms.txt exists, starts with # SX Bet Documentation"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "CF blocks non-browser requests; docs.sx.bet returns HTML not markdown"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "meta description present with platform summary"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "CF challenge page only; no real content without JS/browser"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Only nav tag found (1 semantic tag); needs 3+"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "/soccer/la-liga/1X2 — readable sport/league/market-type slugs"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "docs.sx.bet/sitemap.xml valid with API reference URLs"
+      },
+      "2.5": {
+        "pass": false,
+        "note": "Non-existent URL returns 403 CF challenge, not 404"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.sx.bet has full dev docs: API ref, WebSocket, guides"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Footer links to API Documentation and SX Bet Docs"
+      },
+      "3.3": {
+        "pass": true,
+        "note": "REST endpoints, WebSocket API, Python/JS examples documented"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard a href links throughout site and docs"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "docs.sx.bet robots.txt allows all except /cdn-cgi/"
+      },
+      "4.2": {
+        "pass": false,
+        "note": "Cloudflare managed challenge on sx.bet (403 + cf-mitigated)"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "llms.txt exists but no explicit bot/agent policy document"
+      }
+    }
+  },
+  "Trueo": {
+    "score": 9,
+    "grade": "C",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "Both trueo.com/llms.txt and docs.trueo.com/llms.txt return 404."
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Accept: text/markdown returns text/html; charset=utf-8. No markdown content nego"
+      },
+      "1.3": {
+        "pass": false,
+        "note": "No meta description, no og:description, no JSON-LD found. Only viewport/theme-co"
+      },
+      "2.1": {
+        "pass": true,
+        "note": "Next.js SSR streams real text content in HTML via RSC payload. i18n strings and "
+      },
+      "2.2": {
+        "pass": false,
+        "note": "Only nav and footer confirmed in rendered output. Most structure is React compon"
+      },
+      "2.3": {
+        "pass": true,
+        "note": "URLs are human-readable: /en/markets, /en/tyd, /en/vote, /en/portfolio, /en/atte"
+      },
+      "2.4": {
+        "pass": true,
+        "note": "Valid sitemap.xml with 31 URLs, proper XML structure, hreflang for en/zh, lastmo"
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 redirects 307 to /en/this-does-not-exist-xyz123 whic"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.trueo.com exists with protocol documentation covering trading, tokenomics, "
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Docs link (docs.trueo.com) visible in main site footer navigation. One click fro"
+      },
+      "3.3": {
+        "pass": false,
+        "note": "No API docs, SDK references, contract ABIs, or developer integration guides foun"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard anchor (a href) links used for navigation including footer links to /te"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "robots.txt allows all user-agents (User-Agent: * / Allow: /). Only /debug/ disal"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA or bot-blocking mechanisms detected. Uses wallet-based authentication"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy, AI agent documentation, or machine-readable API guidance found."
+      }
+    }
+  },
+  "worm.wtf": {
+    "score": 4,
+    "grade": "D",
+    "reachability": "open",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "worm.wtf/llms.txt returns 404 (Next.js error page). docs.worm.wtf/llms.txt exist"
+      },
+      "1.2": {
+        "pass": false,
+        "note": "No markdown negotiation. Homepage returns Next.js HTML regardless of Accept head"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Rich structured metadata: meta description, Open Graph tags, Twitter Card, JSON-"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Page is heavily JS-dependent (Next.js). Without hydration, only meta description"
+      },
+      "2.2": {
+        "pass": false,
+        "note": "No semantic HTML tags found (no header, nav, main, section, article, footer, asi"
+      },
+      "2.3": {
+        "pass": false,
+        "note": "Market URLs appear to use numeric IDs (e.g., /market/7055) or long Solana condit"
+      },
+      "2.4": {
+        "pass": false,
+        "note": "sitemap.xml returns a Next.js HTML error page (404), not valid XML. No functiona"
+      },
+      "2.5": {
+        "pass": false,
+        "note": "Soft 404: /this-does-not-exist-xyz123 returns HTTP 200 with Next.js error fallba"
+      },
+      "3.1": {
+        "pass": true,
+        "note": "docs.worm.wtf exists (Mintlify-powered) with articles on prediction markets, lev"
+      },
+      "3.2": {
+        "pass": false,
+        "note": "No visible link to docs.worm.wtf from the main homepage HTML. The docs subdomain"
+      },
+      "3.3": {
+        "pass": false,
+        "note": "No API documentation, OpenAPI spec, or SDK references found. docs.worm.wtf menti"
+      },
+      "3.4": {
+        "pass": false,
+        "note": "Minimal anchor tags in raw HTML. Only social links (Twitter, Telegram) visible w"
+      },
+      "4.1": {
+        "pass": true,
+        "note": "Main site robots.txt allows all crawlers (User-Agent: *) on non-API paths. No AI"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA or challenge pages encountered on any endpoint."
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy, agent documentation, or AI interaction guidelines found anywhere."
+      }
+    }
+  },
+  "XO Market": {
+    "score": 7,
+    "grade": "C",
+    "reachability": "cf-blocked",
+    "checks": {
+      "1.1": {
+        "pass": false,
+        "note": "xo.market/llms.txt returns 404. docs.xo.market/llms.txt fails with ECONNREFUSED "
+      },
+      "1.2": {
+        "pass": false,
+        "note": "Cloudflare blocks all non-browser requests with 403. No opportunity to test Acce"
+      },
+      "1.3": {
+        "pass": true,
+        "note": "Meta description: Open conviction markets for all. Create, trade and share your"
+      },
+      "2.1": {
+        "pass": false,
+        "note": "Next.js SSR app but Cloudflare blocks non-browser fetches (403). Content is only"
+      },
+      "2.2": {
+        "pass": true,
+        "note": "Found nav, footer, section (3 semantic tags). Missing main, article, header."
+      },
+      "2.3": {
+        "pass": true,
+        "note": "Clean readable slugs: /docs, /privacy-policy, /terms-of-service, /blog (external"
+      },
+      "2.4": {
+        "pass": false,
+        "note": "sitemap.xml returns 404."
+      },
+      "2.5": {
+        "pass": true,
+        "note": "/this-does-not-exist-xyz123 returns 404 This page could not be found. with cor"
+      },
+      "3.1": {
+        "pass": false,
+        "note": "/docs page exists but only contains placeholder content: FAQ link, XO Market Li"
+      },
+      "3.2": {
+        "pass": true,
+        "note": "Docs link in top navigation bar, reachable in 1 click from homepage."
+      },
+      "3.3": {
+        "pass": false,
+        "note": "No REST API documentation, no SDKs (Python, TypeScript, C++), no programmatic su"
+      },
+      "3.4": {
+        "pass": true,
+        "note": "Standard <a href> links throughout: Home (/), Blog (medium.com/@xomarket), Docs "
+      },
+      "4.1": {
+        "pass": false,
+        "note": "No robots.txt (returns 404). No explicit AI crawler policy. Cloudflare blocks no"
+      },
+      "4.2": {
+        "pass": true,
+        "note": "No CAPTCHA elements found on pages. However, Cloudflare firewall blocks non-brow"
+      },
+      "4.3": {
+        "pass": false,
+        "note": "No bot policy, no agent-specific documentation, no terms addressing automated ac"
+      }
+    }
+  }
+}

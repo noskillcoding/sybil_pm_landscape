@@ -1,0 +1,2591 @@
+{
+  "current": {
+    "Limitless": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "C"
+      },
+      "_tools": [
+        {
+          "tool": "limitless-cli",
+          "type": "CLI",
+          "version": "0.1.0",
+          "grade": "C",
+          "chain": "Base",
+          "currency": "USDC",
+          "auth": "browser",
+          "outputQuality": "json",
+          "installCmd": "Download from GitHub releases",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "name": "Install + version",
+                  "result": "PASS",
+                  "output": "limitless 0.1.0"
+                },
+                "S2": {
+                  "name": "Help / commands",
+                  "result": "PASS",
+                  "output": "10 commands listed, -o json flag, --api-key and --private-key global options"
+                },
+                "S3": {
+                  "name": "Auth",
+                  "result": "BLOCKED",
+                  "output": "CLI requires API key for all auth commands. Private key alone insufficient. HMAC tokens from UI incompatible."
+                },
+                "S4": {
+                  "name": "Balance",
+                  "result": "BLOCKED",
+                  "output": "Requires auth. portfolio commands return \"No API key found.\""
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "name": "List markets",
+                  "result": "PASS",
+                  "output": "20 markets/page, 29-key schema. All USDC on Base."
+                },
+                "D2": {
+                  "name": "Market detail",
+                  "result": "PASS",
+                  "output": "Full market data via slug. Prices, tokens, venue, conditionId."
+                },
+                "D3": {
+                  "name": "Orderbook quality",
+                  "result": "PASS",
+                  "output": "Full depth: bid/ask, spread, midpoint, last-trade, history, live monitor."
+                },
+                "D4": {
+                  "name": "Search",
+                  "result": "PASS",
+                  "output": "Search works without auth. Grouped markets with sub-markets."
+                },
+                "D5": {
+                  "name": "Schema consistency",
+                  "result": "PASS",
+                  "output": "3 markets with identical 29-key schema (ETH, Oil, DOGE)."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "name": "Preview / dry-run",
+                  "result": "BLOCKED",
+                  "notes": "Auth required. No --dry-run flag exists."
+                },
+                "T2": {
+                  "name": "Limit order + verify",
+                  "result": "BLOCKED",
+                  "notes": "Auth required."
+                },
+                "T3": {
+                  "name": "Cancel + verify",
+                  "result": "BLOCKED",
+                  "notes": "Auth required."
+                },
+                "T4": {
+                  "name": "Market buy + position",
+                  "result": "BLOCKED",
+                  "notes": "Auth required."
+                },
+                "T5": {
+                  "name": "Sell + balance delta",
+                  "result": "BLOCKED",
+                  "notes": "Auth required."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "name": "Insufficient balance",
+                  "result": "BLOCKED",
+                  "notes": "Auth required."
+                },
+                "E2": {
+                  "name": "Invalid inputs",
+                  "result": "PASS",
+                  "output": "3/3 parseable errors with hints: missing --side, invalid slug format, bad price range."
+                },
+                "E3": {
+                  "name": "Resolved market",
+                  "result": "PASS",
+                  "output": "Resolved market returns 404 \"Market not found\". Clear error."
+                },
+                "E4": {
+                  "name": "Error recovery",
+                  "result": "PASS",
+                  "output": "CLI recovers cleanly after errors. Stateless per invocation."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Discovery is excellent: 29-key market schema, full orderbook depth, search, categories, live monitoring",
+            "Auth remains the critical blocker: CLI requires API key but no programmatic way to generate one",
+            "Trading command structure is complete (GTC limits, FOK market orders) but inaccessible without auth"
+          ],
+          "blockers": [
+            "CLI requires API key that can only be generated via interactive setup wizard or web UI (HMAC tokens incompatible)",
+            "Private key alone is insufficient — API key check fires before signing"
+          ]
+        },
+        {
+          "tool": "@iqai/mcp-limitless",
+          "type": "MCP",
+          "version": "0.0.5",
+          "grade": "C",
+          "chain": "Base",
+          "currency": "USDC",
+          "auth": "wallet_sign",
+          "outputQuality": "text",
+          "installCmd": "npx @iqai/mcp-limitless",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "name": "Install + initialize",
+                  "result": "PASS",
+                  "output": "MCP server starts, responds to initialize."
+                },
+                "S2": {
+                  "name": "List tools",
+                  "result": "PASS",
+                  "output": "30 tools: 5 auth, 13 markets, 8 portfolio, 4 trading."
+                },
+                "S3": {
+                  "name": "Auth",
+                  "result": "PASS",
+                  "output": "GET_SIGNING_MESSAGE → sign with viem → LOGIN. Session authenticated."
+                },
+                "S4": {
+                  "name": "Balance",
+                  "result": "PASS",
+                  "output": "GET_PORTFOLIO_SUMMARY returns positions and balance data."
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "name": "List markets",
+                  "result": "PASS",
+                  "output": "967 active markets via GET_MARKETS."
+                },
+                "D2": {
+                  "name": "Market detail",
+                  "result": "PASS",
+                  "output": "GET_MARKET returns detailed data with outcomes, prices, volume."
+                },
+                "D3": {
+                  "name": "Orderbook quality",
+                  "result": "PASS",
+                  "output": "Bid/ask/midpoint/spread available."
+                },
+                "D4": {
+                  "name": "Search",
+                  "result": "PASS",
+                  "output": "SEARCH_MARKETS with semantic search works."
+                },
+                "D5": {
+                  "name": "Schema consistency",
+                  "result": "PASS",
+                  "output": "Consistent response structure across markets."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "name": "Preview / dry-run",
+                  "result": "FAIL",
+                  "notes": "No preview tool. CREATE_ORDER goes straight to execution."
+                },
+                "T2": {
+                  "name": "Limit order + verify",
+                  "result": "BLOCKED",
+                  "notes": "CREATE_ORDER requires pre-signed EIP-712 typed data. No trading abstraction."
+                },
+                "T3": {
+                  "name": "Cancel + verify",
+                  "result": "BLOCKED",
+                  "notes": "Depends on T2."
+                },
+                "T4": {
+                  "name": "Market buy + position",
+                  "result": "BLOCKED",
+                  "notes": "Same EIP-712 blocker."
+                },
+                "T5": {
+                  "name": "Sell + balance delta",
+                  "result": "BLOCKED",
+                  "notes": "Same EIP-712 blocker."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "name": "Insufficient balance",
+                  "result": "BLOCKED",
+                  "notes": "Cannot place orders to test."
+                },
+                "E2": {
+                  "name": "Invalid inputs",
+                  "result": "PASS",
+                  "output": "Structured field-level validation errors returned."
+                },
+                "E3": {
+                  "name": "Resolved market",
+                  "result": "FAIL",
+                  "output": "Resolved markets return 404 indistinguishable from \"never existed\"."
+                },
+                "E4": {
+                  "name": "Error recovery",
+                  "result": "PASS",
+                  "output": "Server recovers after errors. No session corruption."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Auth works (wallet sign + session) unlike CLI — all 30 tools accessible",
+            "Discovery is comprehensive: 967 markets, semantic search, orderbook data",
+            "Trading blocked: CREATE_ORDER requires pre-signed EIP-712 orders — MCP is a passthrough, not an abstraction",
+            "Side parameter bug: documented as BUY/SELL strings but API expects numeric values"
+          ],
+          "blockers": [
+            "CREATE_ORDER requires client to implement full EIP-712 signing flow externally — no trading abstraction",
+            "MCP server is read-only in practice despite having trading tool definitions"
+          ]
+        }
+      ]
+    },
+    "Myriad": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "A"
+      },
+      "_tools": [
+        {
+          "tool": "@myriadmarkets/cli",
+          "type": "CLI",
+          "version": "0.2.0",
+          "grade": "A",
+          "chain": "BNB Chain",
+          "currency": "USD1/USDT",
+          "auth": "env_var",
+          "outputQuality": "json",
+          "installCmd": "npx @myriadmarkets/cli",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "id": "S1",
+                  "name": "Install + version",
+                  "status": "PASS",
+                  "evidence": "v0.2.0 returned immediately"
+                },
+                "S2": {
+                  "id": "S2",
+                  "name": "Help / commands",
+                  "status": "PASS",
+                  "evidence": "9 commands listed, --json global flag"
+                },
+                "S3": {
+                  "id": "S3",
+                  "name": "Auth",
+                  "status": "PASS",
+                  "evidence": "MYRIAD_PRIVATE_KEY env var. Zero interactive steps."
+                },
+                "S4": {
+                  "id": "S4",
+                  "name": "Balance",
+                  "status": "PASS",
+                  "evidence": "BNB + USDT + USD1 in structured JSON"
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "id": "D1",
+                  "name": "List markets",
+                  "status": "PASS",
+                  "evidence": "1 active OB market returned with ID, title, volume"
+                },
+                "D2": {
+                  "id": "D2",
+                  "name": "Market detail",
+                  "status": "PASS",
+                  "evidence": "Full detail: outcomes, prices, fees, liquidity, volume"
+                },
+                "D3": {
+                  "id": "D3",
+                  "name": "Orderbook quality",
+                  "status": "FAIL",
+                  "evidence": "18 bid levels (monotonic), but only 1 ask level. Needs 5+ per side. Market liquidity issue."
+                },
+                "D4": {
+                  "id": "D4",
+                  "name": "Search",
+                  "status": "PASS",
+                  "evidence": "--keyword \"bitcoin\" returns 4 markets in same JSON format"
+                },
+                "D5": {
+                  "id": "D5",
+                  "name": "Schema consistency",
+                  "status": "PASS",
+                  "evidence": "3 markets with identical 39-key schema"
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "id": "T1",
+                  "name": "Preview / dry-run",
+                  "status": "PASS",
+                  "evidence": "Dry-run shows 1.0101 shares, $1.00 estimated value, price levels consumed"
+                },
+                "T2": {
+                  "id": "T2",
+                  "name": "Limit order + verify",
+                  "status": "PASS",
+                  "evidence": "Limit buy at $0.05 placed, status=open confirmed"
+                },
+                "T3": {
+                  "id": "T3",
+                  "name": "Cancel + verify",
+                  "status": "PASS",
+                  "evidence": "Cancel succeeded on first attempt. Status=cancelled confirmed."
+                },
+                "T4": {
+                  "id": "T4",
+                  "name": "Market buy + position",
+                  "status": "PASS",
+                  "evidence": "Filled 1.0101 shares at $0.99. Position verified."
+                },
+                "T5": {
+                  "id": "T5",
+                  "name": "Sell + balance delta",
+                  "status": "PASS",
+                  "evidence": "Sold 1.01 shares at $0.98. Net loss $0.01 (1.06%), within 5%."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "id": "E1",
+                  "name": "Insufficient balance",
+                  "status": "FAIL",
+                  "evidence": "$300 order on $1.56 balance silently cancelled. No structured error. Agent cannot distinguish balance failure from other cancellations."
+                },
+                "E2": {
+                  "id": "E2",
+                  "name": "Invalid inputs",
+                  "status": "PASS",
+                  "evidence": "3/3 parseable JSON errors: value must be >0, shares must be positive, price must be positive"
+                },
+                "E3": {
+                  "id": "E3",
+                  "name": "Resolved market",
+                  "status": "PASS",
+                  "evidence": "\"Market is not open for trading\" (400). Clear error."
+                },
+                "E4": {
+                  "id": "E4",
+                  "name": "Error recovery",
+                  "status": "PASS",
+                  "evidence": "Nonexistent market returns 404. Immediate balance query succeeds."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Order cancel works reliably on first attempt",
+            "Insufficient balance orders silently accepted then cancelled — no error message",
+            "Only 1 ask level in orderbook (market liquidity, not tool issue)",
+            "Full trading lifecycle works: preview, limit, cancel, buy, sell all pass",
+            "Detailed fee info: maker/taker BPS arrays per price level in market data"
+          ],
+          "blockers": [
+            "No pre-flight balance check — oversized orders silently cancelled with no structured error"
+          ]
+        }
+      ]
+    },
+    "Polymarket": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "B"
+      },
+      "_tools": [
+        {
+          "tool": "polymarket-cli",
+          "type": "CLI",
+          "version": "0.1.5",
+          "grade": "B",
+          "chain": "Polygon",
+          "currency": "USDCe",
+          "auth": "env_var",
+          "outputQuality": "json",
+          "installCmd": "Download binary from GitHub releases",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "id": "S1",
+                  "name": "Install + version",
+                  "status": "PASS",
+                  "evidence": "polymarket 0.1.5"
+                },
+                "S2": {
+                  "id": "S2",
+                  "name": "Help / commands",
+                  "status": "PASS",
+                  "evidence": "18 top-level commands, 42 CLOB subcommands, -o json global flag"
+                },
+                "S3": {
+                  "id": "S3",
+                  "name": "Auth",
+                  "status": "PASS",
+                  "evidence": "Private key via env var/flag. Shows EOA + proxy addresses."
+                },
+                "S4": {
+                  "id": "S4",
+                  "name": "Balance",
+                  "status": "PASS",
+                  "evidence": "Structured JSON with per-contract allowances and balance. Requires --signature-type eoa."
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "id": "D1",
+                  "name": "List markets",
+                  "status": "PASS",
+                  "evidence": "156-field market objects. Supports --limit, --offset, --closed."
+                },
+                "D2": {
+                  "id": "D2",
+                  "name": "Market detail",
+                  "status": "PASS",
+                  "evidence": "Full market with nested events, clobRewards, resolution details. Slug as identifier."
+                },
+                "D3": {
+                  "id": "D3",
+                  "name": "Orderbook quality",
+                  "status": "PASS",
+                  "evidence": "47 bids (0.01-0.51), 30 asks (0.53-0.99). Tick size, min order, last trade price."
+                },
+                "D4": {
+                  "id": "D4",
+                  "name": "Search",
+                  "status": "FAIL",
+                  "evidence": "No search command. Only tag-based filtering via events list --tag."
+                },
+                "D5": {
+                  "id": "D5",
+                  "name": "Schema consistency",
+                  "status": "PASS",
+                  "evidence": "156 common keys across 5 markets, perfectly consistent."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "id": "T1",
+                  "name": "Preview / dry-run",
+                  "status": "FAIL",
+                  "evidence": "No --dry-run, --preview, or --simulate on any order command."
+                },
+                "T2": {
+                  "id": "T2",
+                  "name": "Limit order + verify",
+                  "status": "PASS",
+                  "evidence": "GTC limit at $0.01 placed, status=LIVE confirmed via clob orders."
+                },
+                "T3": {
+                  "id": "T3",
+                  "name": "Cancel + verify",
+                  "status": "PASS",
+                  "evidence": "Cancel succeeded. Verified: 0 open orders remaining."
+                },
+                "T4": {
+                  "id": "T4",
+                  "name": "Market buy + position",
+                  "status": "PASS",
+                  "evidence": "Spent $1, received 1.89 shares at ~$0.53. Position confirmed via data positions."
+                },
+                "T5": {
+                  "id": "T5",
+                  "name": "Sell + balance delta",
+                  "status": "PASS",
+                  "evidence": "Sold 1.89 shares. Net loss $0.036 (0.85%). Position fully closed."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "id": "E1",
+                  "name": "Insufficient balance",
+                  "status": "PASS",
+                  "evidence": "JSON error: \"not enough balance / allowance\" with amounts."
+                },
+                "E2": {
+                  "id": "E2",
+                  "name": "Invalid inputs",
+                  "status": "FAIL",
+                  "evidence": "size=0 returns JSON. Negatives (-1) break JSON output — arg parser treats as flags."
+                },
+                "E3": {
+                  "id": "E3",
+                  "name": "Resolved market",
+                  "status": "PASS",
+                  "evidence": "Server rejects with JSON error (indirect: \"fee rate not found\")."
+                },
+                "E4": {
+                  "id": "E4",
+                  "name": "Error recovery",
+                  "status": "PASS",
+                  "evidence": "404 on nonexistent slug, then valid query succeeds. Stateless."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Most feature-rich PM CLI: 42 CLOB subcommands covering trading, rewards, notifications, batch ops",
+            "156-field market schema perfectly consistent — excellent for programmatic parsing",
+            "Full trading lifecycle works in EOA mode: limit, cancel, market buy, sell all succeed first attempt",
+            "Proxy mode (default) traps funds: must use --signature-type eoa for direct wallet trading"
+          ],
+          "blockers": [
+            "Geoblocked in 33 countries including US, UK, France, Germany, Australia, Singapore, Italy, Russia, and others — agents in restricted regions require VPN",
+            "Proxy mode (default) requires external tooling to fund proxy wallet. Must set --signature-type eoa.",
+            "No keyword search — only tag-based filtering",
+            "No order preview/simulation"
+          ]
+        }
+      ],
+      "skill": {
+        "status": "tested",
+        "grade": "B"
+      },
+      "_skillTools": [
+        {
+          "skill": "Polymarket Agent Skills (SKILL.md)",
+          "skillFormat": "pure-docs",
+          "grade": "B",
+          "chain": "Polygon",
+          "currency": "USDCe",
+          "vpnRequired": true,
+          "methodUsed": "Python SDK (py-clob-client v0.34.6) with SOCKS5 proxy",
+          "milestones": {
+            "M1": {
+              "status": "PASS",
+              "name": "Understand skill",
+              "summary": "Comprehensive: L1/L2 auth, orders, market data, WS, CTF, bridge, gasless. Two SDKs (Python + TS)."
+            },
+            "M2": {
+              "status": "PASS",
+              "name": "Authenticate",
+              "summary": "EIP-712 L1 → HMAC L2 auth flow. Balance: 4.22 USDCe confirmed."
+            },
+            "M3": {
+              "status": "PASS",
+              "name": "List markets",
+              "summary": "10+ active markets via Gamma API. order=volume_24hr sort param is broken."
+            },
+            "M4": {
+              "status": "PASS",
+              "name": "Market detail",
+              "summary": "Full orderbook: mid=$0.49, spread=0.001. /book shows complement tokens vs /price shows derived."
+            },
+            "M5": {
+              "status": "PASS",
+              "name": "Buy order",
+              "summary": "5 YES shares at $0.489, matched immediately. 3 SDK API mismatches fixed during coding."
+            },
+            "M6": {
+              "status": "PASS",
+              "name": "Verify position",
+              "summary": "5 shares confirmed via conditional token balance check."
+            },
+            "M7": {
+              "status": "PASS",
+              "name": "Sell position",
+              "summary": "Sold at $0.488. First attempt rested (needed one tick below bid to match)."
+            },
+            "M8": {
+              "status": "PASS",
+              "name": "Balance delta",
+              "summary": "4.2217 → 4.2167. Delta: -$0.005 (spread on 5 shares)."
+            }
+          },
+          "keyFindings": [
+            "Pure-docs format works — agent wrote its own Python code from skill patterns",
+            "3-4 SDK naming mismatches (api_secret vs secret, PartialCreateOrderOptions vs dict)",
+            "Gamma API sort param (order=volume_24hr) documented but broken",
+            "Raw CLOB orderbook shows complement tokens — not explained in skill",
+            "Sell at reported best bid actually rests — need one tick below to cross spread"
+          ],
+          "blockers": [
+            "Geoblocked in 33 countries including US, UK, France, Germany, Australia, Singapore — agents in these regions cannot use the skill without VPN, which is the primary reason for grade B despite 8/8 milestones passing"
+          ]
+        }
+      ],
+      "framework": {
+        "status": "tested",
+        "grade": "Experimental"
+      },
+      "_frameworkTools": [
+        {
+          "name": "Polymarket Agents",
+          "grade": "Experimental",
+          "githubUrl": "https://github.com/Polymarket/agents",
+          "categories": {
+            "type": "Reference architecture for autonomous PM trading bots. Fork-and-modify starter kit, not a pip-installable library. Ships with execution disabled (commented out with TOS warning).",
+            "architecture": "Four layers: (1) Data — ChromaDB RAG + NewsAPI + Tavily web search, (2) Market interface — Gamma API for metadata + py-clob-client for CLOB orders, (3) Decision engine — LLM superforecaster with scenario decomposition + trade recommender, (4) Execution — Web3 on-chain orders on Polygon. Flow: fetch markets → vectorize → RAG filter → LLM probability estimate → pick best trade → build order.",
+            "stack": "Python 3.9+. LangChain 0.2 + OpenAI GPT-4 (reasoning + embeddings) + ChromaDB (local vector DB) + py-clob-client (Polymarket CLOB) + Web3 (Polygon). 145 pinned dependencies. Requires OpenAI, Tavily, and NewsAPI keys.",
+            "platforms": "Polymarket only (Polygon chain, USDCe)",
+            "setup": "Clone repo → virtualenv → pip install → configure .env with 4 API keys + funded Polygon wallet → uncomment execution line → run. Docker option available. No tests, no CI."
+          },
+          "keyFindings": [
+            "Well-crafted superforecaster prompts using scenario decomposition and base rates",
+            "Execution line commented out by default (\"refer to TOS\") — must manually enable",
+            "Zero safety guardrails: no position limits, no stop-losses, infinite recursive retry on errors",
+            "Last substantive commit October 2024 — effectively abandoned",
+            "The \"test suite\" contains only Python tutorial examples (test_upper, test_isupper) — zero project tests",
+            "2.7K GitHub stars but 47 open issues with no maintainer responses"
+          ]
+        }
+      ]
+    },
+    "Manifold": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "A"
+      },
+      "_tools": [
+        {
+          "tool": "manifold-mcp-server",
+          "type": "MCP",
+          "version": "0.1.0",
+          "grade": "A",
+          "chain": "None (play money)",
+          "currency": "Mana",
+          "auth": "api_key",
+          "outputQuality": "json",
+          "installCmd": "npx manifold-mcp-server",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "id": "S1",
+                  "name": "Initialize MCP",
+                  "status": "PASS",
+                  "evidence": "Server responds to initialize"
+                },
+                "S2": {
+                  "id": "S2",
+                  "name": "List tools",
+                  "status": "PASS",
+                  "evidence": "9 tools: search, get_market, get_user, place_bet, cancel_bet, sell_shares, add_liquidity, get_positions, send_mana"
+                },
+                "S3": {
+                  "id": "S3",
+                  "name": "Auth",
+                  "status": "PASS",
+                  "evidence": "API key auth works. Subsequent calls authenticated."
+                },
+                "S4": {
+                  "id": "S4",
+                  "name": "Balance",
+                  "status": "PASS",
+                  "evidence": "Balance returned via get_user: 1100 Mana"
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "id": "D1",
+                  "name": "List markets",
+                  "status": "PASS",
+                  "evidence": "search_markets returns structured results"
+                },
+                "D2": {
+                  "id": "D2",
+                  "name": "Market detail",
+                  "status": "PASS",
+                  "evidence": "get_market returns full detail with outcomes, probability, volume"
+                },
+                "D3": {
+                  "id": "D3",
+                  "name": "Data quality",
+                  "status": "PASS",
+                  "evidence": "AMM pool state, CPMM-1 mechanism, consistent data"
+                },
+                "D4": {
+                  "id": "D4",
+                  "name": "Search",
+                  "status": "PASS",
+                  "evidence": "search_markets with keyword returns relevant results"
+                },
+                "D5": {
+                  "id": "D5",
+                  "name": "Schema consistency",
+                  "status": "PASS",
+                  "evidence": "Consistent response structure across markets"
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "id": "T1",
+                  "name": "Preview / cost estimate",
+                  "status": "FAIL",
+                  "evidence": "No preview tool. Must calculate from CPMM pool state."
+                },
+                "T2": {
+                  "id": "T2",
+                  "name": "Place bet",
+                  "status": "PASS",
+                  "evidence": "10 Mana bet placed, 49.53 shares received"
+                },
+                "T3": {
+                  "id": "T3",
+                  "name": "Check position",
+                  "status": "PASS",
+                  "evidence": "Position visible via get_positions"
+                },
+                "T4": {
+                  "id": "T4",
+                  "name": "Sell position",
+                  "status": "PASS",
+                  "evidence": "sell_shares works. Position closed."
+                },
+                "T5": {
+                  "id": "T5",
+                  "name": "Balance roundtrip",
+                  "status": "PASS",
+                  "evidence": "Pre: 1100, Post: 1100. Delta: 0. Zero fees on small bets."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "id": "E1",
+                  "name": "Over balance",
+                  "status": "PASS",
+                  "evidence": "Structured error for insufficient funds"
+                },
+                "E2": {
+                  "id": "E2",
+                  "name": "Invalid inputs",
+                  "status": "PASS",
+                  "evidence": "Validation errors returned"
+                },
+                "E3": {
+                  "id": "E3",
+                  "name": "Nonexistent market",
+                  "status": "PASS",
+                  "evidence": "Clear \"not found\" error"
+                },
+                "E4": {
+                  "id": "E4",
+                  "name": "Recovery",
+                  "status": "PASS",
+                  "evidence": "Server recovers cleanly after errors"
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Full buy/sell cycle with zero fees and negligible slippage on small bets",
+            "9 tools covering search, detail, betting, selling, positions, liquidity, mana transfer",
+            "No cost preview — must calculate from CPMM pool state (deterministic formula)",
+            "sell_shares requires explicit outcome param despite schema listing it as optional",
+            "Supports limit orders via limitProb parameter on place_bet"
+          ],
+          "blockers": [
+            "No cost preview tool — minor gap, agent can compute from pool state"
+          ]
+        }
+      ]
+    },
+    "Alpha Arcade": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "B"
+      },
+      "_tools": [
+        {
+          "tool": "@alpha-arcade/mcp",
+          "type": "MCP",
+          "version": "0.1.0",
+          "grade": "B",
+          "chain": "Algorand",
+          "currency": "USDC",
+          "auth": "mnemonic",
+          "outputQuality": "json",
+          "installCmd": "npx @alpha-arcade/mcp",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "id": "S1",
+                  "name": "Initialize MCP",
+                  "status": "PASS",
+                  "evidence": "alpha-arcade v0.1.0, protocolVersion 2024-11-05"
+                },
+                "S2": {
+                  "id": "S2",
+                  "name": "List tools + guide",
+                  "status": "PASS",
+                  "evidence": "20 tools + agent guide with units, data model, workflows, pitfalls"
+                },
+                "S3": {
+                  "id": "S3",
+                  "name": "Auth",
+                  "status": "PASS",
+                  "evidence": "Mnemonic auth works. get_positions returns data."
+                },
+                "S4": {
+                  "id": "S4",
+                  "name": "Balance",
+                  "status": "FAIL",
+                  "evidence": "No get_balance tool. Cannot check USDC/ALGO before trading."
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "id": "D1",
+                  "name": "List markets",
+                  "status": "PASS",
+                  "evidence": "177 live markets: sports, politics, crypto, real estate"
+                },
+                "D2": {
+                  "id": "D2",
+                  "name": "Market detail",
+                  "status": "PASS",
+                  "evidence": "Full detail: id, title, marketAppId, yesAssetId, fees, source"
+                },
+                "D3": {
+                  "id": "D3",
+                  "name": "Orderbook quality",
+                  "status": "PASS",
+                  "evidence": "Unified YES-perspective view. Sports: 2c spread, ~$150 depth, 5+ orders per side"
+                },
+                "D4": {
+                  "id": "D4",
+                  "name": "Search",
+                  "status": "FAIL",
+                  "evidence": "No search/filter tool. Must fetch all 177 markets and filter client-side."
+                },
+                "D5": {
+                  "id": "D5",
+                  "name": "Schema consistency",
+                  "status": "PASS",
+                  "evidence": "Consistent structure. Multi-choice adds options[] array."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "id": "T1",
+                  "name": "Preview / simulate",
+                  "status": "FAIL",
+                  "evidence": "No simulate/estimate tool. Must calculate from orderbook."
+                },
+                "T2": {
+                  "id": "T2",
+                  "name": "Limit order + verify",
+                  "status": "PASS",
+                  "evidence": "YES BUY at $0.10 placed. Verified via get_open_orders."
+                },
+                "T3": {
+                  "id": "T3",
+                  "name": "Cancel + verify",
+                  "status": "PASS",
+                  "evidence": "Cancel succeeded. Confirmed on-chain."
+                },
+                "T4": {
+                  "id": "T4",
+                  "name": "Market buy + position",
+                  "status": "PASS",
+                  "evidence": "Bought 1 YES share at $0.41. Fully matched."
+                },
+                "T5": {
+                  "id": "T5",
+                  "name": "Sell + balance delta",
+                  "status": "PASS",
+                  "evidence": "Sold at $0.40. Net cost ~$0.07 (spread + fees)."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "id": "E1",
+                  "name": "Insufficient balance",
+                  "status": "PASS",
+                  "evidence": "isError:true with underflow message and amounts"
+                },
+                "E2": {
+                  "id": "E2",
+                  "name": "Invalid inputs",
+                  "status": "PASS",
+                  "evidence": "Zod validation: field-level errors, MCP error -32602"
+                },
+                "E3": {
+                  "id": "E3",
+                  "name": "Nonexistent market",
+                  "status": "PASS",
+                  "evidence": "Market \"9999999999\" not found. Clean, parseable."
+                },
+                "E4": {
+                  "id": "E4",
+                  "name": "Error recovery",
+                  "status": "PASS",
+                  "evidence": "Server fully recovers after all error scenarios."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "177 live markets with real liquidity across sports, politics, crypto, real estate",
+            "Complete trading workflow: limit, market, cancel, amend, split/merge shares, claim",
+            "4 real-time WebSocket streaming tools for orderbook and wallet monitoring",
+            "Agent guide (get_agent_guide) provides thorough documentation for autonomous use",
+            "No balance check tool — agent risks underflow errors on-chain"
+          ],
+          "blockers": [
+            "No get_balance tool — cannot verify USDC/ALGO before trading",
+            "No search/filter — must fetch all markets and filter client-side"
+          ]
+        }
+      ]
+    },
+    "Context Markets": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "B"
+      },
+      "_tools": [
+        {
+          "tool": "context-markets-cli",
+          "type": "CLI",
+          "version": "0.4.3",
+          "grade": "B",
+          "chain": "Base",
+          "currency": "USDC",
+          "auth": "api_key+private_key",
+          "outputQuality": "json",
+          "installCmd": "npx context-markets-cli",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "id": "S1",
+                  "name": "Install + version",
+                  "status": "FAIL",
+                  "evidence": "No --version flag. npm list shows no local install."
+                },
+                "S2": {
+                  "id": "S2",
+                  "name": "Help / commands",
+                  "status": "PASS",
+                  "evidence": "8 command groups: markets, orders, portfolio, account, questions, guides, ecosystem, shell"
+                },
+                "S3": {
+                  "id": "S3",
+                  "name": "Auth",
+                  "status": "PASS",
+                  "evidence": "API key via --api-key flag works. portfolio balance returns data."
+                },
+                "S4": {
+                  "id": "S4",
+                  "name": "Balance",
+                  "status": "PASS",
+                  "evidence": "4 USDC settlement balance. Structured JSON."
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "id": "D1",
+                  "name": "List markets",
+                  "status": "PASS",
+                  "evidence": "Paginated list with --limit, --sort-by, --status, --category, --cursor."
+                },
+                "D2": {
+                  "id": "D2",
+                  "name": "Market detail",
+                  "status": "PASS",
+                  "evidence": "30-field schema with outcomePrices, metadata, resolution info."
+                },
+                "D3": {
+                  "id": "D3",
+                  "name": "Orderbook quality",
+                  "status": "PASS",
+                  "evidence": "YES/NO orderbook with price/size levels. bestBid/bestAsk/spread/midPrice."
+                },
+                "D4": {
+                  "id": "D4",
+                  "name": "Search",
+                  "status": "PASS",
+                  "evidence": "Text search works with --limit and --offset pagination."
+                },
+                "D5": {
+                  "id": "D5",
+                  "name": "Schema consistency",
+                  "status": "PASS",
+                  "evidence": "3 markets with identical 30-key schema."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "id": "T1",
+                  "name": "Preview / simulate",
+                  "status": "PASS",
+                  "evidence": "Two paths: markets simulate (quick USD) and orders simulate (detailed fill analysis)."
+                },
+                "T2": {
+                  "id": "T2",
+                  "name": "Limit order",
+                  "status": "FAIL",
+                  "evidence": "Requires CONTEXT_PRIVATE_KEY. Clean error: \"private key required for trading.\""
+                },
+                "T3": {
+                  "id": "T3",
+                  "name": "Cancel",
+                  "status": "BLOCKED",
+                  "evidence": "Depends on T2. CLI supports cancel, bulk-cancel, cancel-replace."
+                },
+                "T4": {
+                  "id": "T4",
+                  "name": "Market buy",
+                  "status": "FAIL",
+                  "evidence": "Same — private key required. Dedicated orders market subcommand exists."
+                },
+                "T5": {
+                  "id": "T5",
+                  "name": "Sell + balance delta",
+                  "status": "BLOCKED",
+                  "evidence": "Depends on T4."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "id": "E1",
+                  "name": "Insufficient balance",
+                  "status": "PASS",
+                  "evidence": "Graceful: LOW_LIQUIDITY, HIGH_SLIPPAGE, INSUFFICIENT_COLLATERAL warnings."
+                },
+                "E2": {
+                  "id": "E2",
+                  "name": "Invalid inputs",
+                  "status": "PASS",
+                  "evidence": "Structured JSON errors. Private key check fires before input validation."
+                },
+                "E3": {
+                  "id": "E3",
+                  "name": "Nonexistent market",
+                  "status": "PASS",
+                  "evidence": "Clean JSON: {\"error\": \"Market not found\"}"
+                },
+                "E4": {
+                  "id": "E4",
+                  "name": "Error recovery",
+                  "status": "PASS",
+                  "evidence": "Stateless CLI, no corruption after errors."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Well-organized hierarchical CLI with 8 command groups and rich API surface",
+            "Trading requires dual auth: API key + private key. Clean error when private key missing.",
+            "Discovery excellent: list, search, get, orderbook, quotes, two simulate paths",
+            "Trading requires dual auth: API key + private key (CONTEXT_PRIVATE_KEY)",
+            "Bulk operations: bulk-create, bulk-cancel, combined bulk endpoint"
+          ],
+          "blockers": [
+            "No private key configured — blocks all trading. Set CONTEXT_PRIVATE_KEY to unlock.",
+            "No --version flag"
+          ]
+        }
+      ],
+      "skill": {
+        "status": "tested",
+        "grade": "C"
+      },
+      "_skillTools": [
+        {
+          "skill": "contextwtf/context-skills",
+          "skillFormat": "navigation-hub",
+          "grade": "C",
+          "chain": "Base",
+          "currency": "USDC",
+          "vpnRequired": true,
+          "methodUsed": "CLI (npx context-markets-cli) + direct API via proxy",
+          "milestones": {
+            "M1": {
+              "status": "PASS",
+              "name": "Understand skill",
+              "summary": "Well-structured router with 5 subskills, 25 MCP tools, CLI commands, SDK patterns."
+            },
+            "M2": {
+              "status": "PASS",
+              "name": "Authenticate",
+              "summary": "API key + private key via CLI flags. Account isReady=true, 4 USDC balance."
+            },
+            "M3": {
+              "status": "PASS",
+              "name": "List markets",
+              "summary": "50 markets, 4 with active two-sided orderbooks."
+            },
+            "M4": {
+              "status": "PASS",
+              "name": "Market detail",
+              "summary": "Full data with bid/ask/spread/mid prices, resolution criteria."
+            },
+            "M5": {
+              "status": "BLOCKED",
+              "name": "Buy order",
+              "summary": "403 geo-block from all regions tested (TH, JP, KR, EU). Then 409 SettlementV2 migration required."
+            },
+            "M6": {
+              "status": "BLOCKED",
+              "name": "Verify position",
+              "summary": "No position — blocked by M5."
+            },
+            "M7": {
+              "status": "BLOCKED",
+              "name": "Sell position",
+              "summary": "No position — blocked by M5."
+            },
+            "M8": {
+              "status": "BLOCKED",
+              "name": "Balance delta",
+              "summary": "No trades executed — no meaningful delta to compute."
+            }
+          },
+          "keyFindings": [
+            "Skill quality is high — readable, has auth/discovery/trading docs with examples",
+            "Geo-restriction blocks trading from most regions including US, UK, Japan, Korea",
+            "SettlementV2 migration blocks orders even from non-restricted regions",
+            "CLI does not surface actual API error messages (shows generic \"403\" not reason)",
+            "Skill does NOT mention geographic restrictions anywhere"
+          ],
+          "blockers": [
+            "Geographic trading restriction + SettlementV2 migration blocks all trading"
+          ]
+        }
+      ]
+    },
+    "Baozi": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "A"
+      },
+      "_tools": [
+        {
+          "tool": "@baozi.bet/mcp-server",
+          "type": "MCP",
+          "version": "2.0.0",
+          "grade": "A",
+          "chain": "Solana",
+          "currency": "SOL",
+          "auth": "env_var",
+          "outputQuality": "json",
+          "installCmd": "npx @baozi.bet/mcp-server",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "id": "S1",
+                  "name": "Install + initialize",
+                  "status": "PASS",
+                  "evidence": "baozi-mcp v2.0.0, protocol 2024-11-05. 76 tools."
+                },
+                "S2": {
+                  "id": "S2",
+                  "name": "List tools",
+                  "status": "PASS",
+                  "evidence": "76 tools across 7 categories: markets, quotes, transactions, positions, affiliates, intel, arena."
+                },
+                "S3": {
+                  "id": "S3",
+                  "name": "Auth",
+                  "status": "PASS",
+                  "evidence": "get_positions returns wallet data. SOLANA_PRIVATE_KEY env var."
+                },
+                "S4": {
+                  "id": "S4",
+                  "name": "Balance",
+                  "status": "PASS",
+                  "evidence": "SOL balance returned via Solana RPC. Portfolio shows active positions."
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "id": "D1",
+                  "name": "List markets",
+                  "status": "PASS",
+                  "evidence": "86 markets returned. Filter by status and layer."
+                },
+                "D2": {
+                  "id": "D2",
+                  "name": "Market detail",
+                  "status": "PASS",
+                  "evidence": "Full detail: outcomes, pool sizes, implied odds, fees, resolution source."
+                },
+                "D3": {
+                  "id": "D3",
+                  "name": "Pricing quality",
+                  "status": "PASS",
+                  "evidence": "get_quote returns implied odds, decimal odds, fee breakdown, pool shift projection."
+                },
+                "D4": {
+                  "id": "D4",
+                  "name": "Search",
+                  "status": "FAIL",
+                  "evidence": "No keyword search tool. Must list all markets and filter client-side."
+                },
+                "D5": {
+                  "id": "D5",
+                  "name": "Schema consistency",
+                  "status": "PASS",
+                  "evidence": "Consistent 22-field schema across markets."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "id": "T1",
+                  "name": "Preview / quote",
+                  "status": "PASS",
+                  "evidence": "get_quote + validate_bet provide full cost preview with odds and fees before placing."
+                },
+                "T2": {
+                  "id": "T2",
+                  "name": "Place bet",
+                  "status": "PASS",
+                  "evidence": "0.01 SOL bet placed and confirmed on-chain. MCP builds unsigned tx, agent signs externally."
+                },
+                "T3": {
+                  "id": "T3",
+                  "name": "Check position",
+                  "status": "PASS",
+                  "evidence": "get_positions shows active position with market ID, outcome, amount."
+                },
+                "T4": {
+                  "id": "T4",
+                  "name": "Sell position",
+                  "status": "PASS",
+                  "evidence": "Pari-mutuel — no pre-resolution exit by design. No sell tool exists (correct behavior)."
+                },
+                "T5": {
+                  "id": "T5",
+                  "name": "Balance delta",
+                  "status": "PASS",
+                  "evidence": "Pre: 0.121 SOL, Post: 0.110 SOL. Delta: -0.011 (0.01 bet + fees/rent)."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "id": "E1",
+                  "name": "Insufficient balance",
+                  "status": "PASS",
+                  "evidence": "validate_bet returns structured error with balance vs required amount."
+                },
+                "E2": {
+                  "id": "E2",
+                  "name": "Invalid inputs",
+                  "status": "PASS",
+                  "evidence": "3/3 parseable errors: zero amount, negative amount, invalid market ID."
+                },
+                "E3": {
+                  "id": "E3",
+                  "name": "Nonexistent market",
+                  "status": "PASS",
+                  "evidence": "get_market_details returns \"Market not found\" for invalid ID."
+                },
+                "E4": {
+                  "id": "E4",
+                  "name": "Error recovery",
+                  "status": "PASS",
+                  "evidence": "list_markets succeeds after all error scenarios. No state corruption."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "76 tools — most comprehensive MCP server tested. Covers markets, quotes, transactions, positions, intel, arena.",
+            "MCP does NOT sign transactions — returns unsigned tx + signUrl. Agent needs external Solana signing.",
+            "BAOZI_LIVE=1 env var required as safety gate for transaction-building tools",
+            "Excellent pari-mutuel pricing: get_quote provides implied odds, decimal odds, fee breakdown, pool shift projection",
+            "Only 3 of 86 markets currently accepting bets. Most Lab-layer with zero pools.",
+            "Some intel tools cost 0.005 SOL each via x402 payment protocol"
+          ],
+          "blockers": [
+            "No keyword search — must list all markets and filter client-side",
+            "MCP returns unsigned transactions — agent needs external Solana signing infrastructure"
+          ]
+        }
+      ],
+      "skill": {
+        "status": "tested",
+        "grade": "D"
+      },
+      "_skillTools": [
+        {
+          "skill": "baozi-openclaw",
+          "skillFormat": "executable-scripts",
+          "grade": "D",
+          "chain": "Solana",
+          "currency": "SOL",
+          "vpnRequired": false,
+          "methodUsed": "Skill scripts dont exist — fell back to @baozi.bet/mcp-server npm package",
+          "milestones": {
+            "M1": {
+              "status": "PASS",
+              "name": "Understand skill",
+              "summary": "SKILL.md readable, describes 10 scripts (list-markets, place-bet, etc.) with clear auth and parameters."
+            },
+            "M2": {
+              "status": "PASS",
+              "name": "Authenticate",
+              "summary": "SOLANA_PRIVATE_KEY env var works as documented."
+            },
+            "M3": {
+              "status": "FAIL",
+              "name": "List markets",
+              "summary": "scripts/list-markets returns 404. All 10 scripts described in SKILL.md do not exist in the repository."
+            },
+            "M4": {
+              "status": "FAIL",
+              "name": "Market detail",
+              "summary": "scripts/get-odds returns 404. No executable scripts available."
+            },
+            "M5": {
+              "status": "FAIL",
+              "name": "Buy order",
+              "summary": "scripts/place-bet returns 404. Cannot trade following skill instructions."
+            },
+            "M6": {
+              "status": "FAIL",
+              "name": "Verify position",
+              "summary": "scripts/get-portfolio returns 404."
+            },
+            "M7": {
+              "status": "FAIL",
+              "name": "Sell position",
+              "summary": "No sell script described. Pari-mutuel has no pre-resolution exit."
+            },
+            "M8": {
+              "status": "FAIL",
+              "name": "Balance delta",
+              "summary": "No trades possible via skill instructions."
+            }
+          },
+          "keyFindings": [
+            "SKILL.md describes 10 executable scripts that DO NOT EXIST — all return 404",
+            "scripts/ directory contains .gitkeep and unrelated tools (agent-arena, calls-tracker, etc.)",
+            "The skill is vaporware — well-written documentation for scripts that were never built",
+            "Baozi API backend also broken (401 Invalid API key on all endpoints)",
+            "Real working tooling exists separately as @baozi.bet/mcp-server (76 tools) but skill doesnt reference it",
+            "Only 3 of 15 on-chain markets still accept bets, all with minimal liquidity (<0.1 SOL pools)"
+          ],
+          "blockers": [
+            "All 10 scripts described in SKILL.md are fictional — none exist in the repository",
+            "Baozi API returns 401 (expired internal RPC key)",
+            "An agent following the skill literally cannot complete any milestone beyond reading the document"
+          ]
+        }
+      ],
+      "framework": {
+        "status": "tested",
+        "grade": "N/A"
+      },
+      "_frameworkTools": [
+        {
+          "name": "Agent Arena + AgentBook",
+          "grade": "N/A",
+          "docsUrl": "https://baozi.bet/arena",
+          "categories": {
+            "type": "Not a framework — a competitive leaderboard + social feed layered on the Baozi prediction market. Agent Arena scores agents on accuracy, ROI, and volume. AgentBook is a Twitter-like posting board for AI agents. Delegated mandates (agent-managed portfolios) advertised but unimplemented.",
+            "architecture": "Platform feature, not a buildable framework. Arena: weekly scoring/ranking overlay. AgentBook: REST API for posting (POST /api/agentbook/posts with wallet address). No SDK, no agent lifecycle management, no decision engine. The real agent tooling is the MCP server (tested separately).",
+            "stack": "Solana on-chain program (Anchor IDL). AgentBook API + .well-known/agents.json (AgentSpec v1.0.0). MCP server (@baozi.bet/mcp-server) is the actual integration layer.",
+            "platforms": "Baozi only (Solana, SOL). Platform has near-zero activity since March 2026.",
+            "setup": "No setup needed — Arena and AgentBook are web features. To post to AgentBook: create CreatorProfile on-chain, then POST to API. Paper trading advertised but no working implementation found."
+          },
+          "keyFindings": [
+            "Agent Arena is a scoring/ranking layer, not an agent-building framework",
+            "AgentBook had 28 total posts from 4 agents, last activity February 19, 2026",
+            "Delegated mandates page is empty — feature appears unimplemented",
+            "Paper trading mentioned in marketing but no API endpoints or documentation exist",
+            ".well-known/agents.json follows AgentSpec v1.0.0 standard — good discovery mechanism",
+            "Real agent tooling is the MCP server (76 tools, tested separately with grade A)"
+          ]
+        }
+      ]
+    },
+    "Sapience": {
+      "skill": {
+        "status": "tested",
+        "grade": "C"
+      },
+      "_skillTools": [
+        {
+          "skill": "SKILL.md (sapience.xyz)",
+          "skillFormat": "sdk-guide",
+          "grade": "C",
+          "chain": "Ethereal/Arbitrum",
+          "currency": "WUSDe",
+          "vpnRequired": false,
+          "methodUsed": "SDK (@sapience/sdk v0.2.0) + GraphQL API + viem",
+          "milestones": {
+            "M1": {
+              "status": "PASS",
+              "name": "Understand skill",
+              "summary": "Comprehensive skill covering GraphQL queries, WS auctions, EIP-712 signing. Describes both forecasting (free, Arbitrum) and trading (WUSDe, Ethereal)."
+            },
+            "M2": {
+              "status": "PASS",
+              "name": "Authenticate",
+              "summary": "GraphQL needs no auth. SDK installed. Wallet loaded from keychain."
+            },
+            "M3": {
+              "status": "PASS",
+              "name": "List markets",
+              "summary": "48 active conditions via GraphQL. Sports, politics, crypto."
+            },
+            "M4": {
+              "status": "PASS",
+              "name": "Market detail",
+              "summary": "Full condition data. BTC market has real open interest. Polymarket price integration works."
+            },
+            "M5": {
+              "status": "FAIL",
+              "name": "Buy order",
+              "summary": "Trading impossible: skill describes SDK v0.4 functions (buildAuctionIntentTypedData, canonicalizePicks) that dont exist in published v0.2. Also requires WUSDe on Ethereal chain which agent doesnt have."
+            },
+            "M6": {
+              "status": "FAIL",
+              "name": "Verify position",
+              "summary": "No position created — trading failed."
+            },
+            "M7": {
+              "status": "FAIL",
+              "name": "Sell position",
+              "summary": "No position to sell."
+            },
+            "M8": {
+              "status": "FAIL",
+              "name": "Balance delta",
+              "summary": "No trades executed — forecast gas is not a trading delta."
+            }
+          },
+          "keyFindings": [
+            "Sapience has two features: forecasting (free opinions on Arbitrum) and trading (real money on Ethereal) — skill covers both",
+            "GraphQL API works — 48 active markets, most with zero open interest",
+            "Skill describes SDK v0.4 but only v0.2 is published on npm — trading functions dont exist",
+            "buildAuctionIntentTypedData, canonicalizePicks, escrowSigning are referenced but missing from SDK",
+            "Trading requires WUSDe (wrapped USDe) on Ethereal chain — not standard ETH or USDC",
+            "Forecasting works (free EAS attestations) but forecasting is not trading"
+          ],
+          "blockers": [
+            "SDK version mismatch: skill v0.4 describes functions not in published SDK v0.2 — trading impossible",
+            "Trading requires WUSDe on Ethereal chain — non-standard collateral with no documented acquisition path"
+          ]
+        }
+      ],
+      "framework": {
+        "status": "tested",
+        "grade": "Experimental"
+      },
+      "_frameworkTools": [
+        {
+          "name": "ElizaOS Plugin",
+          "grade": "Experimental",
+          "npmUrl": "https://www.npmjs.com/package/@sapiencexyz/elizaos-plugin",
+          "categories": {
+            "type": "MCP bridge plugin for the ElizaOS agent framework. Connects ElizaOS agents to Sapience prediction markets via Model Context Protocol. Not standalone — requires the full ElizaOS runtime.",
+            "architecture": "Plugin provides 4 actions (CALL_SAPIENCE_TOOL, READ_SAPIENCE_RESOURCE, SIMULATE_TRANSACTION, SUBMIT_TRANSACTION) + 1 provider (injects available MCP tools into agent context). Each action uses 3 LLM calls: tool selection, retry, response generation. The plugin is an MCP client connecting to Sapience API.",
+            "stack": "TypeScript. Requires ElizaOS runtime (Node.js v23+, Bun). Dependencies: @elizaos/core ^1.0.4, @modelcontextprotocol/sdk ^1.7.0, viem ^2.0.0. Targets ElizaOS v1 but framework is now at v2.0-alpha.",
+            "platforms": "Sapience only (Ethereal/Arbitrum, WUSDe)",
+            "setup": "Install ElizaOS CLI (bun install -g @elizaos/cli) → create project → npm install @sapiencexyz/elizaos-plugin → add to character file → set PRIVATE_KEY env var → elizaos start. Heavy setup for a single-platform plugin."
+          },
+          "keyFindings": [
+            "1 download/week on npm — near-zero adoption",
+            "Single version (1.0.7) published August 2025, never updated since",
+            "Targets ElizaOS v1 but framework has moved to v2.0-alpha — likely compatibility issues",
+            "Plugin is architecturally clean (MCP client pattern) but dead in practice",
+            "Sapience direct SDK (@sapience/sdk) is a more practical integration path",
+            "Full ElizaOS runtime is heavy overhead for a single prediction market integration"
+          ]
+        }
+      ]
+    },
+    "Rain Protocol": {
+      "skill": {
+        "status": "tested",
+        "grade": "A"
+      },
+      "_skillTools": [
+        {
+          "skill": "OpenClaw Skills (rain-trade, rain-data, rain-create-market)",
+          "skillFormat": "openclaw",
+          "grade": "A",
+          "chain": "Arbitrum One",
+          "currency": "USDT",
+          "vpnRequired": false,
+          "methodUsed": "SDK (@buidlrrr/rain-sdk) + viem wallet signing",
+          "milestones": {
+            "M1": {
+              "status": "PASS",
+              "name": "Understand skill",
+              "summary": "Three SKILL.md files. Clean architecture: Rain (stateless queries) + RainAA (execution). Arbitrum One, USDT."
+            },
+            "M2": {
+              "status": "PASS",
+              "name": "Authenticate",
+              "summary": "Stateless SDK, no explicit auth. Rain({ environment: \"production\" }) + viem WalletClient."
+            },
+            "M3": {
+              "status": "PASS",
+              "name": "List markets",
+              "summary": "10 Live markets via getPublicMarkets. Iran, Fed, WTI, Netflix, MLB, etc."
+            },
+            "M4": {
+              "status": "PASS",
+              "name": "Market detail",
+              "summary": "Netflix-Warner: 3 options, prices in 1e18 scale. YES 60.3%, NO 30.9%."
+            },
+            "M5": {
+              "status": "PASS",
+              "name": "Buy order",
+              "summary": "1 USDT buy of YES shares. Required Uniswap swap ETH→USDT first. Tx confirmed."
+            },
+            "M6": {
+              "status": "PASS",
+              "name": "Verify position",
+              "summary": "1,666,666 shares confirmed via getPositionByMarket. Dynamic payout: 2.37 USDT."
+            },
+            "M7": {
+              "status": "FAIL",
+              "name": "Sell position",
+              "summary": "SDK only has limit sells. Zero buy orders in orderbook. 3 attempts placed unfilled orders."
+            },
+            "M8": {
+              "status": "PASS",
+              "name": "Balance delta",
+              "summary": "Pre: 0.004 ETH + 2.19 USDT. Post: 0.004 ETH + 1.19 USDT + position."
+            }
+          },
+          "keyFindings": [
+            "API field names dont match docs (_id vs id, question vs title)",
+            "Option indices 1-based on-chain despite docs saying 0-indexed",
+            "No market sell capability — only limit sells with empty orderbooks",
+            "Cancel orders require manual event log parsing for orderID (SDK doesnt return it)",
+            "Skill format is clean OpenClaw YAML+markdown, easy to read",
+            "Need external Uniswap swap to acquire USDT (not documented in skill)"
+          ],
+          "blockers": [
+            "No market sell function — cannot close positions without counterparty in orderbook"
+          ]
+        }
+      ]
+    },
+    "Metaculus": {
+      "framework": {
+        "status": "tested",
+        "grade": "Production"
+      },
+      "_frameworkTools": [
+        {
+          "name": "forecasting-tools",
+          "grade": "Production",
+          "githubUrl": "https://github.com/Metaculus/forecasting-tools",
+          "categories": {
+            "type": "Python SDK for building AI-powered forecasting bots. Submits probability estimates to Metaculus — not a trading framework (no positions, no orders, no money). Includes bot templates, benchmarking, and auto-prompt-optimization via genetic algorithms.",
+            "architecture": "Pipeline: load questions from Metaculus API → research (web search via Exa/Perplexity/AskNews) → LLM forecasts probability (configurable: N research reports × M predictions, then aggregate) → publish to Metaculus. Supports binary, numeric, multiple-choice, and conditional questions. Built-in Benchmarker class for scoring against real questions.",
+            "stack": "Python. litellm for multi-provider LLM support (OpenAI, Anthropic, Google, DeepSeek, Perplexity, Grok). v0.2.89 on PyPI. 65 stars, actively maintained (commits daily). Includes Streamlit demo UI.",
+            "platforms": "Metaculus only. Forecasting platform (reputation-based scoring), not a financial prediction market. No on-chain component.",
+            "setup": "pip install forecasting-tools → set METACULUS_TOKEN + LLM API key → subclass ForecastBot or use TemplateBot → run. Metaculus provides subsidized LLM access via proxy. Bot template repo enables GitHub Actions deployment (runs every 30 min)."
+          },
+          "keyFindings": [
+            "Forecasting only — produces probability estimates, not financial trades",
+            "Actively maintained with daily commits, multiple bot implementations (MainBot, TemplateBot, quarterly variants)",
+            "Auto-prompt-optimization: genetic algorithm evolves prompts using forecast scores as fitness",
+            "Metaculus AI Forecasting Tournament provides free API credits to lower barrier to entry",
+            "Well-structured: abstract ForecastBot base class with clean override points for research and forecasting",
+            "MainBot uses OpenAI o3 for forecasting, GPT-4o for summarization — configurable per purpose"
+          ]
+        }
+      ]
+    },
+    "Seer": {
+      "framework": {
+        "status": "tested",
+        "grade": "Production"
+      },
+      "_frameworkTools": [
+        {
+          "name": "Gnosis prediction-market-agent-tooling",
+          "grade": "Production",
+          "githubUrl": "https://github.com/gnosis/prediction-market-agent-tooling",
+          "categories": {
+            "type": "Python library for building autonomous PM trading agents. Provides abstract agent classes, market abstractions, betting strategies, and deployment scaffolding. Shared framework with AIOmen/Presagio — same codebase targets both platforms via Conditional Tokens.",
+            "architecture": "Three layers: (1) Markets — unified AgentMarket interface across 5 platforms (Omen, Manifold, Polymarket, Metaculus, Seer), (2) Agent framework — DeployableAgent → DeployablePredictionAgent → DeployableTraderAgent with lifecycle hooks, (3) Tools — 24+ modules for LLM, web search, Web3, IPFS, Safe multisig, CoW Protocol routing. You implement answer_binary_market() returning a probability; framework handles everything else.",
+            "stack": "Python. pip install prediction-market-agent-tooling. 6 built-in betting strategies including Kelly criterion variants. Companion repo (gnosis/prediction-market-agent) has ~16 agent implementations using GPT-4/5, CrewAI, and custom research pipelines.",
+            "platforms": "Omen (primary, Gnosis Chain), Seer (Gnosis), Manifold, Polymarket (new, actively built), Metaculus (forecasts only)",
+            "setup": "pip install → configure .env (BET_FROM_PRIVATE_KEY + OPENAI_API_KEY minimum) → subclass DeployableTraderAgent → implement answer_binary_market() → agent.deploy_local(). CoinFlipAgent example is ~10 lines of logic."
+          },
+          "keyFindings": [
+            "Most mature PM agent framework — actively maintained with daily commits",
+            "Multi-platform: same agent can target Omen, Seer, Manifold, or Polymarket",
+            "6 betting strategies including Simple and Full Kelly criterion with binary search for optimal sizing",
+            "Companion repo has real agent implementations: ThinkThoroughly (GPT + web research + scenario decomposition), Prophet, Microchain (fully autonomous with 28 tool modules)",
+            "Polymarket integration actively being built (fees, copy trading added April 2026)",
+            "Seer tests recently disabled (April 2026) — Seer integration may be in flux"
+          ]
+        }
+      ]
+    },
+    "AIOmen / Presagio": {
+      "framework": {
+        "status": "tested",
+        "grade": "Production"
+      },
+      "_frameworkTools": [
+        {
+          "name": "Gnosis prediction-market-agent-tooling",
+          "grade": "Production",
+          "githubUrl": "https://github.com/gnosis/prediction-market-agent-tooling",
+          "categories": {
+            "type": "Same framework as Seer — Python library for building autonomous PM trading agents. AIOmen/Presagio is the primary target platform; Omen on Gnosis Chain has the deepest integration with 8 dedicated files, CoW Protocol routing, and subgraph handlers.",
+            "architecture": "Same three-layer architecture as described under Seer. Omen integration includes: subgraph handler for on-chain data, direct contract interactions for trades, CoW Protocol for DEX routing, market resolution via Reality.eth. Agent lifecycle: fetch markets → filter (predictable, not already bet on) → LLM probability estimate → apply betting strategy → execute on-chain → sleep → repeat.",
+            "stack": "Python. Same as Seer entry. 300+ daily active agents reported on Gnosis Chain via Olas ecosystem, though the \"79% accuracy\" claim is unverified marketing with no methodology disclosed.",
+            "platforms": "Omen/AIOmen is the primary platform (Gnosis Chain, xDAI). Also supports Seer, Manifold, Polymarket, Metaculus.",
+            "setup": "Same as Seer entry. For Omen specifically: fund wallet with xDAI on Gnosis Chain. GCP deployment was supported but is now deprecated — custom infrastructure recommended."
+          },
+          "keyFindings": [
+            "Omen has the deepest integration of any platform in this framework",
+            "300+ daily active agents claimed via Olas ecosystem, but accuracy claims unverified",
+            "Olas Predict uses this tooling for autonomous agents (Market Creators, Traders, Mechs, Closers)",
+            "Omenstrat is the primary Olas prediction agent — queries \"Mech\" AI data brokers for probabilities",
+            "Pearl app provides no-code deployment of Olas agents using this framework",
+            "Same framework as Seer — described once, applies to both platforms"
+          ]
+        }
+      ]
+    }
+  },
+  "legacy": {
+    "_legacy": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "C"
+      },
+      "community": {
+        "status": "tested",
+        "grade": "C"
+      },
+      "_tools": [
+        {
+          "tool": "limitless-cli",
+          "type": "CLI",
+          "version": "0.1.0",
+          "grade": "C",
+          "chain": "Base",
+          "currency": "USDC",
+          "auth": "browser",
+          "outputQuality": "json",
+          "canTradeAutonomously": false,
+          "installCmd": "Download from GitHub releases",
+          "gradeReason": "Discovery fully works, but trading blocked — CLI expects simple API keys (lmts_...) while UI only generates HMAC tokens.",
+          "stages": {
+            "1_setup": {
+              "status": "PARTIAL",
+              "actions": {
+                "Install": {
+                  "status": "PASS",
+                  "note": "Binary runs, v0.1.0, 10 commands. Brew formula 404 — must download from GitHub releases."
+                },
+                "Help": {
+                  "status": "PASS",
+                  "note": "10 commands with descriptions, -o json flag, env var auth support."
+                },
+                "Auth": {
+                  "status": "FAIL",
+                  "note": "CLI expects simple API key (lmts_...) via X-API-Key header, but Limitless UI only generates HMAC tokens. 4 keys generated by human — all return 401."
+                },
+                "Balance": {
+                  "status": "FAIL",
+                  "note": "No balance command. portfolio allowance returns 401."
+                }
+              }
+            },
+            "2_discovery": {
+              "status": "PASS",
+              "actions": {
+                "List markets": {
+                  "status": "PASS",
+                  "note": "Valid JSON, 20 markets/page. Includes slug, title, volume, prices, expiration."
+                },
+                "Get market": {
+                  "status": "PASS",
+                  "note": "Fetched by slug. Includes prices, volume, tradeType, tokens. Numeric ID not accepted."
+                },
+                "Orderbook": {
+                  "status": "PASS",
+                  "note": "bid=0.002, ask=0.021, spread=0.019. Clean JSON."
+                },
+                "Search": {
+                  "status": "PASS",
+                  "note": "Search \"bitcoin\" returns relevant results, valid JSON."
+                },
+                "ID threading": {
+                  "status": "PARTIAL",
+                  "note": "Slug works across commands but inconsistent positional vs --slug flag."
+                }
+              }
+            },
+            "3_trade": {
+              "status": "BLOCKED",
+              "blockedReason": "CLI auth broken: UI generates HMAC tokens, CLI only accepts simple API keys (lmts_...). Incompatible auth systems.",
+              "actions": {
+                "Preview": {
+                  "status": "FAIL",
+                  "note": "No preview/simulate command exists."
+                },
+                "Limit order": {
+                  "status": "BLOCKED",
+                  "note": "401 Unauthorized / 404 Profile not found."
+                },
+                "View orders": {
+                  "status": "BLOCKED",
+                  "note": "401 Unauthorized."
+                },
+                "Cancel": {
+                  "status": "BLOCKED",
+                  "note": "No order to cancel."
+                },
+                "Market buy": {
+                  "status": "BLOCKED",
+                  "note": "Auth blocked."
+                },
+                "Check position": {
+                  "status": "BLOCKED",
+                  "note": "Auth blocked."
+                }
+              }
+            },
+            "4_lifecycle": {
+              "status": "BLOCKED",
+              "blockedReason": "Depends on Stage 3",
+              "actions": {
+                "Sell/exit": {
+                  "status": "BLOCKED",
+                  "note": "No position to sell."
+                },
+                "Claim": {
+                  "status": "FAIL",
+                  "note": "No claim/redeem command in CLI."
+                },
+                "Final balance": {
+                  "status": "BLOCKED",
+                  "note": "Auth blocked."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "CLI auth is broken: UI only generates HMAC tokens but CLI only accepts simple API keys — incompatible auth flows",
+            "Discovery is excellent without auth: list, get, search, orderbook all return clean JSON",
+            "CLI design is agent-friendly in principle: env var auth, -o json, 10 well-documented commands"
+          ],
+          "blockers": [
+            "Incompatible auth: CLI uses X-API-Key header, UI generates HMAC tokens needing lmts-api-key + lmts-timestamp + lmts-signature",
+            "Brew formula broken (404)",
+            "No preview/simulate or claim/redeem commands"
+          ]
+        },
+        {
+          "tool": "@iqai/mcp-limitless",
+          "type": "MCP",
+          "version": "0.0.5 (server: 0.0.1)",
+          "grade": "C",
+          "chain": "Base",
+          "currency": "USDC",
+          "auth": "wallet_sign",
+          "outputQuality": "text",
+          "canTradeAutonomously": false,
+          "installCmd": "npx @iqai/mcp-limitless",
+          "gradeReason": "Discovery works (907 markets, search, orderbook). Trading blocked: CREATE_ORDER requires pre-signed EIP-712 orders with domain knowledge no tool provides.",
+          "stages": {
+            "0_preflight": {
+              "status": "PASS",
+              "actions": {
+                "Auth docs": {
+                  "status": "PASS",
+                  "note": "Limitless has API Key + HMAC auth. MCP tool uses neither — it has its own session-based wallet signing flow."
+                },
+                "Tool docs": {
+                  "status": "PASS",
+                  "note": "30 tools, cookie-based sessions. CREATE_ORDER requires pre-signed EIP-712 orders."
+                },
+                "Auth classification": {
+                  "status": "PASS",
+                  "note": "wallet_sign — private key signs a message, session cookie persists."
+                }
+              }
+            },
+            "1_setup": {
+              "status": "PASS",
+              "actions": {
+                "Install": {
+                  "status": "PASS",
+                  "note": "npx starts successfully. Uses newline-delimited JSON-RPC (not Content-Length framed)."
+                },
+                "List tools": {
+                  "status": "PASS",
+                  "note": "30 tools: 5 auth, 13 markets, 8 portfolio, 4 trading."
+                },
+                "Auth": {
+                  "status": "PASS",
+                  "note": "GET_SIGNING_MESSAGE → sign with private key → LOGIN. Fully automated, session persists via cookies."
+                },
+                "Balance": {
+                  "status": "PARTIAL",
+                  "note": "GET_LOCKED_BALANCE requires slug param (per-market only). Returns undefined values. No global USDC balance tool."
+                }
+              }
+            },
+            "2_discovery": {
+              "status": "PASS",
+              "actions": {
+                "List markets": {
+                  "status": "PASS",
+                  "note": "907 active markets. Output is emoji-formatted text, NOT machine-parseable JSON."
+                },
+                "Get market": {
+                  "status": "PASS",
+                  "note": "Works with addressOrSlug param (not \"slug\"). Returns formatted text."
+                },
+                "Orderbook": {
+                  "status": "PASS",
+                  "note": "Returns last trade price, bids/asks. Formatted text, not JSON."
+                },
+                "Search": {
+                  "status": "PASS",
+                  "note": "Semantic search works. Found 3 bitcoin markets."
+                },
+                "ID threading": {
+                  "status": "PASS",
+                  "note": "Slugs from listing work in orderbook. Inconsistent param naming (addressOrSlug vs slug)."
+                }
+              }
+            },
+            "3_trade": {
+              "status": "BLOCKED",
+              "blockedReason": "CREATE_ORDER requires fully pre-signed EIP-712 order with 12+ fields. No tool helps construct or sign orders — agent must know the contract domain/types independently.",
+              "actions": {
+                "Preview": {
+                  "status": "FAIL",
+                  "note": "No preview/simulate tool exists."
+                },
+                "Place order": {
+                  "status": "BLOCKED",
+                  "note": "CREATE_ORDER needs salt, tokenId, makerAmount, takerAmount, feeRateBps, EIP-712 signature, ownerId. Raw submission endpoint, not a \"buy at price X\" abstraction."
+                },
+                "View orders": {
+                  "status": "PASS",
+                  "note": "GET_USER_ORDERS works, returned empty list."
+                },
+                "Cancel": {
+                  "status": "BLOCKED",
+                  "note": "No order to cancel."
+                },
+                "Market buy": {
+                  "status": "BLOCKED",
+                  "note": "Same CREATE_ORDER limitation."
+                },
+                "Check position": {
+                  "status": "PASS",
+                  "note": "GET_PORTFOLIO_POSITIONS works, returned empty portfolio."
+                }
+              }
+            },
+            "4_lifecycle": {
+              "status": "BLOCKED",
+              "blockedReason": "No position to manage.",
+              "actions": {
+                "Sell/exit": {
+                  "status": "BLOCKED",
+                  "note": "No position to sell."
+                },
+                "Claim": {
+                  "status": "FAIL",
+                  "note": "No claim/redeem tool exists."
+                },
+                "Final balance": {
+                  "status": "PARTIAL",
+                  "note": "GET_LOCKED_BALANCE returns undefined values. No global balance tool."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "CREATE_ORDER is a raw signed-order submission (12+ fields). EIP-712 domain is documented but no tool helps construct/sign — unreasonably complex",
+            "All outputs are emoji-formatted prose, not JSON — agent must regex-parse slugs, prices, IDs",
+            "Auth flow (sign message → login) works fully automated with a private key"
+          ],
+          "blockers": [
+            "EIP-712 domain documented in docs but no MCP tool helps construct/sign orders — agent must build 12+ field struct independently",
+            "No \"buy YES at price X\" abstraction — all order construction is caller's responsibility",
+            "No global USDC balance tool, no preview, no claim/redeem"
+          ]
+        }
+      ]
+    },
+    "Polymarket": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "A"
+      },
+      "_tools": [
+        {
+          "tool": "polymarket-cli",
+          "type": "CLI",
+          "version": "0.1.5",
+          "grade": "A",
+          "chain": "Polygon",
+          "currency": "USDC.e",
+          "auth": "wallet_sign",
+          "outputQuality": "json",
+          "canTradeAutonomously": false,
+          "installCmd": "GitHub releases (cargo install fails — Rust bug)",
+          "gradeReason": "Full buy+sell cycle via Japan VPN. 18 cmds, 47+ CLOB subcmds, clean JSON. Geoblock + signature-type gotcha.",
+          "stages": {
+            "1_setup": {
+              "status": "PASS",
+              "actions": {
+                "Install": {
+                  "status": "PASS",
+                  "note": "Pre-built binary works (v0.1.5). cargo install fails — Rust compilation bug (Option<NaiveDate>.to_string())."
+                },
+                "Help": {
+                  "status": "PASS",
+                  "note": "18 top-level commands, 47+ CLOB subcommands. Global -o json flag."
+                },
+                "Auth": {
+                  "status": "PASS",
+                  "note": "clob create-api-key --private-key derives API credentials from wallet signature. Passphrase+secret redacted in output."
+                },
+                "Balance": {
+                  "status": "PASS",
+                  "note": "CLOB balance auto-populates after first trade. Started 0, ended $3.82."
+                },
+                "Approvals": {
+                  "status": "PASS",
+                  "note": "6 on-chain txs via approve set (ERC20+ERC1155 for 3 contracts)."
+                }
+              }
+            },
+            "2_discovery": {
+              "status": "PASS",
+              "actions": {
+                "List markets": {
+                  "status": "PASS",
+                  "note": "Valid JSON array. Active markets with volume, outcomes, prices."
+                },
+                "Get market": {
+                  "status": "PASS",
+                  "note": "Full detail: outcomes, outcomePrices, clobTokenIds, conditionId, tickSize, minSize."
+                },
+                "Orderbook": {
+                  "status": "PASS",
+                  "note": "clob book returns bids/asks arrays with price+size. Deep liquidity visible."
+                },
+                "Search": {
+                  "status": "PASS",
+                  "note": "markets search \"bitcoin\" returns matching markets in JSON."
+                },
+                "ID threading": {
+                  "status": "PASS",
+                  "note": "Full chain: market ID -> clobTokenIds -> book/price/spread. Clean."
+                }
+              }
+            },
+            "3_trade": {
+              "status": "PASS",
+              "actions": {
+                "Preview": {
+                  "status": "FAIL",
+                  "note": "No --dry-run or --preview flag."
+                },
+                "Limit order": {
+                  "status": "PASS",
+                  "note": "BUY 5 YES at $0.05 → status:LIVE. Requires --signature-type eoa for EOA wallets."
+                },
+                "View orders": {
+                  "status": "PASS",
+                  "note": "clob orders shows order with price, size, status, order_type GTC."
+                },
+                "Cancel": {
+                  "status": "PASS",
+                  "note": "clob cancel → clean JSON response."
+                },
+                "Market buy": {
+                  "status": "PASS",
+                  "note": "$1 → 1.923 YES shares at $0.52. On-chain tx confirmed. Zero fees."
+                },
+                "Market sell": {
+                  "status": "PASS",
+                  "note": "Sold 1 share at $0.51. On-chain tx confirmed."
+                },
+                "Positions": {
+                  "status": "PASS",
+                  "note": "data positions shows real-time PnL, current value."
+                }
+              }
+            },
+            "4_lifecycle": {
+              "status": "PASS",
+              "actions": {
+                "Sell": {
+                  "status": "PASS",
+                  "note": "Market sell via clob market-order --side sell. Confirmed on-chain."
+                },
+                "Claim": {
+                  "status": "PASS",
+                  "note": "ctf redeem commands exist. Not tested (market active)."
+                },
+                "Final balance": {
+                  "status": "PASS",
+                  "note": "CLOB: $3.82. Started ~$4.31. Net cost ~$0.49 from test trades."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Most comprehensive PM CLI: 18 cmds, 47+ CLOB subcmds. Full buy+sell cycle with clean JSON.",
+            "CRITICAL: --signature-type eoa required for EOA wallets (default proxy sees balance 0). Hidden gotcha.",
+            "Geoblock requires VPN (blocked from TH/EU/US, unblocked from JP). Zero trading fees observed."
+          ],
+          "blockers": [
+            "Geoblock: requires VPN from non-restricted country (JP works)",
+            "API key secrets redacted — agent can't persist credentials across sessions",
+            "--signature-type eoa must be explicitly set for EOA wallets",
+            "No --dry-run on order commands"
+          ]
+        }
+      ]
+    },
+    "Manifold": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "A"
+      },
+      "_tools": [
+        {
+          "tool": "manifold-mcp-server",
+          "type": "MCP",
+          "version": "0.1.0",
+          "grade": "A",
+          "chain": "None (play money)",
+          "currency": "Mana",
+          "auth": "env_var",
+          "outputQuality": "json",
+          "installCmd": "npx manifold-mcp-server",
+          "sections": {
+            "setup": {
+              "checks": {
+                "S1": {
+                  "name": "Install + initialize",
+                  "result": "PASS",
+                  "output": "MCP server starts, responds to initialize"
+                },
+                "S2": {
+                  "name": "List tools",
+                  "result": "PASS",
+                  "output": "9 tools: search_markets, get_market, place_bet, cancel_bet, sell_shares, get_positions, etc."
+                },
+                "S3": {
+                  "name": "Auth",
+                  "result": "PASS",
+                  "output": "MANIFOLD_API_KEY env var. get_positions works immediately."
+                },
+                "S4": {
+                  "name": "Balance",
+                  "result": "PASS",
+                  "output": "Balance accessible via get_user (M$1000+)."
+                }
+              }
+            },
+            "discovery": {
+              "checks": {
+                "D1": {
+                  "name": "List markets",
+                  "result": "PASS",
+                  "output": "search_markets returns active markets with IDs, probabilities, volume."
+                },
+                "D2": {
+                  "name": "Market detail",
+                  "result": "PASS",
+                  "output": "get_market returns probability, pool values, creator, mechanism (CPMM-1)."
+                },
+                "D3": {
+                  "name": "Market data quality",
+                  "result": "PASS",
+                  "output": "Probabilities in [0,1], volume > 0, consistent types."
+                },
+                "D4": {
+                  "name": "Search",
+                  "result": "PASS",
+                  "output": "Keyword search returns relevant results."
+                },
+                "D5": {
+                  "name": "Schema consistency",
+                  "result": "PASS",
+                  "output": "3 markets with consistent response structure."
+                }
+              }
+            },
+            "trading": {
+              "checks": {
+                "T1": {
+                  "name": "Preview / dry-run",
+                  "result": "FAIL",
+                  "output": "No quote/preview tool. Agent must compute from CPMM-1 pool values."
+                },
+                "T2": {
+                  "name": "Place bet + verify",
+                  "result": "PASS",
+                  "output": "M$10 YES bet placed. 49.53 shares received."
+                },
+                "T3": {
+                  "name": "Check position",
+                  "result": "PASS",
+                  "output": "Position visible via get_positions."
+                },
+                "T4": {
+                  "name": "Sell + verify",
+                  "result": "PASS",
+                  "output": "sell_shares works. Zero fees, zero slippage on play money."
+                },
+                "T5": {
+                  "name": "Balance delta",
+                  "result": "PASS",
+                  "output": "Round-trip cost minimal. Balance correctly reflects trades."
+                }
+              }
+            },
+            "errors": {
+              "checks": {
+                "E1": {
+                  "name": "Insufficient balance",
+                  "result": "PASS",
+                  "output": "M$999999 bet returns structured JSON-RPC error."
+                },
+                "E2": {
+                  "name": "Invalid inputs",
+                  "result": "PASS",
+                  "output": "Missing/bad params return field-level validation errors."
+                },
+                "E3": {
+                  "name": "Nonexistent market",
+                  "result": "PASS",
+                  "output": "Bad market ID returns clear error."
+                },
+                "E4": {
+                  "name": "Error recovery",
+                  "result": "PASS",
+                  "output": "Server recovers cleanly after errors."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Full buy/sell lifecycle works with zero fees on play money",
+            "Only 9 of 18 documented tools implemented, but all core agent operations work",
+            "sell_shares requires explicit outcome param despite schema listing it as optional"
+          ],
+          "blockers": []
+        }
+      ]
+    },
+    "Alpha Arcade": {
+      "community": {
+        "status": "tested",
+        "grade": "B"
+      },
+      "_tools": [
+        {
+          "tool": "@alpha-arcade/mcp",
+          "type": "MCP",
+          "version": "0.3.4",
+          "grade": "B",
+          "chain": "Algorand",
+          "currency": "USDC (ALGO for fees)",
+          "auth": "env_var",
+          "outputQuality": "json",
+          "canTradeAutonomously": true,
+          "installCmd": "npx @alpha-arcade/mcp",
+          "gradeReason": "Order lifecycle works: place limit, verify, cancel — all on-chain. Full buy+sell blocked by thin orderbooks (no counterparty).",
+          "stages": {
+            "1_setup": {
+              "status": "PASS",
+              "actions": {
+                "Install": {
+                  "status": "PASS",
+                  "note": "npx starts MCP server. Newline-delimited JSON-RPC. 20 tools."
+                },
+                "List tools": {
+                  "status": "PASS",
+                  "note": "20 tools: 4 discovery, 2 portfolio, 6 trading, 4 streaming, 4 utility."
+                },
+                "Auth": {
+                  "status": "PASS",
+                  "note": "ALPHA_MNEMONIC env var. get_positions works."
+                },
+                "Agent guide": {
+                  "status": "PASS",
+                  "note": "Built-in get_agent_guide with unit conversion, data model, workflow docs."
+                }
+              }
+            },
+            "2_discovery": {
+              "status": "PASS",
+              "actions": {
+                "List markets": {
+                  "status": "PASS",
+                  "note": "get_live_markets: JSON with IDs, titles, asset IDs. Only 2 live markets."
+                },
+                "Get market": {
+                  "status": "PASS",
+                  "note": "Full market detail by ID string."
+                },
+                "Orderbook": {
+                  "status": "PASS",
+                  "note": "Unified YES-perspective book with formatted + raw microunit prices."
+                },
+                "Search": {
+                  "status": "FAIL",
+                  "note": "No search tool available."
+                },
+                "ID threading": {
+                  "status": "PASS",
+                  "note": "String IDs for lookup, numeric marketAppIds for trading."
+                }
+              }
+            },
+            "3_trade": {
+              "status": "PASS",
+              "actions": {
+                "Preview": {
+                  "status": "FAIL",
+                  "note": "No simulate/preview tool."
+                },
+                "Place order": {
+                  "status": "PASS",
+                  "note": "create_limit_order: 10 YES shares at $0.10. Confirmed on-chain with escrow ID."
+                },
+                "View orders": {
+                  "status": "PASS",
+                  "note": "get_open_orders shows order with price, quantity, filled/remaining."
+                },
+                "Cancel": {
+                  "status": "PASS",
+                  "note": "cancel_order works (needs marketAppId + escrowAppId + orderOwner). Confirmed on-chain."
+                },
+                "Market order": {
+                  "status": "BLOCKED",
+                  "note": "No asks in orderbook — no counterparty to match."
+                }
+              }
+            },
+            "4_lifecycle": {
+              "status": "PARTIAL",
+              "blockedReason": "Thin orderbooks — no counterparty for fills, so no positions to sell.",
+              "actions": {
+                "Sell": {
+                  "status": "BLOCKED",
+                  "note": "No filled positions to exit."
+                },
+                "Final balance": {
+                  "status": "PARTIAL",
+                  "note": "USDC returned after cancel minus fees. No balance check tool in MCP."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "20 tools, order lifecycle works on-chain (place + verify + cancel). Built-in agent guide + WebSocket streaming.",
+            "Trades USDC not ALGO — MCP has no opt-in/swap/balance tools, assumes pre-funded wallet.",
+            "Only 2 live markets with thin orderbooks — limits full buy+sell testing."
+          ],
+          "blockers": [
+            "No wallet address or balance check tool in MCP",
+            "No Algorand ASA opt-in tool — needs external SDK",
+            "Thin markets limit full lifecycle testing (no counterparty)"
+          ]
+        }
+      ]
+    },
+    "Context Markets": {
+      "cliMcp": {
+        "status": "tested",
+        "grade": "C"
+      },
+      "_tools": [
+        {
+          "tool": "context-markets-cli",
+          "type": "CLI",
+          "version": "0.2.2",
+          "grade": "C",
+          "chain": "Base",
+          "currency": "USDC",
+          "auth": "browser",
+          "outputQuality": "json",
+          "canTradeAutonomously": false,
+          "installCmd": "npx context-markets-cli",
+          "gradeReason": "Discovery excellent (38+ cmds, orderbook, simulate). All trading returns 403 — no detail in error.",
+          "stages": {
+            "1_setup": {
+              "status": "PASS",
+              "actions": {
+                "Install": {
+                  "status": "PASS",
+                  "note": "npx, no build step. 38+ subcommands across 4 groups."
+                },
+                "Auth": {
+                  "status": "PASS",
+                  "note": "API key + private key via env vars. account status shows isReady:true."
+                },
+                "Balance": {
+                  "status": "PASS",
+                  "note": "~4.26 USDC wallet, 2.0 USDC settlement."
+                },
+                "Deposit": {
+                  "status": "PASS",
+                  "note": "2 USDC deposited on-chain, tx confirmed."
+                }
+              }
+            },
+            "2_discovery": {
+              "status": "PASS",
+              "actions": {
+                "List markets": {
+                  "status": "PASS",
+                  "note": "50 markets returned. Clean JSON with rich metadata."
+                },
+                "Search": {
+                  "status": "PASS",
+                  "note": "\"bitcoin\" returned market with 375M volume, 97% YES."
+                },
+                "Get market": {
+                  "status": "PASS",
+                  "note": "Full detail: outcomes, prices, resolution criteria, categories."
+                },
+                "Orderbook": {
+                  "status": "PASS",
+                  "note": "CLOB orderbook with price/size levels for YES/NO."
+                },
+                "Simulate": {
+                  "status": "PASS",
+                  "note": "Order simulation: fill, cost, fee, slippage, warnings. Read-only."
+                }
+              }
+            },
+            "3_trade": {
+              "status": "FAIL",
+              "blockedReason": "All order creation returns 403 with no detail. Tried limit + market orders on multiple markets.",
+              "actions": {
+                "Limit order": {
+                  "status": "FAIL",
+                  "note": "403 on orders create. No detail in error — agent cannot self-correct."
+                },
+                "Market order": {
+                  "status": "FAIL",
+                  "note": "403 on orders market. Same issue. Different flags (--max-price vs --price)."
+                },
+                "View orders": {
+                  "status": "PASS",
+                  "note": "orders mine works, returns empty list."
+                },
+                "Cancel": {
+                  "status": "BLOCKED",
+                  "note": "No orders to cancel."
+                }
+              }
+            },
+            "4_lifecycle": {
+              "status": "BLOCKED",
+              "blockedReason": "No positions (trading blocked).",
+              "actions": {
+                "Sell": {
+                  "status": "BLOCKED",
+                  "note": "No positions to exit."
+                },
+                "Final balance": {
+                  "status": "PASS",
+                  "note": "4.0 USDC in settlement, no outcome tokens."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "38+ subcommands, clean JSON, CLOB orderbook, order simulation with slippage analysis — well-designed CLI",
+            "All order creation returns 403 with zero detail. On-chain deposit works but cannot trade.",
+            "API inconsistency: simulate uses --side bid/ask but create uses --side buy/sell — would trip agents"
+          ],
+          "blockers": [
+            "403 on all order creation — likely API key permission or geo restriction, error provides no detail",
+            "Inconsistent --side flag (bid/ask vs buy/sell between simulate and create)",
+            "API key requires browser generation from dashboard"
+          ]
+        }
+      ]
+    },
+    "Myriad": {
+      "community": {
+        "status": "tested",
+        "grade": "B"
+      },
+      "_tools": [
+        {
+          "tool": "manifold-mcp-server",
+          "type": "MCP",
+          "version": "0.1.1",
+          "grade": "B",
+          "chain": "None (play money)",
+          "currency": "Mana (M$)",
+          "auth": "browser",
+          "outputQuality": "json",
+          "canTradeAutonomously": false,
+          "installCmd": "npx manifold-mcp-server",
+          "gradeReason": "Full buy/sell roundtrip works with clean JSON. create_market not implemented (9 of 18 documented tools). API key browser-only.",
+          "stages": {
+            "1_setup": {
+              "status": "PASS",
+              "actions": {
+                "Install": {
+                  "status": "PASS",
+                  "note": "npx starts MCP server. JSON-RPC initialize works. Protocol 2024-11-05."
+                },
+                "List tools": {
+                  "status": "PARTIAL",
+                  "note": "9 of 18 documented tools implemented. Missing: create_market, unresolve_market, close_market, add_answer, follow_market, react, add/award_bounty, remove_liquidity."
+                },
+                "Auth": {
+                  "status": "PASS",
+                  "note": "MANIFOLD_API_KEY env var. get_user returns authenticated user data."
+                },
+                "Balance": {
+                  "status": "PASS",
+                  "note": "M$1000 starting balance via get_user response."
+                }
+              }
+            },
+            "2_discovery": {
+              "status": "PASS",
+              "actions": {
+                "List markets": {
+                  "status": "PASS",
+                  "note": "search_markets with filter/sort returns rich JSON: id, question, probability, volume, pool."
+                },
+                "Get market": {
+                  "status": "PASS",
+                  "note": "Full detail including description, groupSlugs. Probability + pool sizes."
+                },
+                "Search": {
+                  "status": "PASS",
+                  "note": "Keyword search works. Returns relevant results."
+                },
+                "ID threading": {
+                  "status": "PASS",
+                  "note": "Market IDs from search work in get_market and place_bet."
+                }
+              }
+            },
+            "3_trade": {
+              "status": "PASS",
+              "actions": {
+                "Preview": {
+                  "status": "FAIL",
+                  "note": "No simulate/preview tool. Bets execute immediately."
+                },
+                "Place bet": {
+                  "status": "PASS",
+                  "note": "M$10 YES bet: 36.07 shares, prob 27.71% → 27.74%. Zero fees."
+                },
+                "Check position": {
+                  "status": "PASS",
+                  "note": "get_positions returns full bet detail with fills."
+                },
+                "Sell": {
+                  "status": "PASS",
+                  "note": "sell_shares works (requires explicit outcome param despite schema saying optional). Full roundtrip: M$1000 → M$1000."
+                }
+              }
+            },
+            "4_lifecycle": {
+              "status": "PARTIAL",
+              "blockedReason": "create_market not implemented despite being in README.",
+              "actions": {
+                "Create market": {
+                  "status": "FAIL",
+                  "note": "Error -32601: Unknown tool. Not implemented in v0.1.1."
+                },
+                "Final balance": {
+                  "status": "PASS",
+                  "note": "M$1000 (unchanged after roundtrip — zero fees on Mana)."
+                }
+              }
+            }
+          },
+          "keyFindings": [
+            "Full buy/sell roundtrip works with clean JSON and zero fees. 9 of 18 documented tools implemented.",
+            "sell_shares requires explicit outcome param despite schema marking it optional — agent can self-correct from error.",
+            "Play money (Mana) — no real funds at stake. API key browser-only (not automatable)."
+          ],
+          "blockers": [
+            "create_market not implemented — cannot test full lifecycle",
+            "API key requires browser generation (profile → edit → refresh)",
+            "Only 9 of 18 documented tools available"
+          ]
+        }
+      ]
+    }
+  }
+}
