@@ -370,15 +370,6 @@ export function renderTesting() {
         toolTests.forEach((tt, ti) => {
           if (hasSubTabs) bodyHtml += `<div class="m-sub-panel" id="${uid}-st-${ti}" style="${ti>0?'display:none':''}">`;
 
-          const pills = [
-            tt.version ? 'v' + tt.version : '',
-            tt.chain,
-            tt.currency,
-            tt.auth ? 'Auth: ' + tt.auth : '',
-            tt.outputQuality ? 'Output: ' + tt.outputQuality : '',
-            tt.installCmd ? 'Install: ' + tt.installCmd : ''
-          ];
-
           let groups = [];
           if (tt.sections) {
             groups = UNIFIED_SECTIONS.map(sec => {
@@ -409,7 +400,6 @@ export function renderTesting() {
           }
 
           bodyHtml += head(`<span class="${gradeClass(tt.grade)}">${tt.grade}</span>`, tt.tool, tt.type);
-          bodyHtml += renderMeta(pills);
           bodyHtml += renderGroups(groups, true);
           bodyHtml += `<button class="m-show-more" data-show-more>Show details</button>`;
           bodyHtml += renderFindings('Key findings', tt.keyFindings, 'info');
@@ -425,13 +415,6 @@ export function renderTesting() {
       if (hasSkill) {
         bodyHtml += `<div class="methodology-content${firstTab==='skill'?' open':''}" id="${uid}-skill">`;
         skillTests.forEach(st => {
-          const pills = [
-            st.skillFormat ? 'Format: ' + st.skillFormat : '',
-            st.chain,
-            st.currency,
-            st.vpnRequired ? 'VPN required' : '',
-            st.methodUsed ? 'Method: ' + st.methodUsed : ''
-          ];
           const passed = st.milestones ? Object.values(st.milestones).filter(m => m.status === 'PASS').length : 0;
           const groups = [{
             title: 'Trade Cycle Milestones',
@@ -443,7 +426,6 @@ export function renderTesting() {
           }];
 
           bodyHtml += head(`<span class="${gradeClass(st.grade)}">${st.grade}</span>`, st.skill, `${passed}/8 passed`);
-          bodyHtml += renderMeta(pills);
           bodyHtml += renderGroups(groups);
           bodyHtml += `<button class="m-show-more" data-show-more>Show details</button>`;
           bodyHtml += renderFindings('Key findings', st.keyFindings, 'info');
