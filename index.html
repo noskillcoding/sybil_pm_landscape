@@ -552,6 +552,10 @@ table { border-collapse: collapse; width: 100%; }
   /* Card list layout: hide table chrome, render rows as cards */
   .t-table thead { display: none; }
   .t-table, .t-table tbody, .t-table tr, .t-table td { display: block; width: 100%; }
+  /* Hide detail rows by default on mobile (the universal 'tr' rule
+     above would otherwise make them visible). */
+  .t-table tbody tr.t-detail { display: none; }
+  .t-table tbody tr.t-detail.open { display: block; }
   .t-table tbody tr.t-row {
     border: 1px solid var(--line);
     margin-bottom: 12px;
@@ -594,18 +598,31 @@ table { border-collapse: collapse; width: 100%; }
 /* --- Stable table layout (no column shift on expand) ------ */
 .t-table { table-layout: fixed; width: 100%; }
 .t-table col.col-chev    { width: 22px; }
-.t-table col.col-pm      { width: auto; }
+.t-table col.col-pm      { width: 280px; }
 .t-table col.col-cat     { width: 130px; }
 .t-table col.col-chain   { width: 85px; }
-.t-table col.col-vol     { width: 140px; }
+.t-table col.col-vol     { width: 130px; }
 .t-table col.col-dev     { width: 170px; }
-.t-table col.col-agent   { width: 260px; }
+.t-table col.col-agent   { width: auto; }
 .t-table td, .t-table th { overflow: hidden; }
 .t-table td .t-tools { overflow: visible; }
 .t-pm > div:last-child { min-width: 0; flex: 1 1 auto; }
 .t-pm-name, .t-pm-meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .t-vol, .t-chain { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .t-cat { white-space: nowrap; }
+
+/* Right-align numeric + tool cluster so content hugs the right edge */
+/* Landscape table: volume (5), dev tools (6), agent tools (7) */
+#pmTable thead th:nth-child(5),
+#pmTable thead th:nth-child(6),
+#pmTable thead th:nth-child(7) { text-align: right; }
+#pmTable tbody td.t-vol { text-align: right; }
+#pmTable tbody td:nth-child(6) .t-tools,
+#pmTable tbody td:nth-child(7) .t-tools { justify-content: flex-end; }
+
+/* Testing table: dev tools count (4), AA (5), cli (6), skill (7), framework (8) */
+#testTable thead th:nth-child(n+4),
+#testTable tbody td:nth-child(n+4) { text-align: right; }
 
 /* Testing table column widths */
 .t-table col.col-tdev    { width: 90px; }
