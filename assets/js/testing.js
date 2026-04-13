@@ -1,7 +1,7 @@
 // assets/js/testing.js
 
 import { state } from './state.js';
-import { esc, gradeClass, toolTypeGlyphClass, toolTypeGlyphLabel } from './helpers.js';
+import { esc, gradeClass } from './helpers.js';
 import {
   TEST_COLS,
   TOOL_COL_MAP,
@@ -291,23 +291,19 @@ export function renderTesting() {
       if (t.npmUrl) return t.npmUrl;
       return null;
     };
-    const tRenderToolRow = (t) => {
+    const tRenderToolInline = (t) => {
       const url = tPrimaryUrl(t);
-      const nameEl = url
-        ? `<a class="t-dt-name" href="${esc(url)}" target="_blank" onclick="event.stopPropagation()">${esc(t.name)}</a>`
-        : `<span class="t-dt-name">${esc(t.name)}</span>`;
       const tipAttr = t.description ? ` title="${esc(t.description)}"` : '';
-      return `<li class="t-dt-row"${tipAttr}>
-        <span class="${toolTypeGlyphClass(t.type)}">${esc(toolTypeGlyphLabel(t.type))}</span>
-        ${nameEl}
-        ${tToolLinks(t)}
-      </li>`;
+      return url
+        ? `<a class="t-dt-name" href="${esc(url)}" target="_blank" onclick="event.stopPropagation()"${tipAttr}>${esc(t.name)}</a>`
+        : `<span class="t-dt-name"${tipAttr}>${esc(t.name)}</span>`;
     };
     const tAllTools = [...pm.coreTools, ...pm.aiTools];
     if (tAllTools.length) {
+      const toolsInline = tAllTools.map(tRenderToolInline).join('<span class="t-dt-sep">·</span>');
       bodyHtml += `<div class="t-detail-section">
         <div class="t-detail-h">tools · ${tAllTools.length}</div>
-        <ul class="t-dt-list">${tAllTools.map(tRenderToolRow).join('')}</ul>
+        <div class="t-dt-inline">${toolsInline}</div>
       </div>`;
     }
 

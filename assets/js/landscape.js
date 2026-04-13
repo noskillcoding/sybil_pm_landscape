@@ -1,7 +1,7 @@
 // assets/js/landscape.js
 
 import { state } from './state.js';
-import { esc, toolPillClass, toolPillLabel, toolTypeGlyphClass, toolTypeGlyphLabel } from './helpers.js';
+import { esc, toolPillClass, toolPillLabel } from './helpers.js';
 import { Sort } from './sort.js';
 import { Router } from './router.js';
 
@@ -125,15 +125,6 @@ export function render() {
     <td>${aiToolsHtml}</td>
   </tr>
 `;
-    const toolLinks = (t) => {
-      const links = [];
-      if (t.docsUrl) links.push(`<a href="${esc(t.docsUrl)}" target="_blank">docs</a>`);
-      if (Array.isArray(t.docsUrls)) t.docsUrls.forEach(u => { if (u) links.push(`<a href="${esc(u)}" target="_blank">docs</a>`); });
-      if (t.githubUrl) links.push(`<a href="${esc(t.githubUrl)}" target="_blank">github</a>`);
-      if (Array.isArray(t.githubUrls)) t.githubUrls.forEach(u => { if (u) links.push(`<a href="${esc(u)}" target="_blank">github</a>`); });
-      if (t.npmUrl) links.push(`<a href="${esc(t.npmUrl)}" target="_blank">npm</a>`);
-      return links.length ? `<div class="t-dt-links">${links.join('')}</div>` : '';
-    };
     const primaryUrl = (t) => {
       if (t.docsUrl) return t.docsUrl;
       if (Array.isArray(t.docsUrls) && t.docsUrls[0]) return t.docsUrls[0];
@@ -142,20 +133,15 @@ export function render() {
       if (t.npmUrl) return t.npmUrl;
       return null;
     };
-    const renderToolRow = (t) => {
+    const renderToolInline = (t) => {
       const url = primaryUrl(t);
-      const nameEl = url
-        ? `<a class="t-dt-name" href="${esc(url)}" target="_blank">${esc(t.name)}</a>`
-        : `<span class="t-dt-name">${esc(t.name)}</span>`;
       const tipAttr = t.description ? ` title="${esc(t.description)}"` : '';
-      return `<li class="t-dt-row"${tipAttr}>
-        <span class="${toolTypeGlyphClass(t.type)}">${esc(toolTypeGlyphLabel(t.type))}</span>
-        ${nameEl}
-        ${toolLinks(t)}
-      </li>`;
+      return url
+        ? `<a class="t-dt-name" href="${esc(url)}" target="_blank"${tipAttr}>${esc(t.name)}</a>`
+        : `<span class="t-dt-name"${tipAttr}>${esc(t.name)}</span>`;
     };
     const allTools = [...pm.coreTools, ...pm.aiTools];
-    const toolsHtml = allTools.map(renderToolRow).join('');
+    const toolsHtml = allTools.map(renderToolInline).join('<span class="t-dt-sep">·</span>');
 
     const linksHtml = [
       pm.website ? `<a href="${esc(pm.website)}" target="_blank">website</a>` : '',
@@ -165,7 +151,7 @@ export function render() {
     const toolsSection = allTools.length
       ? `<div class="t-detail-section">
            <div class="t-detail-h">tools · ${allTools.length}</div>
-           <ul class="t-dt-list">${toolsHtml}</ul>
+           <div class="t-dt-inline">${toolsHtml}</div>
          </div>`
       : '';
 

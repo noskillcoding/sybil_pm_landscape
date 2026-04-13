@@ -36,43 +36,23 @@
 .t-detail-toolchain { display: flex; flex-direction: column; gap: 24px; }
 .t-detail-section + .t-detail-section { padding-top: 4px; }
 
-/* Compact single-line tool rows — replaces the old card grid. */
-.t-dt-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.t-dt-row {
-  display: grid;
-  grid-template-columns: 38px 1fr auto;
+/* Inline bullet-separated tool list — single wrapped row of clickable names. */
+.t-dt-inline {
+  display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 10px;
-  padding: 5px 0;
-  border-bottom: 1px dashed var(--line);
+  gap: 6px 10px;
   font-size: 12.5px;
+  line-height: 1.7;
 }
-.t-dt-row:last-child { border-bottom: 0; }
-.t-dt-glyph {
-  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  text-align: right;
-  color: var(--ink-muted);
-  padding-top: 1px;
-}
-.t-dt-glyph-api  { color: var(--pill-api);   }
-.t-dt-glyph-sdk  { color: var(--pill-sdk);   }
-.t-dt-glyph-cli  { color: var(--pill-cli);   }
-.t-dt-glyph-mcp  { color: var(--pill-mcp);   }
-.t-dt-glyph-ws   { color: var(--pill-api);   }
-.t-dt-glyph-skl  { color: var(--pill-skill); }
-.t-dt-glyph-fw   { color: var(--pill-fw);    }
 .t-dt-name {
   color: var(--ink);
   font-weight: 500;
   border-bottom: 1px solid transparent;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
+a.t-dt-name { color: var(--ink); }
 a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.t-dt-sep { color: var(--ink-muted); }
 
 /* --- Testing detail row (unified) ------------------------- */
 .t-detail .methodology { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
@@ -213,32 +193,6 @@ a.t-dt-name:hover { color: var(--accent); border-bottom-color: var(--accent); }
   cursor: pointer;
 }
 .t-detail .m-show-more:hover { color: var(--ink); border-color: var(--line-2); }
-
-/* --- Tool-card external links (in expanded detail row) ---- */
-.t-dt-links {
-  margin-top: 6px;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
-.t-dt-links a {
-  color: var(--ink-dim);
-  border-bottom: 1px solid var(--line-2);
-  padding-bottom: 1px;
-}
-.t-dt-links a:hover { color: var(--accent); border-bottom-color: var(--accent); }
-
-/* Inline variant when .t-dt-links sits inside a .t-dt-row (compact list) */
-.t-dt-row .t-dt-links {
-  margin-top: 0;
-  display: inline-flex;
-  gap: 10px;
-  font-size: 10px;
-}
 
 /* --- Tighter detail layout (less width for description) --- */
 .t-detail-inner { grid-template-columns: 1fr 2fr; }
