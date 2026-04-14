@@ -10,7 +10,8 @@ import {
   UNIFIED_SECTION_LABELS,
   SKILL_MILESTONES,
   AA_DIMS,
-  AA_TOTAL_CHECKS
+  AA_TOTAL_CHECKS,
+  AA_MAX_SCORE
 } from './constants.js';
 
 // === Unified check-list primitive ============================
@@ -150,7 +151,7 @@ export function renderTesting() {
                    : 't-cat-play';
 
     const aaCell = aaRes
-      ? `<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span><span class="t-cell-tools">${aaRes.score}/${AA_TOTAL_CHECKS}</span>`
+      ? `<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span><span class="t-cell-tools">${aaRes.score}/${AA_MAX_SCORE}</span>`
       : `<span class="${gradeClass(null)}">untested</span>`;
     const tcell = key => {
       const r = res[key];
@@ -257,7 +258,7 @@ export function renderTesting() {
           })
         }));
         bodyHtml += `<div class="methodology-content${firstTab==='aa'?' open':''}" id="${uid}-aa">
-          ${head(`<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span>`, 'Agent Accessibility', `${aaRes.score}/${AA_TOTAL_CHECKS} checks passed`)}
+          ${head(`<span class="${gradeClass(aaRes.grade)}">${aaRes.grade}</span>`, 'Agent Accessibility', `${aaRes.score}/${AA_MAX_SCORE} weighted score`)}
           ${renderGroups(groups, true)}
           <button class="m-show-more" data-show-more>Show details</button>
         </div>`;

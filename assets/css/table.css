@@ -128,9 +128,10 @@
 .t-grade-d { color: var(--warn);   border-color: color-mix(in srgb, var(--warn)   40%, transparent); }
 .t-grade-f { color: var(--red);    border-color: color-mix(in srgb, var(--red)    40%, transparent); }
 .t-grade-na { color: var(--ink-muted); border-color: var(--line); border-style: dashed; }
-.t-grade-fwprod   { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
-.t-grade-fwusable { color: var(--cyan);   border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
-.t-grade-fwexp    { color: var(--warn);   border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+.t-grade-fwprod      { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.t-grade-fwusable    { color: var(--cyan);   border-color: color-mix(in srgb, var(--cyan) 40%, transparent); }
+.t-grade-fwexp       { color: var(--warn);   border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
+.t-grade-fwabandoned { color: var(--red);    border-color: color-mix(in srgb, var(--red) 40%, transparent); }
 .t-cell-tools { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--ink-muted); min-width: 32px; text-align: left; }
 .t-cell { display: inline-flex; align-items: center; gap: 6px; }
 

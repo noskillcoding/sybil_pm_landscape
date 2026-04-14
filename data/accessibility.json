@@ -1,6 +1,6 @@
 {
   "AIOmen / Presagio": {
-    "score": 7,
+    "score": 12,
     "grade": "C",
     "reachability": "open",
     "checks": {
@@ -64,10 +64,79 @@
         "pass": true,
         "note": "Site explicitly positions itself around AI agents: title Where predictions meet"
       }
+    },
+    "_regrade": {
+      "score": 12,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Alpha Arcade": {
-    "score": 6,
+    "score": 7,
     "grade": "D",
     "reachability": "cf-blocked",
     "checks": {
@@ -131,10 +200,79 @@
         "pass": false,
         "note": "No MCP server, agent guide, or bot policy found. No developer or agent-facing do"
       }
+    },
+    "_regrade": {
+      "score": 7,
+      "max": 23,
+      "grade": "D",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": false
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Baozi": {
-    "score": 11,
+    "score": 17,
     "grade": "B",
     "reachability": "open",
     "checks": {
@@ -198,10 +336,79 @@
         "pass": true,
         "note": "Comprehensive agent support: /.well-known/agents.json (agentspec v1), /llms.txt,"
       }
+    },
+    "_regrade": {
+      "score": 17,
+      "max": 23,
+      "grade": "B",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": false
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Context Markets": {
-    "score": 14,
+    "score": 22,
     "grade": "A",
     "reachability": "open",
     "checks": {
@@ -265,10 +472,79 @@
         "pass": true,
         "note": "Extensive agent-first documentation: MCP server with 17 tools, Claude Code plugi"
       }
+    },
+    "_regrade": {
+      "score": 22,
+      "max": 23,
+      "grade": "A",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Limitless": {
-    "score": 10,
+    "score": 15,
     "grade": "B",
     "reachability": "open",
     "checks": {
@@ -332,10 +608,79 @@
         "pass": false,
         "note": "No bot/agent policy, no MCP docs, no agent quickstart section"
       }
+    },
+    "_regrade": {
+      "score": 15,
+      "max": 23,
+      "grade": "B",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": false
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Manifold": {
-    "score": 11,
+    "score": 18,
     "grade": "B",
     "reachability": "open",
     "checks": {
@@ -399,10 +744,79 @@
         "pass": true,
         "note": "API docs explicitly list building bots, automated trading systems, algorithmic "
       }
+    },
+    "_regrade": {
+      "score": 18,
+      "max": 23,
+      "grade": "B",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Metaculus": {
-    "score": 10,
+    "score": 14,
     "grade": "B",
     "reachability": "cf-blocked",
     "checks": {
@@ -466,11 +880,80 @@
         "pass": true,
         "note": "Footer links to Tournaments for AI bots (/aib/) which redirects to /futureeval"
       }
+    },
+    "_regrade": {
+      "score": 14,
+      "max": 23,
+      "grade": "B",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Myriad": {
-    "score": 12,
-    "grade": "B",
+    "score": 19,
+    "grade": "A",
     "reachability": "cf-blocked",
     "checks": {
       "1.1": {
@@ -533,10 +1016,79 @@
         "pass": true,
         "note": "AI Agents & LLMs page with CLI, MCP tools, npm package docs"
       }
+    },
+    "_regrade": {
+      "score": 19,
+      "max": 23,
+      "grade": "A",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Opinion": {
-    "score": 9,
+    "score": 13,
     "grade": "C",
     "reachability": "cf-blocked",
     "checks": {
@@ -600,10 +1152,79 @@
         "pass": false,
         "note": "No bot policy, agent quickstart, or MCP mentions found"
       }
+    },
+    "_regrade": {
+      "score": 13,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Overtime": {
-    "score": 7,
+    "score": 11,
     "grade": "C",
     "reachability": "open",
     "checks": {
@@ -667,10 +1288,79 @@
         "pass": false,
         "note": "No explicit bot policy, AI agent documentation, or terms addressing automated ac"
       }
+    },
+    "_regrade": {
+      "score": 11,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": false
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Polymarket": {
-    "score": 13,
+    "score": 20,
     "grade": "A",
     "reachability": "open",
     "checks": {
@@ -734,10 +1424,79 @@
         "pass": false,
         "note": "No bot policy, agent quickstart, MCP docs, or dedicated agent section found"
       }
+    },
+    "_regrade": {
+      "score": 20,
+      "max": 23,
+      "grade": "A",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "predict.fun": {
-    "score": 9,
+    "score": 12,
     "grade": "C",
     "reachability": "cf-blocked",
     "checks": {
@@ -801,11 +1560,80 @@
         "pass": false,
         "note": "No explicit bot policy or robots.txt. However, dev docs FAQ mentions Context7 MC"
       }
+    },
+    "_regrade": {
+      "score": 12,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Probable": {
-    "score": 6,
-    "grade": "D",
+    "score": 9,
+    "grade": "C",
     "reachability": "cf-blocked",
     "checks": {
       "1.1": {
@@ -868,10 +1696,79 @@
         "pass": false,
         "note": "No bot policy page, no agent documentation, no terms for automated access. robot"
       }
+    },
+    "_regrade": {
+      "score": 9,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": false
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": false
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Rain Protocol": {
-    "score": 10,
+    "score": 15,
     "grade": "B",
     "reachability": "cf-blocked",
     "checks": {
@@ -935,10 +1832,79 @@
         "pass": true,
         "note": "Dedicated AI Agent documentation at /docs/For-Developers/Rain-for-Ai-Agents/. De"
       }
+    },
+    "_regrade": {
+      "score": 15,
+      "max": 23,
+      "grade": "B",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Sapience": {
-    "score": 13,
+    "score": 21,
     "grade": "A",
     "reachability": "open",
     "checks": {
@@ -1002,10 +1968,79 @@
         "pass": true,
         "note": "SKILL.md at /SKILL.md, Claude Code agent guide, OpenClaw, Codex docs"
       }
+    },
+    "_regrade": {
+      "score": 21,
+      "max": 23,
+      "grade": "A",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": true
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Seer": {
-    "score": 8,
+    "score": 13,
     "grade": "C",
     "reachability": "open",
     "checks": {
@@ -1069,10 +2104,79 @@
         "pass": false,
         "note": "No bot policy or agent-specific documentation. Seer is NOT listed in Gnosis pred"
       }
+    },
+    "_regrade": {
+      "score": 13,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "SX Bet": {
-    "score": 9,
+    "score": 13,
     "grade": "C",
     "reachability": "cf-blocked",
     "checks": {
@@ -1136,10 +2240,79 @@
         "pass": false,
         "note": "llms.txt exists but no explicit bot/agent policy document"
       }
+    },
+    "_regrade": {
+      "score": 13,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": true
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "Trueo": {
-    "score": 9,
+    "score": 13,
     "grade": "C",
     "reachability": "open",
     "checks": {
@@ -1203,10 +2376,79 @@
         "pass": false,
         "note": "No bot policy, AI agent documentation, or machine-readable API guidance found."
       }
+    },
+    "_regrade": {
+      "score": 13,
+      "max": 23,
+      "grade": "C",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": true
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": false
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "worm.wtf": {
-    "score": 4,
+    "score": 6,
     "grade": "D",
     "reachability": "open",
     "checks": {
@@ -1270,11 +2512,80 @@
         "pass": false,
         "note": "No bot policy, agent documentation, or AI interaction guidelines found anywhere."
       }
+    },
+    "_regrade": {
+      "score": 6,
+      "max": 23,
+      "grade": "D",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": false
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": false
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   },
   "XO Market": {
-    "score": 7,
-    "grade": "C",
+    "score": 8,
+    "grade": "D",
     "reachability": "cf-blocked",
     "checks": {
       "1.1": {
@@ -1337,6 +2648,75 @@
         "pass": false,
         "note": "No bot policy, no agent-specific documentation, no terms addressing automated ac"
       }
+    },
+    "_regrade": {
+      "score": 8,
+      "max": 23,
+      "grade": "D",
+      "floorReason": null,
+      "breakdown": {
+        "2.1": {
+          "weight": 3,
+          "pass": false
+        },
+        "3.3": {
+          "weight": 3,
+          "pass": false
+        },
+        "1.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.1": {
+          "weight": 2,
+          "pass": false
+        },
+        "4.2": {
+          "weight": 2,
+          "pass": true
+        },
+        "4.3": {
+          "weight": 2,
+          "pass": false
+        },
+        "1.2": {
+          "weight": 1,
+          "pass": false
+        },
+        "1.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.3": {
+          "weight": 1,
+          "pass": true
+        },
+        "2.4": {
+          "weight": 1,
+          "pass": false
+        },
+        "2.5": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.1": {
+          "weight": 1,
+          "pass": false
+        },
+        "3.2": {
+          "weight": 1,
+          "pass": true
+        },
+        "3.4": {
+          "weight": 1,
+          "pass": true
+        }
+      },
+      "formula": "AA v2 (weighted): 3pt×2 critical + 2pt×4 important + 1pt×9 standard"
     }
   }
 }

@@ -3,14 +3,14 @@
     "Limitless": {
       "cliMcp": {
         "status": "tested",
-        "grade": "C"
+        "grade": "D"
       },
       "_tools": [
         {
           "tool": "limitless-cli",
           "type": "CLI",
           "version": "0.1.0",
-          "grade": "C",
+          "grade": "D",
           "chain": "Base",
           "currency": "USDC",
           "auth": "browser",
@@ -132,13 +132,144 @@
           "blockers": [
             "CLI requires API key that can only be generated via interactive setup wizard or web UI (HMAC tokens incompatible)",
             "Private key alone is insufficient — API key check fires before signing"
-          ]
+          ],
+          "_regrade": {
+            "score": 10,
+            "max": 23,
+            "grade": "D",
+            "expectedMax": 23,
+            "floorReason": null,
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 2,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "BLOCKED",
+                    "pass": false
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 5,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 0,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 3,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": false,
+            "t5": false,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         },
         {
           "tool": "@iqai/mcp-limitless",
           "type": "MCP",
           "version": "0.0.5",
-          "grade": "C",
+          "grade": "D",
           "chain": "Base",
           "currency": "USDC",
           "auth": "wallet_sign",
@@ -261,7 +392,138 @@
           "blockers": [
             "CREATE_ORDER requires client to implement full EIP-712 signing flow externally — no trading abstraction",
             "MCP server is read-only in practice despite having trading tool definitions"
-          ]
+          ],
+          "_regrade": {
+            "score": 11,
+            "max": 23,
+            "grade": "D",
+            "expectedMax": 23,
+            "floorReason": "Trading floor: neither T4 (buy) nor T5 (sell) completes → cap D",
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 5,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 0,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 2,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": false,
+            "t5": false,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ]
     },
@@ -416,24 +678,156 @@
           ],
           "blockers": [
             "No pre-flight balance check — oversized orders silently cancelled with no structured error"
-          ]
+          ],
+          "_regrade": {
+            "score": 21,
+            "max": 23,
+            "grade": "A",
+            "expectedMax": 23,
+            "floorReason": null,
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 5,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 3,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": true,
+            "t5": true,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ]
     },
     "Polymarket": {
       "cliMcp": {
         "status": "tested",
-        "grade": "B"
+        "grade": "C"
       },
       "_tools": [
         {
           "tool": "polymarket-cli",
           "type": "CLI",
           "version": "0.1.5",
-          "grade": "B",
+          "grade": "C",
           "chain": "Polygon",
           "currency": "USDCe",
           "auth": "env_var",
+          "vpnRequired": true,
           "outputQuality": "json",
           "installCmd": "Download binary from GitHub releases",
           "sections": {
@@ -573,7 +967,138 @@
             "Proxy mode (default) requires external tooling to fund proxy wallet. Must set --signature-type eoa.",
             "No keyword search — only tag-based filtering",
             "No order preview/simulation"
-          ]
+          ],
+          "_regrade": {
+            "score": 19,
+            "max": 23,
+            "grade": "C",
+            "expectedMax": 23,
+            "floorReason": null,
+            "vpnReason": "VPN penalty: vpnRequired=true on a critical-trading tool → drop one tier (B → C)",
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 3,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": true,
+            "t5": true,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ],
       "skill": {
@@ -640,17 +1165,69 @@
           ],
           "blockers": [
             "Geoblocked in 33 countries including US, UK, France, Germany, Australia, Singapore — agents in these regions cannot use the skill without VPN, which is the primary reason for grade B despite 8/8 milestones passing"
-          ]
+          ],
+          "_regrade": {
+            "score": 13,
+            "max": 13,
+            "grade": "B",
+            "floorReason": null,
+            "vpnReason": "VPN penalty: vpnRequired=true on a critical milestone → drop one tier (A → B)",
+            "breakdown": {
+              "M1": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M2": {
+                "weight": 2,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M3": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M4": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M5": {
+                "weight": 3,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M6": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M7": {
+                "weight": 3,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M8": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              }
+            },
+            "m5": true,
+            "m7": true,
+            "formula": "Skill v2 (weighted): 3pt×2 critical (M5,M7) + 2pt×1 auth (M2) + 1pt×5 standard"
+          }
         }
       ],
       "framework": {
         "status": "tested",
-        "grade": "Experimental"
+        "grade": "Abandoned"
       },
       "_frameworkTools": [
         {
           "name": "Polymarket Agents",
-          "grade": "Experimental",
+          "grade": "Abandoned",
           "githubUrl": "https://github.com/Polymarket/agents",
           "categories": {
             "type": "Reference architecture for autonomous PM trading bots. Fork-and-modify starter kit, not a pip-installable library. Ships with execution disabled (commented out with TOS warning).",
@@ -666,7 +1243,21 @@
             "Last substantive commit October 2024 — effectively abandoned",
             "The \"test suite\" contains only Python tutorial examples (test_upper, test_isupper) — zero project tests",
             "2.7K GitHub stars but 47 open issues with no maintainer responses"
-          ]
+          ],
+          "_regrade": {
+            "score": 4,
+            "max": 15,
+            "grade": "Abandoned",
+            "typeQualifier": "trading",
+            "dimensions": {
+              "maintenance": 0,
+              "adoption": 1,
+              "completeness": 2,
+              "documentation": 1,
+              "safety": 0
+            },
+            "formula": "Framework v2: 5 dimensions × 0-3 + type qualifier"
+          }
         }
       ]
     },
@@ -821,7 +1412,138 @@
           ],
           "blockers": [
             "No cost preview tool — minor gap, agent can compute from pool state"
-          ]
+          ],
+          "_regrade": {
+            "score": 21,
+            "max": 23,
+            "grade": "A",
+            "expectedMax": 23,
+            "floorReason": null,
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 5,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": true,
+            "t5": true,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ]
     },
@@ -977,21 +1699,152 @@
           "blockers": [
             "No get_balance tool — cannot verify USDC/ALGO before trading",
             "No search/filter — must fetch all markets and filter client-side"
-          ]
+          ],
+          "_regrade": {
+            "score": 19,
+            "max": 23,
+            "grade": "B",
+            "expectedMax": 23,
+            "floorReason": null,
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 3,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": true,
+            "t5": true,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ]
     },
     "Context Markets": {
       "cliMcp": {
         "status": "tested",
-        "grade": "B"
+        "grade": "D"
       },
       "_tools": [
         {
           "tool": "context-markets-cli",
           "type": "CLI",
           "version": "0.4.3",
-          "grade": "B",
+          "grade": "D",
           "chain": "Base",
           "currency": "USDC",
           "auth": "api_key+private_key",
@@ -1133,18 +1986,149 @@
           "blockers": [
             "No private key configured — blocks all trading. Set CONTEXT_PRIVATE_KEY to unlock.",
             "No --version flag"
-          ]
+          ],
+          "_regrade": {
+            "score": 14,
+            "max": 23,
+            "grade": "D",
+            "expectedMax": 23,
+            "floorReason": "Trading floor: neither T4 (buy) nor T5 (sell) completes → cap D",
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 3,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 5,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 1,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "BLOCKED",
+                    "pass": false
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": false,
+            "t5": false,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ],
       "skill": {
         "status": "tested",
-        "grade": "C"
+        "grade": "D"
       },
       "_skillTools": [
         {
           "skill": "contextwtf/context-skills",
           "skillFormat": "navigation-hub",
-          "grade": "C",
+          "grade": "D",
           "chain": "Base",
           "currency": "USDC",
           "vpnRequired": true,
@@ -1200,7 +2184,59 @@
           ],
           "blockers": [
             "Geographic trading restriction + SettlementV2 migration blocks all trading"
-          ]
+          ],
+          "_regrade": {
+            "score": 5,
+            "max": 13,
+            "grade": "D",
+            "floorReason": "Trading floor: neither M5 (buy) nor M7 (sell) passes → cap D",
+            "vpnReason": null,
+            "breakdown": {
+              "M1": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M2": {
+                "weight": 2,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M3": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M4": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M5": {
+                "weight": 3,
+                "pass": false,
+                "status": "BLOCKED"
+              },
+              "M6": {
+                "weight": 1,
+                "pass": false,
+                "status": "BLOCKED"
+              },
+              "M7": {
+                "weight": 3,
+                "pass": false,
+                "status": "BLOCKED"
+              },
+              "M8": {
+                "weight": 1,
+                "pass": false,
+                "status": "BLOCKED"
+              }
+            },
+            "m5": false,
+            "m7": false,
+            "formula": "Skill v2 (weighted): 3pt×2 critical (M5,M7) + 2pt×1 auth (M2) + 1pt×5 standard"
+          }
         }
       ]
     },
@@ -1357,7 +2393,138 @@
           "blockers": [
             "No keyword search — must list all markets and filter client-side",
             "MCP returns unsigned transactions — agent needs external Solana signing infrastructure"
-          ]
+          ],
+          "_regrade": {
+            "score": 22,
+            "max": 23,
+            "grade": "A",
+            "expectedMax": 23,
+            "floorReason": null,
+            "vpnReason": null,
+            "breakdown": {
+              "setup": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "S1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "S4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "discovery": {
+                "weight": 1,
+                "pass": 4,
+                "total": 5,
+                "items": {
+                  "D1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "D4": {
+                    "weight": 1,
+                    "status": "FAIL",
+                    "pass": false
+                  },
+                  "D5": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "trading": {
+                "weight": 2,
+                "pass": 5,
+                "total": 5,
+                "items": {
+                  "T1": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T2": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T3": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T4": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "T5": {
+                    "weight": 2,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              },
+              "errors": {
+                "weight": 1,
+                "pass": 4,
+                "total": 4,
+                "items": {
+                  "E1": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E2": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E3": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  },
+                  "E4": {
+                    "weight": 1,
+                    "status": "PASS",
+                    "pass": true
+                  }
+                }
+              }
+            },
+            "t4": true,
+            "t5": true,
+            "formula": "CLI/MCP v2 (weighted, 2× trading): 1pt setup + 1pt discovery + 2pt trading + 1pt errors"
+          }
         }
       ],
       "skill": {
@@ -1427,7 +2594,59 @@
             "All 10 scripts described in SKILL.md are fictional — none exist in the repository",
             "Baozi API returns 401 (expired internal RPC key)",
             "An agent following the skill literally cannot complete any milestone beyond reading the document"
-          ]
+          ],
+          "_regrade": {
+            "score": 3,
+            "max": 13,
+            "grade": "D",
+            "floorReason": null,
+            "vpnReason": null,
+            "breakdown": {
+              "M1": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M2": {
+                "weight": 2,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M3": {
+                "weight": 1,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M4": {
+                "weight": 1,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M5": {
+                "weight": 3,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M6": {
+                "weight": 1,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M7": {
+                "weight": 3,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M8": {
+                "weight": 1,
+                "pass": false,
+                "status": "FAIL"
+              }
+            },
+            "m5": false,
+            "m7": false,
+            "formula": "Skill v2 (weighted): 3pt×2 critical (M5,M7) + 2pt×1 auth (M2) + 1pt×5 standard"
+          }
         }
       ],
       "framework": {
@@ -1453,20 +2672,28 @@
             "Paper trading mentioned in marketing but no API endpoints or documentation exist",
             ".well-known/agents.json follows AgentSpec v1.0.0 standard — good discovery mechanism",
             "Real agent tooling is the MCP server (76 tools, tested separately with grade A)"
-          ]
+          ],
+          "_regrade": {
+            "score": null,
+            "max": 15,
+            "grade": "N/A",
+            "typeQualifier": "platform-feature",
+            "typeOverrideReason": "Type qualifier `platform-feature` → grade overridden to N/A (not a framework)",
+            "formula": "Framework v2: 5 dimensions × 0-3 + type qualifier"
+          }
         }
       ]
     },
     "Sapience": {
       "skill": {
         "status": "tested",
-        "grade": "C"
+        "grade": "D"
       },
       "_skillTools": [
         {
           "skill": "SKILL.md (sapience.xyz)",
           "skillFormat": "sdk-guide",
-          "grade": "C",
+          "grade": "D",
           "chain": "Ethereal/Arbitrum",
           "currency": "WUSDe",
           "vpnRequired": false,
@@ -1524,17 +2751,69 @@
           "blockers": [
             "SDK version mismatch: skill v0.4 describes functions not in published SDK v0.2 — trading impossible",
             "Trading requires WUSDe on Ethereal chain — non-standard collateral with no documented acquisition path"
-          ]
+          ],
+          "_regrade": {
+            "score": 5,
+            "max": 13,
+            "grade": "D",
+            "floorReason": "Trading floor: neither M5 (buy) nor M7 (sell) passes → cap D",
+            "vpnReason": null,
+            "breakdown": {
+              "M1": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M2": {
+                "weight": 2,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M3": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M4": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M5": {
+                "weight": 3,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M6": {
+                "weight": 1,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M7": {
+                "weight": 3,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M8": {
+                "weight": 1,
+                "pass": false,
+                "status": "FAIL"
+              }
+            },
+            "m5": false,
+            "m7": false,
+            "formula": "Skill v2 (weighted): 3pt×2 critical (M5,M7) + 2pt×1 auth (M2) + 1pt×5 standard"
+          }
         }
       ],
       "framework": {
         "status": "tested",
-        "grade": "Experimental"
+        "grade": "Abandoned"
       },
       "_frameworkTools": [
         {
           "name": "ElizaOS Plugin",
-          "grade": "Experimental",
+          "grade": "Abandoned",
           "npmUrl": "https://www.npmjs.com/package/@sapiencexyz/elizaos-plugin",
           "categories": {
             "type": "MCP bridge plugin for the ElizaOS agent framework. Connects ElizaOS agents to Sapience prediction markets via Model Context Protocol. Not standalone — requires the full ElizaOS runtime.",
@@ -1550,20 +2829,34 @@
             "Plugin is architecturally clean (MCP client pattern) but dead in practice",
             "Sapience direct SDK (@sapience/sdk) is a more practical integration path",
             "Full ElizaOS runtime is heavy overhead for a single prediction market integration"
-          ]
+          ],
+          "_regrade": {
+            "score": 2,
+            "max": 15,
+            "grade": "Abandoned",
+            "typeQualifier": "plugin",
+            "dimensions": {
+              "maintenance": 0,
+              "adoption": 0,
+              "completeness": 1,
+              "documentation": 1,
+              "safety": 0
+            },
+            "formula": "Framework v2: 5 dimensions × 0-3 + type qualifier"
+          }
         }
       ]
     },
     "Rain Protocol": {
       "skill": {
         "status": "tested",
-        "grade": "A"
+        "grade": "C"
       },
       "_skillTools": [
         {
           "skill": "OpenClaw Skills (rain-trade, rain-data, rain-create-market)",
           "skillFormat": "openclaw",
-          "grade": "A",
+          "grade": "C",
           "chain": "Arbitrum One",
           "currency": "USDT",
           "vpnRequired": false,
@@ -1620,19 +2913,71 @@
           ],
           "blockers": [
             "No market sell function — cannot close positions without counterparty in orderbook"
-          ]
+          ],
+          "_regrade": {
+            "score": 10,
+            "max": 13,
+            "grade": "C",
+            "floorReason": "Trading floor: only M5 (buy) passes → cap C",
+            "vpnReason": null,
+            "breakdown": {
+              "M1": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M2": {
+                "weight": 2,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M3": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M4": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M5": {
+                "weight": 3,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M6": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              },
+              "M7": {
+                "weight": 3,
+                "pass": false,
+                "status": "FAIL"
+              },
+              "M8": {
+                "weight": 1,
+                "pass": true,
+                "status": "PASS"
+              }
+            },
+            "m5": true,
+            "m7": false,
+            "formula": "Skill v2 (weighted): 3pt×2 critical (M5,M7) + 2pt×1 auth (M2) + 1pt×5 standard"
+          }
         }
       ]
     },
     "Metaculus": {
       "framework": {
         "status": "tested",
-        "grade": "Production"
+        "grade": "Usable"
       },
       "_frameworkTools": [
         {
           "name": "forecasting-tools",
-          "grade": "Production",
+          "grade": "Usable",
           "githubUrl": "https://github.com/Metaculus/forecasting-tools",
           "categories": {
             "type": "Python SDK for building AI-powered forecasting bots. Submits probability estimates to Metaculus — not a trading framework (no positions, no orders, no money). Includes bot templates, benchmarking, and auto-prompt-optimization via genetic algorithms.",
@@ -1648,7 +2993,21 @@
             "Metaculus AI Forecasting Tournament provides free API credits to lower barrier to entry",
             "Well-structured: abstract ForecastBot base class with clean override points for research and forecasting",
             "MainBot uses OpenAI o3 for forecasting, GPT-4o for summarization — configurable per purpose"
-          ]
+          ],
+          "_regrade": {
+            "score": 11,
+            "max": 15,
+            "grade": "Usable",
+            "typeQualifier": "forecasting",
+            "dimensions": {
+              "maintenance": 3,
+              "adoption": 2,
+              "completeness": 2,
+              "documentation": 3,
+              "safety": 1
+            },
+            "formula": "Framework v2: 5 dimensions × 0-3 + type qualifier"
+          }
         }
       ]
     },
@@ -1676,7 +3035,21 @@
             "Companion repo has real agent implementations: ThinkThoroughly (GPT + web research + scenario decomposition), Prophet, Microchain (fully autonomous with 28 tool modules)",
             "Polymarket integration actively being built (fees, copy trading added April 2026)",
             "Seer tests recently disabled (April 2026) — Seer integration may be in flux"
-          ]
+          ],
+          "_regrade": {
+            "score": 13,
+            "max": 15,
+            "grade": "Production",
+            "typeQualifier": "trading",
+            "dimensions": {
+              "maintenance": 3,
+              "adoption": 3,
+              "completeness": 3,
+              "documentation": 2,
+              "safety": 2
+            },
+            "formula": "Framework v2: 5 dimensions × 0-3 + type qualifier"
+          }
         }
       ]
     },
@@ -1704,7 +3077,21 @@
             "Omenstrat is the primary Olas prediction agent — queries \"Mech\" AI data brokers for probabilities",
             "Pearl app provides no-code deployment of Olas agents using this framework",
             "Same framework as Seer — described once, applies to both platforms"
-          ]
+          ],
+          "_regrade": {
+            "score": 13,
+            "max": 15,
+            "grade": "Production",
+            "typeQualifier": "trading",
+            "dimensions": {
+              "maintenance": 3,
+              "adoption": 3,
+              "completeness": 3,
+              "documentation": 2,
+              "safety": 2
+            },
+            "formula": "Framework v2: 5 dimensions × 0-3 + type qualifier"
+          }
         }
       ]
     }

@@ -260,11 +260,15 @@ function renderTypeQualifier(tq) {
 
 function gradeChipClass(grade) {
   const g = String(grade).toLowerCase();
-  if (g === 'a' || g === 'production') return 't-grade t-grade-a';
-  if (g === 'b' || g === 'usable') return 't-grade t-grade-b';
-  if (g === 'c' || g === 'experimental') return 't-grade t-grade-c';
-  if (g === 'd' || g === 'abandoned') return 't-grade t-grade-d';
+  if (g === 'a') return 't-grade t-grade-a';
+  if (g === 'b') return 't-grade t-grade-b';
+  if (g === 'c') return 't-grade t-grade-c';
+  if (g === 'd') return 't-grade t-grade-d';
   if (g === 'f') return 't-grade t-grade-f';
+  if (g === 'production')   return 't-grade t-grade-fwprod';
+  if (g === 'usable')       return 't-grade t-grade-fwusable';
+  if (g === 'experimental') return 't-grade t-grade-fwexp';
+  if (g === 'abandoned')    return 't-grade t-grade-fwabandoned';
   return 't-grade t-grade-na';
 }
 

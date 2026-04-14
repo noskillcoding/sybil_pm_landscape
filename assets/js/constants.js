@@ -92,7 +92,8 @@ export const AA_DIMS = [
     { id: '4.3', label: 'Bot policy / agent docs',       why: 'Site or docs have explicit bot policy, agent quickstart, or tool integration docs. Concrete — not just "AI" in marketing copy.' }
   ]}
 ];
-export const AA_TOTAL_CHECKS = AA_DIMS.reduce((s, d) => s + d.checks.length, 0); // 15
+export const AA_TOTAL_CHECKS = AA_DIMS.reduce((s, d) => s + d.checks.length, 0); // 15 (count of checks)
+export const AA_MAX_SCORE = 23; // weighted max: 3pt×2 critical + 2pt×4 important + 1pt×9 standard
 
 // === FRAMEWORK ASSESSMENT (for methodology panel) ===
 export const FRAMEWORK_CATEGORIES = [

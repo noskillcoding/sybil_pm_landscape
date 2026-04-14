@@ -32,6 +32,7 @@ export function gradeClass(grade) {
   if (g === 'production')   return 't-grade t-grade-fwprod';
   if (g === 'usable')       return 't-grade t-grade-fwusable';
   if (g === 'experimental') return 't-grade t-grade-fwexp';
+  if (g === 'abandoned')    return 't-grade t-grade-fwabandoned';
   return 't-grade t-grade-na';
 }
 

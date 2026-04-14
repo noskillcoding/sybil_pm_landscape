@@ -787,7 +787,22 @@
     "volumeEstimate": "Declining",
     "volumeNumeric": 0,
     "category": "Regulated/CeFi",
-    "coreTools": [],
+    "coreTools": [
+      {
+        "name": "Market Data API",
+        "type": "API",
+        "description": "Public read-only REST endpoint returning bid/ask/last for all markets and contracts. No auth, ~60s update cadence. No trading endpoint — order placement is web-only.",
+        "docsUrl": "https://www.predictit.org/api/marketdata/all/",
+        "features": [
+          "list all markets",
+          "get single market by id",
+          "bid/ask/last per contract",
+          "no auth required",
+          "~60s rate limit",
+          "non-commercial license"
+        ]
+      }
+    ],
     "aiTools": []
   },
   {

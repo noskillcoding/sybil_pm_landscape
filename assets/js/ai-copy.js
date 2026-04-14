@@ -59,7 +59,7 @@ function buildClipboardText({ DATA, AA, TESTS }) {
     .sort((a, b) => b.score - a.score);
   const aaDist = {};
   aaEntries.forEach(e => { aaDist[e.grade] = (aaDist[e.grade] || 0) + 1; });
-  const aaTop = aaEntries.slice(0, 3).map(e => `${e.name} ${e.score}/15`).join(', ') || '(none)';
+  const aaTop = aaEntries.slice(0, 3).map(e => `${e.name} ${e.score}/23`).join(', ') || '(none)';
 
   // CLI/MCP
   const cliEntries = sortedByGrade(
