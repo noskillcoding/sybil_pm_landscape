@@ -14,61 +14,70 @@
 
 /* --- Tier section -------------------------------------------------- */
 .t-sm-tier {
-  margin-bottom: 44px;
+  margin-bottom: 56px;
 }
 .t-sm-tier:last-child {
   margin-bottom: 0;
+}
+.t-sm-tier + .t-sm-tier {
+  border-top: 1px solid var(--line);
+  padding-top: 44px;
+  margin-top: 44px;
 }
 
 .t-sm-tier-head {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 10px;
+  gap: 18px;
+  margin-bottom: 14px;
 }
 
 .t-sm-tier-badge {
-  font-size: 12px;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 1.8px;
+  letter-spacing: 2.2px;
   text-transform: uppercase;
-  padding: 7px 14px;
+  padding: 11px 22px;
   border: 1px solid currentColor;
   display: inline-block;
+  color: var(--bg);
 }
 .t-sm-tier.tier-a .t-sm-tier-badge {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  background: var(--accent);
+  border-color: var(--accent);
 }
 .t-sm-tier.tier-b .t-sm-tier-badge {
-  color: var(--cyan);
-  background: color-mix(in srgb, var(--cyan) 12%, transparent);
+  background: var(--cyan);
+  border-color: var(--cyan);
 }
 .t-sm-tier.tier-c .t-sm-tier-badge {
-  color: var(--warn);
-  background: color-mix(in srgb, var(--warn) 12%, transparent);
+  background: var(--warn);
+  border-color: var(--warn);
 }
 .t-sm-tier.tier-d .t-sm-tier-badge {
-  color: var(--ink-dim);
-  background: var(--bg-2);
+  background: var(--ink-dim);
+  border-color: var(--ink-dim);
 }
 .t-sm-tier.tier-e .t-sm-tier-badge {
-  color: var(--red);
-  background: color-mix(in srgb, var(--red) 12%, transparent);
+  background: var(--red);
+  border-color: var(--red);
 }
 
 .t-sm-tier-name {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
-  font-size: 18px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
   color: var(--ink);
   text-transform: none;
+  line-height: 1.1;
 }
 .t-sm-tier-count {
   color: var(--ink-muted);
-  font-size: 11px;
+  font-size: 12px;
   margin-left: auto;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
 }
 
 .t-sm-tier-sub {
@@ -273,23 +282,28 @@
   /* Tier header: badge + name + count must stack/wrap gracefully */
   .t-sm-tier-head {
     flex-wrap: wrap;
-    gap: 8px 10px;
+    gap: 10px 12px;
+    margin-bottom: 12px;
   }
   .t-sm-tier-badge {
-    font-size: 11px;
-    padding: 5px 10px;
-    letter-spacing: 1.4px;
+    font-size: 13px;
+    padding: 8px 14px;
+    letter-spacing: 1.6px;
   }
   .t-sm-tier-name {
-    font-size: 16px;
-    line-height: 1.25;
-    flex: 1 1 auto;
+    font-size: 22px;
+    line-height: 1.2;
+    flex: 1 1 100%;
     min-width: 0;
   }
   .t-sm-tier-count {
-    font-size: 10px;
+    font-size: 10.5px;
     margin-left: 0;
     flex: 0 0 auto;
+  }
+  .t-sm-tier + .t-sm-tier {
+    padding-top: 32px;
+    margin-top: 32px;
   }
   .t-sm-tier-sub {
     font-size: 12.5px;
@@ -363,11 +377,11 @@
 
   /* Tier badge gets a hair smaller so it fits next to the name */
   .t-sm-tier-badge {
-    font-size: 10px;
-    padding: 4px 8px;
-    letter-spacing: 1.2px;
+    font-size: 12px;
+    padding: 7px 12px;
+    letter-spacing: 1.4px;
   }
-  .t-sm-tier-name { font-size: 15px; }
+  .t-sm-tier-name { font-size: 19px; }
 
   /* Featured card head: glyph + name on one line, grades below */
   .t-sm-card { padding: 12px 14px; gap: 10px; }

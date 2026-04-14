@@ -97,11 +97,22 @@ export function render() {
       ? esc(pm.volumeEstimate || '—')
       : `<span class="t-vol-muted">${esc(pm.volumeEstimate || 'undisclosed')}</span>`;
 
-    const devToolsHtml = pm.coreTools.length
-      ? `<div class="t-tools">${pm.coreTools.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
+    const uniqueByType = (tools) => {
+      const seen = new Set();
+      return tools.filter(t => {
+        const key = (t.type || '').toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+    };
+    const coreUnique = uniqueByType(pm.coreTools);
+    const aiUnique = uniqueByType(pm.aiTools);
+    const devToolsHtml = coreUnique.length
+      ? `<div class="t-tools">${coreUnique.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
       : `<span class="t-pill t-pill-none">—</span>`;
-    const aiToolsHtml = pm.aiTools.length
-      ? `<div class="t-tools">${pm.aiTools.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
+    const aiToolsHtml = aiUnique.length
+      ? `<div class="t-tools">${aiUnique.map(t => `<span class="${toolPillClass(t.type)}">${esc(toolPillLabel(t.type))}</span>`).join('')}</div>`
       : `<span class="t-pill t-pill-none">—</span>`;
 
     const domain = (pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, '');

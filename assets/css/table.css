@@ -71,6 +71,27 @@
 }
 .t-pm-name { font-weight: 500; color: var(--ink); font-size: 13px; }
 .t-pm-meta { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-muted); }
+.t-pm-meta-link {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--ink-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.1s, border-color 0.1s;
+}
+.t-pm-meta-link:hover {
+  color: var(--accent);
+  border-bottom-color: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+.t-pm-meta-ext {
+  font-size: 9px;
+  color: var(--ink-faint);
+  transition: color 0.1s;
+}
+.t-pm-meta-link:hover .t-pm-meta-ext { color: var(--accent); }
 
 /* Category badge */
 .t-cat {

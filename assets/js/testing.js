@@ -162,6 +162,10 @@ export function renderTesting() {
       return `<span class="${gradeClass(r.grade)}">${r.grade}</span>`;
     };
 
+    const domain = (pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+    const metaHtml = pm.website
+      ? `<a class="t-pm-meta-link" href="${esc(pm.website)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${esc(domain)} <span class="t-pm-meta-ext">↗</span></a>`
+      : `<span class="t-pm-meta">${esc(domain)}</span>`;
     bodyHtml += `
   <tr class="t-row" data-pm="${esc(pm.name)}">
     <td class="t-chev">▶</td>
@@ -170,7 +174,7 @@ export function renderTesting() {
         ${pmGlyphHtml(pm)}
         <div>
           <div class="t-pm-name">${esc(pm.name)}</div>
-          <div class="t-pm-meta">${esc((pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}</div>
+          ${metaHtml}
         </div>
       </div>
     </td>
