@@ -71,7 +71,6 @@ function buildClipboardText({ DATA, AA, TESTS }) {
     '',
     '## Source',
     '',
-    '- GitHub: https://github.com/noskillcoding/sybil_pm_landscape',
     '- X: https://x.com/sybil_pm',
     '- Parent project: https://sybil.exchange'
   ];

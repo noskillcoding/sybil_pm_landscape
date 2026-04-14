@@ -734,7 +734,7 @@ After all seven tasks land, do a full walkthrough:
 
 1. **Fresh clone test:**
    ```bash
-   cd /tmp && rm -rf spl && git clone https://github.com/noskillcoding/sybil_pm_landscape.git spl
+   cd /tmp && rm -rf spl && git clone <repo-url> spl
    cd spl && git checkout redesign/terminal-density
    python3 -m http.server 8765
    ```

@@ -32,6 +32,5 @@ All data is available as static JSON — no API key, no CORS, no rate limits, no
 
 ## Source
 
-- [GitHub](https://github.com/noskillcoding/sybil_pm_landscape)
 - [Twitter](https://x.com/sybil_pm)
 - [Parent project: sybil.exchange](https://sybil.exchange)

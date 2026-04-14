@@ -597,9 +597,9 @@ Replace with:
 <footer class="t-footer mono">
   <div class="t-footer-left">sybil_pm_landscape · agent-authored · <span id="footerVersion">apr 2026</span></div>
   <div class="t-footer-right">
-    <a href="https://github.com/noskillcoding/sybil_pm_landscape/tree/main/methodology" target="_blank">methodology</a>
+    <a href="<repo-url>/tree/main/methodology" target="_blank">methodology</a>
     <span class="t-footer-sep">·</span>
-    <a href="https://github.com/noskillcoding/sybil_pm_landscape" target="_blank">source</a>
+    <a href="<repo-url>" target="_blank">source</a>
     <span class="t-footer-sep">·</span>
     <a href="#" target="_blank"><!-- TODO: replace # with project X handle when available -->x</a>
   </div>
