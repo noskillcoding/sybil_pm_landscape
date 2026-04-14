@@ -9,29 +9,37 @@ import { esc, gradeClass, pmGlyphHtml } from './helpers.js';
 // ---------------------------------------------------------------------
 // Tier data — single source of truth for the ranking.
 // Order within a tier matters: it's the display order.
+// `linkTo` = 'testing' means PM cards deep-link into the testing view
+// (per-check evidence). `linkTo` = 'landscape' goes to the landscape
+// view (tool list and metadata).
 // ---------------------------------------------------------------------
 const TIERS = [
   {
     id: 'tier-1',
+    letter: 'A',
     name: 'Production-ready',
     sub:  'Round-trip trade demonstrably works through a tested surface, no critical blockers.',
     layout: 'featured',
+    linkTo: 'testing',
     pms: [
       { name: 'Manifold',           verdict: 'Play-money MCP scores 17 of 18; the easiest place to start.' },
       { name: 'Baozi',              verdict: '76-tool MCP server on Solana with a clean round-trip.' },
       { name: 'Myriad',             verdict: 'BNB-chain CLI nails the full trade with one rough edge.' },
-      { name: 'Alpha Arcade',       verdict: 'Algorand MCP completes the trade despite a clunky install.' },
       { name: 'Seer',               verdict: 'Gnosis framework deploys real trading agents to Seer markets.' },
-      { name: 'AIOmen / Presagio',  verdict: '300+ daily active agents already trading via Olas.' }
+      { name: 'AIOmen / Presagio',  verdict: '300+ daily active agents already trading via Olas.' },
+      { name: 'Metaculus',          verdict: 'Active forecasting framework with daily commits — submits probability estimates, not trades.' }
     ]
   },
   {
     id: 'tier-2',
-    name: 'Trying but broken',
-    sub:  'Has tested agent surfaces that fail to complete the trade end-to-end.',
+    letter: 'B',
+    name: 'Trying but blocked',
+    sub:  'Has tested agent surfaces, but blocked by a trading failure, broken accessibility, or geofencing.',
     layout: 'featured',
+    linkTo: 'testing',
     pms: [
-      { name: 'Polymarket',      verdict: 'Most polished agent stack on the market; VPN-blocked everywhere it matters.' },
+      { name: 'Polymarket',      verdict: 'Most polished agent stack on the market; geoblocked in 33 countries including the US, UK, EU, and Australia.' },
+      { name: 'Alpha Arcade',    verdict: 'MCP completes the trade, but the website is rated D for agent accessibility — agents must already know the tool exists.' },
       { name: 'Rain Protocol',   verdict: 'OpenClaw skill opens positions but cannot close them.' },
       { name: 'Limitless',       verdict: 'Two tools published, both auth-walled, zero trading checks pass.' },
       { name: 'Context Markets', verdict: 'CLI and Skill both exist; neither completes a trade end-to-end.' },
@@ -40,34 +48,37 @@ const TIERS = [
   },
   {
     id: 'tier-3',
-    name: 'Dev tools, agent layer untested',
-    sub:  'These PMs ship developer APIs, but this research benchmarks agent-specific interfaces (CLI, MCP, Skill, Framework). Until we test theirs at that layer, they sit between "agent-ready" and "closed" without a confident verdict.',
+    letter: 'C',
+    name: 'Dev tools, no agentic layer',
+    sub:  'These PMs ship developer APIs and SDKs, but no MCP, Skill, or Framework has been published or tested. They could be agent-ready with effort; we just don\'t have evidence yet.',
     layout: 'compact',
+    linkTo: 'landscape',
     pms: [
       { name: 'Kalshi' },
+      { name: 'XO Market' },
       { name: 'Opinion' },
       { name: 'SX Bet' },
       { name: 'predict.fun' },
-      { name: 'Overtime' },
       { name: 'Probable' },
       { name: 'Trueo' },
-      { name: 'XO Market' },
-      { name: 'worm.wtf' },
-      { name: 'Robinhood Prediction Markets' },
-      { name: 'OG (by Crypto.com)' },
       { name: 'Interactive Brokers (ForecastTrader)' },
-      { name: 'PredictIt' },
-      { name: 'Metaculus' }
+      { name: 'PredictIt' }
     ]
   },
   {
     id: 'tier-4',
+    letter: 'D',
     name: 'Closed to agents',
-    sub:  'No public dev surface beyond the consumer web UI.',
+    sub:  'No public dev surface beyond the consumer web UI. No documented API, no SDK, no agent layer.',
     layout: 'compact',
+    linkTo: 'landscape',
     pms: [
+      { name: 'Robinhood Prediction Markets' },
+      { name: 'OG (by Crypto.com)' },
       { name: 'DraftKings Predictions' },
-      { name: 'FanDuel Predicts' }
+      { name: 'FanDuel Predicts' },
+      { name: 'Overtime' },
+      { name: 'worm.wtf' }
     ]
   }
 ];
@@ -80,37 +91,37 @@ const FINDINGS = [
   {
     n: '01',
     headline: 'Geoblocking treats agents like they\'re human.',
-    body: 'Polymarket, the most agent-tooled PM in the dataset, is geofenced in 33 countries including the US, UK, EU, and Australia. Agents run on cloud VPS wherever it\'s cheapest; that location reflects the operator\'s hosting choice, not their jurisdiction.'
+    body: 'Polymarket, the most agent-tooled PM in the dataset, is geofenced in 33 countries including the US, UK, EU, and Australia. Agents run on cloud VPS in whichever region the operator chooses; that location reflects hosting decisions, not the operator\'s actual jurisdiction.'
   },
   {
     n: '02',
     headline: 'The biggest PMs are not the friendliest to agents.',
-    body: 'Polymarket and Kalshi together account for the majority of total prediction-market volume. Neither is in Tier 1. The top of the ranking is mid-volume DeFi: Manifold, Baozi, Myriad.'
+    body: 'Polymarket and Kalshi together account for the majority of total prediction-market volume. Neither is in Tier A. The top of the ranking is mid-volume DeFi: Manifold, Baozi, Myriad.'
   },
   {
     n: '03',
-    headline: 'Half the agent surfaces ship without safety guardrails.',
-    body: 'Of the framework-grade integrations evaluated, only the Gnosis prediction-market-agent-tooling library includes any form of position sizing or risk control. Polymarket Agents ships with verbatim "zero safety guardrails: no position limits, no stop-losses, infinite recursive retry on errors". The default agent integration executes whatever the model decides.'
-  },
-  {
-    n: '04',
     headline: 'Some "agent surfaces" exist nominally but don\'t function.',
     body: 'Limitless ships a CLI and an MCP server — both pinned to versions, both auth-walled, both fail every trading check. Sapience\'s ElizaOS plugin gets ~1 download/week and targets a host framework version that no longer exists. Polymarket Agents has 2.7K stars but the execution path is commented out by default.'
   },
   {
-    n: '05',
+    n: '04',
     headline: 'There is no shared format for agent surfaces.',
     body: 'The five skills tested use five different formats: SKILL.md, OpenClaw script bundles, custom SDK guides, navigation-hub markdown. Frameworks vary just as widely. An agent built for one PM cannot transfer to another. There is no equivalent of OpenAPI for prediction markets.'
   },
   {
-    n: '06',
+    n: '05',
     headline: 'Most regulated PMs treat agents as a B2B integration channel, not as users.',
     body: 'Of seven regulated/CeFi PMs surveyed, only Kalshi has a developer surface that an agent could reasonably use today. Even Kalshi has not published an agent-specific layer — its API is built for institutional partners. Robinhood, OG, Interactive Brokers, PredictIt, DraftKings, and FanDuel have minimal or no public dev surface.'
   },
   {
-    n: '07',
+    n: '06',
     headline: 'Dev surface and website live in two different worlds.',
     body: '11 of the 20 PMs scored for agent accessibility sit at C or D, including PMs whose APIs we know are functional. PMs invest in developer documentation for partners who already know what they\'re looking for, while leaving their consumer website unparseable to a fetch-only agent. Discoverability is a separate problem from documentation.'
+  },
+  {
+    n: '07',
+    headline: 'Only one agentic framework ships with built-in risk controls.',
+    body: 'Of the six framework-grade integrations evaluated, only the Gnosis prediction-market-agent-tooling library includes any form of position sizing (Kelly criterion variants). Polymarket Agents ships with verbatim "zero safety guardrails: no position limits, no stop-losses, infinite recursive retry on errors". Every other agent framework executes whatever the model decides.'
   }
 ];
 
@@ -121,30 +132,39 @@ function pmByName(name) {
   return (window.DATA || []).find(p => p.name === name);
 }
 
-function pmGradePills(pm) {
-  if (!pm) return '';
+function slugify(name) {
+  return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
+// Returns array of { label, grade, kind } for a PM, in display order.
+// `kind` matches the column the grade comes from.
+function pmGrades(pm) {
+  if (!pm) return [];
   const tr = (window.TEST_RESULTS || {})[pm.name] || {};
   const aa = (window.AA_RESULTS || {})[pm.name];
-  const pills = [];
-  if (aa && aa.grade) {
-    pills.push(`<span class="t-sm-pill ${gradeClass(aa.grade)}" title="Agent Accessibility">${esc(aa.grade)}</span>`);
-  }
-  if (tr.cliMcp && tr.cliMcp.grade) {
-    pills.push(`<span class="t-sm-pill ${gradeClass(tr.cliMcp.grade)}" title="CLI / MCP">${esc(tr.cliMcp.grade)}</span>`);
-  }
-  if (tr.skill && tr.skill.grade) {
-    pills.push(`<span class="t-sm-pill ${gradeClass(tr.skill.grade)}" title="Skill">${esc(tr.skill.grade)}</span>`);
-  }
-  if (tr.framework && tr.framework.grade) {
-    pills.push(`<span class="t-sm-pill ${gradeClass(tr.framework.grade)}" title="Framework">${esc(tr.framework.grade)}</span>`);
-  }
-  return pills.join('');
+  const out = [];
+  if (aa && aa.grade)            out.push({ label: 'AA',    grade: aa.grade });
+  if (tr.cliMcp && tr.cliMcp.grade)    out.push({ label: 'CLI',   grade: tr.cliMcp.grade });
+  if (tr.skill && tr.skill.grade)      out.push({ label: 'SKILL', grade: tr.skill.grade });
+  if (tr.framework && tr.framework.grade) out.push({ label: 'FW',    grade: tr.framework.grade });
+  return out;
+}
+
+function pmGradePillsHtml(pm) {
+  const grades = pmGrades(pm);
+  if (!grades.length) return '';
+  return grades.map(g => `<div class="t-sm-grade-cell">
+    <div class="t-sm-grade-label mono">${esc(g.label)}</div>
+    <span class="t-sm-pill ${gradeClass(g.grade)}">${esc(g.grade)}</span>
+  </div>`).join('');
 }
 
 function pmCategoryAndChain(pm) {
   if (!pm) return '';
   const cat = (pm.category || '').toLowerCase();
-  const chain = pm.chain ? pm.chain.split(/[(,]/)[0].trim() : '';
+  const chain = pm.chain && pm.chain.toLowerCase() !== 'none'
+    ? pm.chain.split(/[(,]/)[0].trim()
+    : '';
   return [cat, chain].filter(Boolean).join(' · ');
 }
 
@@ -181,12 +201,13 @@ function renderStats() {
   </div>`;
 }
 
-function pmCardFeatured(entry) {
+function pmCardFeatured(entry, linkTo) {
   const pm = pmByName(entry.name);
   const meta = pmCategoryAndChain(pm);
-  const pills = pmGradePills(pm);
-  const slug = (pm && pm.name || entry.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  return `<a class="t-sm-card" href="#/landscape/${slug}">
+  const pills = pmGradePillsHtml(pm);
+  const slug = slugify(pm ? pm.name : entry.name);
+  const href = `#/${linkTo}/${slug}`;
+  return `<a class="t-sm-card" href="${href}">
     <div class="t-sm-card-head">
       ${pm ? pmGlyphHtml(pm) : ''}
       <div class="t-sm-card-id">
@@ -199,11 +220,12 @@ function pmCardFeatured(entry) {
   </a>`;
 }
 
-function pmCardCompact(entry) {
+function pmCardCompact(entry, linkTo) {
   const pm = pmByName(entry.name);
   const meta = pmCategoryAndChain(pm);
-  const slug = (pm && pm.name || entry.name).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-  return `<a class="t-sm-mini" href="#/landscape/${slug}">
+  const slug = slugify(pm ? pm.name : entry.name);
+  const href = `#/${linkTo}/${slug}`;
+  return `<a class="t-sm-mini" href="${href}">
     ${pm ? pmGlyphHtml(pm) : ''}
     <div class="t-sm-mini-id">
       <div class="t-sm-mini-name">${esc(entry.name)}</div>
@@ -214,11 +236,14 @@ function pmCardCompact(entry) {
 
 function renderTier(tier) {
   const cards = tier.pms.map(p =>
-    tier.layout === 'featured' ? pmCardFeatured(p) : pmCardCompact(p)
+    tier.layout === 'featured'
+      ? pmCardFeatured(p, tier.linkTo)
+      : pmCardCompact(p, tier.linkTo)
   ).join('');
   const gridClass = tier.layout === 'featured' ? 't-sm-grid-featured' : 't-sm-grid-compact';
   return `<section class="t-sm-tier ${tier.id}">
     <div class="t-sm-tier-head">
+      <span class="t-sm-tier-badge mono">TIER ${esc(tier.letter)}</span>
       <span class="t-sm-tier-name mono">${esc(tier.name)}</span>
       <span class="t-sm-tier-count mono">${tier.pms.length} ${tier.pms.length === 1 ? 'PM' : 'PMs'}</span>
     </div>

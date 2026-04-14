@@ -65,10 +65,11 @@ export const Router = {
     } else {
       renderFor(targetView);
     }
-    if (s.pm) setTimeout(() => this.scrollToAndExpand(s.pm), 0);
+    if (s.pm) setTimeout(() => this.scrollToAndExpand(s.pm, s.view), 100);
   },
-  scrollToAndExpand(slug) {
-    const rows = document.querySelectorAll('#tableBody .t-row');
+  scrollToAndExpand(slug, view) {
+    const tbodyId = view === 'testing' ? 'testTableBody' : 'tableBody';
+    const rows = document.querySelectorAll('#' + tbodyId + ' .t-row');
     for (const row of rows) {
       if (this.slug(row.dataset.pm || '') === slug) {
         if (!row.classList.contains('expanded')) row.click();
