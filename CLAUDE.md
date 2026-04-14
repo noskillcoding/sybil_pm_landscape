@@ -9,8 +9,17 @@ A research project that benchmarks prediction markets (PMs) on how accessible th
 ## Deploy / run
 
 - **Local preview:** `python3 -m http.server 8765` from the repo root, then open `http://localhost:8765/index.html`.
-- **Production deploy:** `npx vercel deploy --prod` (Vercel static hosting).
+- **Production deploy:** `npx vercel deploy --prod` (Vercel static hosting). **Note**: as of 2026-04-14 there is no live URL — Vercel deploy was stripped 2026-04-13 and the eventual home is a route in sybil-landing (see below). Active branch is `redesign/terminal-density`.
 - **Important:** opening `index.html` via `file://` no longer works. The dashboard uses ES modules and `fetch()` against local JSON files, both of which are CORS-blocked from the `file://` origin. You need an HTTP server.
+
+## Eventual home: sybil.exchange/agentic-research
+
+This repo is destined to live as a route inside [sybil-landing](https://github.com/noskillcoding/sybil-landing) at `https://sybil.exchange/agentic-research` ("Phase 4" of the sybil deployment migration — not done as of 2026-04-14). Plan: drop `assets/`, `data/`, `index.html` into sybil-landing's `public/agentic-research/`. Research artifacts (`methodology/`, `results/`, `templates/`) stay here as the editorial source.
+
+Wider sybil ecosystem (for context):
+- [sybil-landing](https://github.com/noskillcoding/sybil-landing) — Next.js apex on Vercel; will host the agentic research dashboard as a route after Phase 4
+- [sybil-spike-analysis](https://github.com/noskillcoding/sybil-spike-analysis) — Streamlit dashboard iframed at `sybil.exchange/spike-analysis/dashboard`, static viz at `sybil.exchange/spike-analysis/viz`
+- VPS `185.182.185.70`: hosts the spike Streamlit dashboard and Postgres for sybil-landing's `/api/subscribe` and `/admin`. Sybil web traffic otherwise goes through Vercel.
 
 ## Architecture
 
