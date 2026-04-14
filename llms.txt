@@ -1,30 +1,34 @@
 # Sybil PM Landscape
 
-> Research dashboard benchmarking how accessible 27 prediction markets are to autonomous AI trading agents. Four independent benchmarks — agent accessibility, CLI/MCP, skill, and framework — run by autonomous coding agents against every PM with a developer surface. Every score, summary, and finding on this site was produced by autonomous coding agents.
+> Research dashboard ranking 27 prediction markets across 5 tiers (A–E) by what an autonomous AI agent can demonstrably do today. Four independent benchmarks — agent accessibility, CLI/MCP, skill, and framework — all run by autonomous coding agents. Every score, summary, and finding on this site was produced by autonomous coding agents. April 2026 snapshot.
 
 All links below are relative — resolve them against whichever host you fetched this file from.
 
+## Pages
+
+- [Summary](/#/summary): 5-tier ranked list (A–E) plus 6 hot-take findings. Start here.
+- [Landscape](/#/landscape): full 27-PM table with category, volume, tools, and links.
+- [Testing](/#/testing): per-benchmark grades for 20 PMs plus per-check evidence.
+- [Methodology](/#/methodology): formula descriptions, floor rules, grade buckets.
+
 ## Dataset
 
-- [pms.json](/data/pms.json): 27 prediction market entries — name, category, chain, volume, website, twitter, coreTools, aiTools (~40KB)
-- [accessibility.json](/data/accessibility.json): per-PM grades on 15 agent-accessibility checks across 4 dimensions
-- [tests.json](/data/tests.json): CLI/MCP, skill, and framework test results per PM (structured as `{current, legacy}`)
+- [pms.json](/data/pms.json): 27 prediction market entries — name, category, chain, volume, website, twitter, coreTools, aiTools (~40KB). The canonical place for tool links (MCP server, CLI repo, SDK, framework).
+- [accessibility.json](/data/accessibility.json): per-PM agent-accessibility grades. 15 checks weighted into a max-23 score. Each entry carries a `_regrade` audit field with the per-check breakdown.
+- [tests.json](/data/tests.json): CLI/MCP, skill, and framework benchmark results. Shape: `{current, legacy}`. Each tool/skill/framework entry under `current` carries a `_regrade` audit with weighted score, max, floor reason, and VPN-penalty reason.
 
 ## Methodology
 
-- [Agent Accessibility (15 checks)](/methodology/agent-accessibility.md)
-- [CLI/MCP Test (18 checks)](/methodology/cli-mcp-test.md)
-- [Skill Test (8 milestones)](/methodology/skill-test.md)
-- [Framework Assessment (5 categories)](/methodology/framework-assessment.md)
+- [Agent Accessibility (15 checks → max 23, weighted)](/methodology/agent-accessibility.md)
+- [CLI/MCP Test (18 checks → max 23, trading 2× weighted)](/methodology/cli-mcp-test.md)
+- [Skill Test (8 milestones → max 13, M5/M7 weighted 3pt)](/methodology/skill-test.md)
+- [Framework Assessment (5 quality dimensions × 0–3 = max 15)](/methodology/framework-assessment.md)
 
-## Tools
-
-- [Landscape view](/#/landscape): filterable table of all 27 markets
-- [Testing view](/#/testing): per-benchmark grades across 18 PMs with a developer surface
+The full methodology — including the round-trip-floor and VPN-penalty rules — is also rendered as a single page at [/#/methodology](/#/methodology).
 
 ## For autonomous agents
 
-All data is available as static JSON — no API key, no CORS, no rate limits, no JavaScript required. The dashboard UI renders client-side, but the underlying dataset is readable by a simple fetch. The HTML at `/` also includes a `<noscript>` fallback listing all 27 markets for no-JS crawlers.
+All data is available as static JSON — no API key, no CORS, no rate limits, no JavaScript required. The dashboard UI renders client-side, but the underlying dataset is readable by a simple `fetch`. The HTML at `/` also includes a `<noscript>` fallback listing all 27 markets for no-JS crawlers.
 
 ## Source
 
