@@ -60,10 +60,13 @@ function renderFindings(title, items, tone /* 'info' | 'red' */) {
 }
 
 export function getTestablePMs() {
-  return window.DATA.filter(pm =>
-    (pm.category === 'Decentralized' || pm.category === 'Play Money') &&
-    (pm.coreTools.length > 0 || pm.aiTools.length > 0)
-  );
+  return window.DATA.filter(pm => {
+    if (pm.category !== 'Decentralized' && pm.category !== 'Play Money') return false;
+    const hasTools = (pm.coreTools.length > 0 || pm.aiTools.length > 0);
+    const aa = (window.AA_RESULTS || {})[pm.name];
+    const hasAa = !!(aa && typeof aa.score === 'number');
+    return hasTools || hasAa;
+  });
 }
 
 export function pmToolsByCol(pm) {
@@ -122,7 +125,7 @@ export function renderTesting() {
 
   const total = pms.length;
 
-  document.getElementById('testResultsCount').textContent = `${total} decentralized & play-money PMs with dev tools`;
+  document.getElementById('testResultsCount').textContent = `${total} decentralized & play-money PMs benchmarked`;
 
   // Table head
   document.getElementById('testTableHead').innerHTML = `

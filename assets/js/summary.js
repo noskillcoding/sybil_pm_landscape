@@ -15,10 +15,10 @@ import { esc, gradeClass, pmGlyphHtml } from './helpers.js';
 // ---------------------------------------------------------------------
 const TIERS = [
   {
-    id: 'tier-1',
+    id: 'tier-a',
     letter: 'A',
     name: 'Production-ready',
-    sub:  'Round-trip trade demonstrably works through a tested surface, no critical blockers.',
+    sub:  'Round-trip trade works through a tested surface with no significant friction. Safe to point an agent at today.',
     layout: 'featured',
     linkTo: 'testing',
     pms: [
@@ -31,15 +31,25 @@ const TIERS = [
     ]
   },
   {
-    id: 'tier-2',
+    id: 'tier-b',
     letter: 'B',
-    name: 'Trying but blocked',
-    sub:  'Has tested agent surfaces, but blocked by a trading failure, broken accessibility, or geofencing.',
+    name: 'Workable with friction',
+    sub:  'A real trade completes, but a major friction point keeps it from being production-ready: geofencing, hostile accessibility, or VPN-only access.',
     layout: 'featured',
     linkTo: 'testing',
     pms: [
       { name: 'Polymarket',      verdict: 'Most polished agent stack on the market; geoblocked in 33 countries including the US, UK, EU, and Australia.' },
-      { name: 'Alpha Arcade',    verdict: 'MCP completes the trade, but the website is rated D for agent accessibility — agents must already know the tool exists.' },
+      { name: 'Alpha Arcade',    verdict: 'MCP completes the trade, but the website is rated D for agent accessibility — agents must already know the tool exists.' }
+    ]
+  },
+  {
+    id: 'tier-c',
+    letter: 'C',
+    name: 'Surface exists, doesn\'t function',
+    sub:  'Has tested agent surfaces (CLI, MCP, or Skill) that fail to complete a real trade end-to-end.',
+    layout: 'featured',
+    linkTo: 'testing',
+    pms: [
       { name: 'Rain Protocol',   verdict: 'OpenClaw skill opens positions but cannot close them.' },
       { name: 'Limitless',       verdict: 'Two tools published, both auth-walled, zero trading checks pass.' },
       { name: 'Context Markets', verdict: 'CLI and Skill both exist; neither completes a trade end-to-end.' },
@@ -47,8 +57,8 @@ const TIERS = [
     ]
   },
   {
-    id: 'tier-3',
-    letter: 'C',
+    id: 'tier-d',
+    letter: 'D',
     name: 'Dev tools, no agentic layer',
     sub:  'These PMs ship developer APIs and SDKs, but no MCP, Skill, or Framework has been published or tested. They could be agent-ready with effort; we just don\'t have evidence yet.',
     layout: 'compact',
@@ -66,8 +76,8 @@ const TIERS = [
     ]
   },
   {
-    id: 'tier-4',
-    letter: 'D',
+    id: 'tier-e',
+    letter: 'E',
     name: 'Closed to agents',
     sub:  'No public dev surface beyond the consumer web UI. No documented API, no SDK, no agent layer.',
     layout: 'compact',
@@ -84,7 +94,7 @@ const TIERS = [
 ];
 
 // ---------------------------------------------------------------------
-// Hot takes — 7 short, shareable findings.
+// Findings — short, shareable observations.
 // Each is a numeral + headline + 2 sentence body.
 // ---------------------------------------------------------------------
 const FINDINGS = [
@@ -105,23 +115,18 @@ const FINDINGS = [
   },
   {
     n: '04',
-    headline: 'There is no shared format for agent surfaces.',
-    body: 'The five skills tested use five different formats: SKILL.md, OpenClaw script bundles, custom SDK guides, navigation-hub markdown. Frameworks vary just as widely. An agent built for one PM cannot transfer to another. There is no equivalent of OpenAPI for prediction markets.'
-  },
-  {
-    n: '05',
     headline: 'Most regulated PMs treat agents as a B2B integration channel, not as users.',
     body: 'Of seven regulated/CeFi PMs surveyed, only Kalshi has a developer surface that an agent could reasonably use today. Even Kalshi has not published an agent-specific layer — its API is built for institutional partners. Robinhood, OG, Interactive Brokers, PredictIt, DraftKings, and FanDuel have minimal or no public dev surface.'
   },
   {
-    n: '06',
+    n: '05',
     headline: 'Dev surface and website live in two different worlds.',
     body: '11 of the 20 PMs scored for agent accessibility sit at C or D, including PMs whose APIs we know are functional. PMs invest in developer documentation for partners who already know what they\'re looking for, while leaving their consumer website unparseable to a fetch-only agent. Discoverability is a separate problem from documentation.'
   },
   {
-    n: '07',
-    headline: 'Only one agentic framework ships with built-in risk controls.',
-    body: 'Of the six framework-grade integrations evaluated, only the Gnosis prediction-market-agent-tooling library includes any form of position sizing (Kelly criterion variants). Polymarket Agents ships with verbatim "zero safety guardrails: no position limits, no stop-losses, infinite recursive retry on errors". Every other agent framework executes whatever the model decides.'
+    n: '06',
+    headline: 'There is no shared format for agent surfaces.',
+    body: 'The five skills tested use five different formats: SKILL.md, OpenClaw script bundles, custom SDK guides, navigation-hub markdown. Frameworks vary just as widely. An agent built for one PM cannot transfer to another. There is no equivalent of OpenAPI for prediction markets.'
   }
 ];
 
@@ -258,7 +263,7 @@ function renderTiers() {
 
 function renderFindings() {
   return `<div class="t-sm-findings-head">
-    <span class="t-detail-h">hot takes</span>
+    <span class="t-detail-h">findings</span>
   </div>
   <div class="t-sm-findings">
     ${FINDINGS.map(f => `<article class="t-sm-finding">
