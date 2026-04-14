@@ -51,6 +51,7 @@
 <link rel="stylesheet" href="./assets/css/table.css">
 <link rel="stylesheet" href="./assets/css/detail.css">
 <link rel="stylesheet" href="./assets/css/methodology.css">
+<link rel="stylesheet" href="./assets/css/summary.css">
 <link rel="stylesheet" href="./assets/css/responsive.css">
 </head>
 <body>
@@ -63,7 +64,8 @@
       <span class="t-brand-name mono">sybil.exchange</span>
     </a>
     <nav class="t-tabs">
-      <a class="t-tab active" data-view="landscape" href="#/landscape">Landscape</a>
+      <a class="t-tab active" data-view="summary" href="#/summary">Summary</a>
+      <a class="t-tab" data-view="landscape" href="#/landscape">Landscape</a>
       <a class="t-tab" data-view="testing" href="#/testing">Testing</a>
       <a class="t-tab" data-view="methodology" href="#/methodology">Methodology</a>
     </nav>
@@ -113,13 +115,19 @@
   </section>
 </noscript>
 
+<section class="t-hero" id="summaryHero">
+  <h1 class="t-hero-headline">27 prediction markets, ranked by agent readiness</h1>
+  <div class="t-hero-meta mono">april 2026 · 4 benchmarks · agent-authored research</div>
+  <p class="t-hero-sub">The list below ranks each prediction market by what we can demonstrate works today, not by what could work in theory. Tier 1 is where an autonomous agent can actually trade right now.</p>
+</section>
+
 <section class="t-hero" id="methodologyHero" style="display:none;">
   <h1 class="t-hero-headline">How we test prediction markets for AI agents</h1>
   <div class="t-hero-meta mono">april 2026 · 4 benchmarks · weighted scoring</div>
   <p class="t-hero-sub">Four benchmarks measuring whether an autonomous agent can install a tool, find a market, place a real trade, and close out the position. The formulas below put a hard floor on tools that fail the buy-and-sell cycle: they cap at D regardless of how well they handle everything else.</p>
 </section>
 
-<section class="t-hero" id="landscapeHero">
+<section class="t-hero" id="landscapeHero" style="display:none;">
   <h1 class="t-hero-headline">Active prediction markets</h1>
   <div class="t-hero-meta mono">april 2026 · 27 markets · agent research</div>
   <p class="t-hero-sub">27 live prediction markets surveyed across volume, chain, developer surface, and AI-agent tooling. The dataset below is the source for our CLI/MCP, Skill, and Framework benchmarks.</p>
@@ -138,6 +146,13 @@
     <span><strong class="mono">agent-generated research</strong> — every test, score, and summary on this site was produced by autonomous coding agents. treat findings accordingly.</span>
   </div>
 </section>
+
+  <!-- SUMMARY VIEW -->
+  <div id="summaryView">
+    <section class="t-summary-section" id="summaryStats"></section>
+    <section class="t-summary-section" id="summaryTiers"></section>
+    <section class="t-summary-section" id="summaryFindings"></section>
+  </div>
 
   <!-- METHODOLOGY VIEW -->
   <div id="methodologyView">

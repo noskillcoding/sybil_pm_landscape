@@ -2,7 +2,7 @@
 // Shared mutable UI state, imported by any module that reads or writes it.
 
 export const state = {
-  currentView: 'landscape',
+  currentView: 'summary',
   catFilter: null,
   toolFilter: null,
   searchQ: '',

@@ -5,16 +5,17 @@ import { Sort } from './sort.js';
 import { render } from './landscape.js';
 import { renderTesting } from './testing.js';
 import { renderMethodology } from './methodology.js';
+import { renderSummary } from './summary.js';
 
 export const Router = {
   parse() {
     const hash = (location.hash || '').replace(/^#\/?/, '');
     const [pathPart, queryPart] = hash.split('?');
     const segments = pathPart.split('/').filter(Boolean);
-    const view = segments[0] || 'landscape';
+    const view = segments[0] || 'summary';
     const pmSlug = segments[1] || null;
     const params = new URLSearchParams(queryPart || '');
-    const validView = (view === 'testing' || view === 'landscape' || view === 'methodology') ? view : 'landscape';
+    const validView = (view === 'summary' || view === 'testing' || view === 'landscape' || view === 'methodology') ? view : 'summary';
     return {
       view: validView,
       pm: pmSlug,
@@ -52,7 +53,8 @@ export const Router = {
     Sort.state.dir = s.dir;
     const targetView = s.view;
     const renderFor = (v) => {
-      if (v === 'methodology') renderMethodology();
+      if (v === 'summary') renderSummary();
+      else if (v === 'methodology') renderMethodology();
       else if (v === 'landscape') render();
       else renderTesting();
     };

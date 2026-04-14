@@ -194,9 +194,11 @@
 }
 
 /* --- View visibility (fix merged-pages bug) --------------- */
+#summaryView { display: none; }
 #methodologyView { display: none; }
 #landscapeView { display: none; }
 #testingView { display: none; }
+#summaryView.is-active { display: block; }
 #methodologyView.is-active { display: block; }
 #landscapeView.is-active { display: block; }
 #testingView.is-active { display: block; }

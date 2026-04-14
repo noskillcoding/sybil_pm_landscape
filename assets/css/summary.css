@@ -1,0 +1,257 @@
+/* ============================================================
+ * Summary page — the "face" of the research.
+ * Tier list first (visual hierarchy: T1/T2 featured, T3/T4 compact),
+ * hot takes second.
+ * ============================================================ */
+
+.t-summary-section { margin-bottom: 48px; }
+.t-summary-section:last-child { margin-bottom: 0; }
+
+/* --- Stat strip overrides ------------------------------------------ */
+#summaryStats .t-stats {
+  margin-bottom: 0;
+}
+
+/* --- Tier section -------------------------------------------------- */
+.t-sm-tier {
+  margin-bottom: 44px;
+}
+.t-sm-tier:last-child {
+  margin-bottom: 0;
+}
+
+.t-sm-tier-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.t-sm-tier-head::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 4px;
+  background: var(--accent);
+}
+.t-sm-tier.tier-1 .t-sm-tier-head::before { background: var(--accent); }
+.t-sm-tier.tier-2 .t-sm-tier-head::before { background: var(--warn); }
+.t-sm-tier.tier-3 .t-sm-tier-head::before { background: var(--ink-muted); }
+.t-sm-tier.tier-4 .t-sm-tier-head::before { background: var(--red); }
+
+.t-sm-tier-name {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.t-sm-tier-count {
+  color: var(--ink-muted);
+  font-size: 10.5px;
+  margin-left: auto;
+}
+
+.t-sm-tier-sub {
+  color: var(--ink-dim);
+  font-size: 13px;
+  line-height: 1.6;
+  max-width: 760px;
+  margin: 0 0 18px 18px;
+}
+
+/* --- Featured PM cards (Tier 1 / 2) --------------------------------- */
+.t-sm-grid-featured {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 14px;
+}
+
+.t-sm-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.12s, background 0.12s;
+}
+.t-sm-card:hover { background: var(--bg-2); }
+
+.tier-1 .t-sm-card { border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); }
+.tier-1 .t-sm-card:hover { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); }
+.tier-2 .t-sm-card { border-color: color-mix(in srgb, var(--warn) 30%, var(--line)); }
+.tier-2 .t-sm-card:hover { border-color: color-mix(in srgb, var(--warn) 55%, var(--line)); }
+
+.t-sm-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.t-sm-card-id {
+  min-width: 0;
+  flex: 1;
+}
+.t-sm-card-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-sm-card-meta {
+  font-size: 10.5px;
+  color: var(--ink-muted);
+  margin-top: 2px;
+  text-transform: lowercase;
+}
+.t-sm-card-grades {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.t-sm-pill {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 9.5px;
+  padding: 2px 6px;
+  border: 1px solid var(--line-2);
+  letter-spacing: 0.4px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.t-sm-card-verdict {
+  color: var(--ink-dim);
+  font-size: 13px;
+  line-height: 1.6;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+/* --- Compact PM cards (Tier 3 / 4) --------------------------------- */
+.t-sm-grid-compact {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.t-sm-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.12s, background 0.12s;
+}
+.t-sm-mini:hover {
+  background: var(--bg-2);
+  border-color: var(--line-2);
+}
+.t-sm-mini-id {
+  min-width: 0;
+  flex: 1;
+}
+.t-sm-mini-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-sm-mini-meta {
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 1px;
+  text-transform: lowercase;
+}
+
+/* --- Hot takes / findings ------------------------------------------ */
+.t-sm-findings-head {
+  margin-bottom: 18px;
+}
+
+.t-sm-findings {
+  display: flex;
+  flex-direction: column;
+}
+
+.t-sm-finding {
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 24px;
+  padding: 32px 0;
+  border-top: 1px solid var(--line);
+}
+.t-sm-finding:first-child { border-top: 1px solid var(--line); }
+.t-sm-finding:last-child { padding-bottom: 12px; }
+
+.t-sm-finding-num {
+  font-size: 44px;
+  line-height: 1;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.t-sm-finding-body {
+  min-width: 0;
+}
+.t-sm-finding-headline {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 10px;
+  max-width: 720px;
+  line-height: 1.25;
+}
+.t-sm-finding-text {
+  color: var(--ink-dim);
+  font-size: 13.5px;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 720px;
+}
+
+/* --- Mobile / narrow ------------------------------------------------ */
+@media (max-width: 720px) {
+  .t-sm-grid-featured {
+    grid-template-columns: 1fr;
+  }
+  .t-sm-grid-compact {
+    grid-template-columns: 1fr 1fr;
+  }
+  .t-sm-tier-sub {
+    font-size: 12.5px;
+    margin-left: 14px;
+  }
+  .t-sm-finding {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 24px 0;
+  }
+  .t-sm-finding-num {
+    font-size: 28px;
+  }
+  .t-sm-finding-headline {
+    font-size: 19px;
+  }
+}
+
+@media (max-width: 480px) {
+  .t-sm-grid-compact {
+    grid-template-columns: 1fr;
+  }
+}
