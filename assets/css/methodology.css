@@ -1,0 +1,271 @@
+/* ============================================================
+ * Methodology page — terminal-density research document
+ * Renders per-test formula descriptions with a consistent
+ * label-on-left / body-on-right callout layout.
+ * ============================================================ */
+
+.t-method-section { margin-bottom: 36px; }
+.t-method-section + .t-method-section { margin-top: 12px; }
+
+/* --- Per-test method block ------------------------------------------ */
+.t-mp-block {
+  padding: 36px 0 32px;
+  border-top: 1px solid var(--line);
+}
+.t-mp-block:first-of-type { border-top: 0; padding-top: 12px; }
+
+/* Section title: prominent, with a green accent bar */
+.t-mp-h {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0 0 12px;
+  position: relative;
+  padding-left: 18px;
+}
+.t-mp-h::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 9px;
+  width: 4px;
+  background: var(--accent);
+}
+.t-mp-lede {
+  font-size: 13.5px;
+  color: var(--ink-dim);
+  line-height: 1.65;
+  max-width: 702px;
+  margin: 0 0 24px 18px;
+}
+
+/* --- Tiers: stacked full-width, items inside auto-fit grid ----------- */
+.t-mp-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.t-mp-rule {
+  border: 1px solid var(--line);
+  background: var(--bg-1);
+  padding: 14px 18px 16px;
+}
+.t-mp-rule-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.t-mp-rule-tier {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--ink);
+}
+.t-mp-rule-pts {
+  font-size: 10.5px;
+  color: var(--accent);
+  letter-spacing: 0.3px;
+}
+.t-mp-rule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  column-gap: 28px;
+  row-gap: 4px;
+}
+.t-mp-rule-list li {
+  display: block;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--ink-dim);
+}
+.t-mp-rule-name {
+  color: var(--ink);
+  font-size: 12.5px;
+  font-weight: 500;
+  display: block;
+}
+.t-mp-rule-why {
+  color: var(--ink-muted);
+  font-size: 11px;
+  margin-top: 3px;
+  line-height: 1.5;
+  display: block;
+}
+.t-mp-rule-sub {
+  color: var(--ink-muted);
+  font-size: 11px;
+  line-height: 1.55;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  letter-spacing: 0.1px;
+  margin-top: 6px;
+}
+
+/* --- Callouts: floor / buckets / why use a 2-col label+body grid ----- */
+.t-mp-floor,
+.t-mp-buckets,
+.t-mp-why {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+  border-left: 2px solid var(--line-2);
+  padding: 14px 18px 16px;
+  margin-bottom: 14px;
+  background: var(--bg-1);
+}
+.t-mp-why { border-left-color: color-mix(in srgb, var(--accent) 60%, var(--line)); }
+
+.t-mp-floor-h {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--ink-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.4px;
+  margin: 2px 0 0;
+  padding-top: 1px;
+}
+
+/* --- Floor / grade-adjustment list: parent-grid for column alignment --- */
+.t-mp-floor-list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  column-gap: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.t-mp-floor-list > li { display: contents; }
+.t-mp-floor-when {
+  font-size: 12.5px;
+  color: var(--ink);
+  align-self: baseline;
+  padding-top: 1px;
+}
+.t-mp-floor-arrow {
+  color: var(--ink-muted);
+  font-size: 11px;
+  align-self: baseline;
+  padding-top: 1px;
+}
+.t-mp-floor-cap {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.3px;
+  align-self: baseline;
+  padding-top: 1px;
+  white-space: nowrap;
+}
+.t-mp-floor-reason {
+  grid-column: 1 / -1;
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+  margin: 4px 0 14px;
+}
+.t-mp-floor-list > li:last-child .t-mp-floor-reason { margin-bottom: 0; }
+
+/* --- Bucket list: parent-grid so chip and range columns align across rows --- */
+.t-mp-bucket-list {
+  display: grid;
+  grid-template-columns: max-content max-content 1fr;
+  column-gap: 16px;
+  row-gap: 10px;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.t-mp-bucket-list > li { display: contents; }
+.t-mp-bucket-range {
+  font-size: 11px;
+  color: var(--ink-muted);
+}
+.t-mp-bucket-label {
+  color: var(--ink);
+  font-size: 12.5px;
+}
+
+/* --- Type qualifier list: parent-grid + uniform badge width ---------- */
+.t-mp-tag-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: 18px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.t-mp-tag-list > li { display: contents; }
+.t-mp-tag-list .t-mp-floor-reason {
+  font-size: 11.5px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+  margin: 5px 0 14px;
+  grid-column: auto;
+  align-self: baseline;
+}
+.t-mp-tag-list > li:last-child .t-mp-floor-reason { margin-bottom: 0; }
+
+.t-mp-tag {
+  display: inline-block;
+  min-width: 150px;
+  text-align: center;
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 10px;
+  color: var(--ink);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 4px 10px;
+  letter-spacing: 0.4px;
+  text-transform: lowercase;
+  align-self: start;
+}
+
+/* --- Why callout body fills its column ------------------------------- */
+.t-mp-why p {
+  font-size: 12.5px;
+  color: var(--ink-dim);
+  line-height: 1.7;
+  margin: 0;
+  max-width: none;
+}
+
+/* --- Mobile / narrow ------------------------------------------------- */
+@media (max-width: 720px) {
+  .t-mp-h { font-size: 24px; padding-left: 14px; }
+  .t-mp-h::before { width: 3px; }
+  .t-mp-lede { font-size: 12.5px; margin-left: 14px; }
+  .t-mp-rules { gap: 10px; }
+  .t-mp-rule { padding: 12px 14px 14px; }
+  .t-mp-rule-list {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
+
+  .t-mp-floor,
+  .t-mp-buckets,
+  .t-mp-why {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .t-mp-floor-list { grid-template-columns: 1fr; }
+  .t-mp-floor-list .t-mp-floor-arrow,
+  .t-mp-floor-list .t-mp-floor-cap {
+    grid-column: 1;
+  }
+  .t-mp-bucket-list { row-gap: 8px; }
+  .t-mp-tag-list { grid-template-columns: 1fr; }
+}

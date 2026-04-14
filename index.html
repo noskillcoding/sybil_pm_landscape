@@ -39,6 +39,8 @@
   ]
 }
 </script>
+<link rel="icon" type="image/png" href="./assets/img/sybil-mark.png">
+<link rel="apple-touch-icon" href="./assets/img/sybil-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -48,6 +50,7 @@
 <link rel="stylesheet" href="./assets/css/filters.css">
 <link rel="stylesheet" href="./assets/css/table.css">
 <link rel="stylesheet" href="./assets/css/detail.css">
+<link rel="stylesheet" href="./assets/css/methodology.css">
 <link rel="stylesheet" href="./assets/css/responsive.css">
 </head>
 <body>
@@ -56,12 +59,13 @@
 
   <header class="t-topbar">
     <a class="t-brand" href="https://sybil.exchange/" target="_blank" rel="noopener">
-      <span class="t-prompt mono">$</span>
+      <img class="t-brand-logo" src="./assets/img/sybil-mark.png" alt="" width="32" height="32">
       <span class="t-brand-name mono">sybil.exchange</span>
     </a>
     <nav class="t-tabs">
       <a class="t-tab active" data-view="landscape" href="#/landscape">Landscape</a>
       <a class="t-tab" data-view="testing" href="#/testing">Testing</a>
+      <a class="t-tab" data-view="methodology" href="#/methodology">Methodology</a>
     </nav>
     <div class="t-topbar-right">
       <span class="t-live mono"><span class="t-live-dot"></span>live</span>
@@ -109,6 +113,12 @@
   </section>
 </noscript>
 
+<section class="t-hero" id="methodologyHero" style="display:none;">
+  <h1 class="t-hero-headline">How we test prediction markets for AI agents</h1>
+  <div class="t-hero-meta mono">april 2026 · 4 benchmarks · weighted scoring</div>
+  <p class="t-hero-sub">Four benchmarks measuring whether an autonomous agent can install a tool, find a market, place a real trade, and close out the position. The formulas below put a hard floor on tools that fail the buy-and-sell cycle: they cap at D regardless of how well they handle everything else.</p>
+</section>
+
 <section class="t-hero" id="landscapeHero">
   <h1 class="t-hero-headline">Active prediction markets</h1>
   <div class="t-hero-meta mono">april 2026 · 27 markets · agent research</div>
@@ -128,6 +138,11 @@
     <span><strong class="mono">agent-generated research</strong> — every test, score, and summary on this site was produced by autonomous coding agents. treat findings accordingly.</span>
   </div>
 </section>
+
+  <!-- METHODOLOGY VIEW -->
+  <div id="methodologyView">
+    <section class="t-method-section" id="methodFormulas"></section>
+  </div>
 
   <!-- LANDSCAPE VIEW -->
   <div id="landscapeView">
@@ -164,7 +179,6 @@
       <div class="t-filter-spacer"></div>
       <input type="text" class="t-search mono" id="testSearchBox" placeholder="/ search…">
     </div>
-    <div id="testMethodology"></div>
     <div class="t-results-count mono" id="testResultsCount"></div>
     <div class="t-table-wrap">
       <table class="t-table" id="testTable">

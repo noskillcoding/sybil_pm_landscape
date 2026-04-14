@@ -29,7 +29,16 @@
   .t-stat:last-child { border-bottom: 0; }
 
   .t-filters { padding: 10px 0 12px; gap: 6px; }
-  .t-filter-group { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 4px; }
+  .t-filter-group {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2) transparent;
+  }
+  .t-filter-group::-webkit-scrollbar { height: 6px; }
+  .t-filter-group::-webkit-scrollbar-track { background: transparent; }
+  .t-filter-group::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
   .t-filter-sep { display: none; }
   .t-search { flex: 1 0 100%; margin-top: 6px; }
 

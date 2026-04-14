@@ -1,5 +1,16 @@
 /* --- Table base ------------------------------------------- */
-.t-table-wrap { overflow-x: auto; }
+.t-table-wrap {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.t-table-wrap::-webkit-scrollbar { height: 8px; width: 8px; }
+.t-table-wrap::-webkit-scrollbar-track { background: transparent; }
+.t-table-wrap::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 4px;
+}
+.t-table-wrap::-webkit-scrollbar-thumb:hover { background: var(--ink-muted); }
 .t-table { font-size: 12.5px; }
 .t-table thead th {
   font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
@@ -38,12 +49,25 @@
 .t-pm-glyph {
   width: 24px; height: 24px;
   border: 1px solid var(--line-2);
-  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
-  font-size: 11px;
   display: grid;
   place-items: center;
   color: var(--ink-dim);
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-1);
+}
+.t-pm-glyph-letter {
+  font-family: "JetBrains Mono", "IBM Plex Mono", monospace;
+  font-size: 11px;
+}
+.t-pm-glyph-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--bg-1);
 }
 .t-pm-name { font-weight: 500; color: var(--ink); font-size: 13px; }
 .t-pm-meta { font-family: "JetBrains Mono", "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-muted); }

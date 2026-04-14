@@ -10,7 +10,8 @@
   margin-bottom: 32px;
   gap: 24px;
 }
-.t-brand { display: flex; align-items: baseline; gap: 10px; flex: 0 0 auto; }
+.t-brand { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
+.t-brand-logo { width: 32px; height: 32px; display: block; flex-shrink: 0; }
 .t-prompt { color: var(--accent); font-size: 13px; }
 .t-brand-name { font-size: 13.5px; color: var(--ink); font-weight: 500; letter-spacing: -0.2px; }
 .t-brand-sep { color: var(--ink-muted); font-size: 12px; }
@@ -193,7 +194,9 @@
 }
 
 /* --- View visibility (fix merged-pages bug) --------------- */
+#methodologyView { display: none; }
 #landscapeView { display: none; }
 #testingView { display: none; }
+#methodologyView.is-active { display: block; }
 #landscapeView.is-active { display: block; }
 #testingView.is-active { display: block; }

@@ -1,19 +1,16 @@
 // assets/js/testing.js
 
 import { state } from './state.js';
-import { esc, gradeClass } from './helpers.js';
+import { esc, gradeClass, pmGlyphHtml } from './helpers.js';
 import {
   TEST_COLS,
   TOOL_COL_MAP,
   TOOL_STAGES,
-  UNIFIED_CHECKS,
   UNIFIED_SECTIONS,
   UNIFIED_SECTION_LABELS,
   SKILL_MILESTONES,
   AA_DIMS,
-  AA_TOTAL_CHECKS,
-  FRAMEWORK_CATEGORIES,
-  FRAMEWORK_MATURITY
+  AA_TOTAL_CHECKS
 } from './constants.js';
 
 // === Unified check-list primitive ============================
@@ -61,93 +58,6 @@ function renderFindings(title, items, tone /* 'info' | 'red' */) {
   </div>`;
 }
 
-// === Methodology overview panel =============================
-// Rendered once per view entry, into #testMethodology.
-// Uses the same renderGroups primitive so per-check rationales live
-// inline under a Show details toggle.
-function renderMethodologyPanel() {
-  const host = document.getElementById('testMethodology');
-  if (!host || host.children.length) return;
-
-  const aaGroups = AA_DIMS.map(dim => ({
-    title: dim.label,
-    items: dim.checks.map(c => ({ num: c.id, label: c.label, detail: c.why }))
-  }));
-  const cliGroups = UNIFIED_SECTIONS.map(sec => ({
-    title: UNIFIED_SECTION_LABELS[sec],
-    items: UNIFIED_CHECKS[sec].map(c => ({ num: c.id, label: c.name, detail: c.why }))
-  }));
-  const skillGroups = [{
-    title: 'Trade Cycle Milestones',
-    items: SKILL_MILESTONES.map(m => ({ num: m.id, label: m.name, detail: m.why })),
-    twoCol: true
-  }];
-  const fwGroups = [{
-    title: 'Assessment Categories',
-    items: FRAMEWORK_CATEGORIES.map(c => ({ num: c.num, label: c.name, detail: c.why }))
-  }, {
-    title: 'Maturity Scale',
-    items: FRAMEWORK_MATURITY.map(m => ({ label: m.grade, detail: m.why }))
-  }];
-
-  const gradeScale = (scale) => scale.map(s => `<span class="t-grade t-grade-${s.cls}">${s.g}</span> ${s.r}`).join(' · ');
-  const aaScale    = gradeScale([{cls:'a',g:'A',r:'13–15'},{cls:'b',g:'B',r:'10–12'},{cls:'c',g:'C',r:'7–9'},{cls:'d',g:'D',r:'4–6'},{cls:'f',g:'F',r:'0–3'}]);
-  const cliScale   = gradeScale([{cls:'a',g:'A',r:'16–18'},{cls:'b',g:'B',r:'13–15'},{cls:'c',g:'C',r:'9–12'},{cls:'d',g:'D',r:'5–8'},{cls:'f',g:'F',r:'0–4'}]);
-  const skillScale = gradeScale([{cls:'a',g:'A',r:'7–8'},{cls:'b',g:'B',r:'5–6'},{cls:'c',g:'C',r:'3–4'},{cls:'d',g:'D',r:'1–2'},{cls:'f',g:'F',r:'0'}]);
-  const fwBadgeMap = {Production:'fwprod', Usable:'fwusable', Experimental:'fwexp', 'N/A':'na'};
-  const fwScale = FRAMEWORK_MATURITY.map(m => `<span class="t-grade t-grade-${fwBadgeMap[m.grade]}">${esc(m.grade)}</span>`).join(' · ');
-
-  host.innerHTML = `
-    <details class="t-methodology">
-      <summary class="t-methodology-summary">
-        <span class="t-methodology-chev mono">▸</span>
-        <span class="t-methodology-title mono">// testing methodology</span>
-        <span class="t-methodology-meta mono">15 accessibility · 18 cli/mcp · 8 skill · 5 framework</span>
-      </summary>
-      <div class="t-methodology-body">
-        <section class="t-methodology-section">
-          <div class="t-detail-h">agent accessibility</div>
-          <p class="t-methodology-lede">Can an AI agent discover, read, and understand this PM's website without a browser? 15 checks across 4 dimensions. Automated via curl/fetch (no browser).</p>
-          ${renderGroups(aaGroups)}
-          <button class="m-show-more" data-show-more>Show details</button>
-          <div class="t-methodology-scale">${aaScale}</div>
-        </section>
-        <section class="t-methodology-section">
-          <div class="t-detail-h">cli / mcp test</div>
-          <p class="t-methodology-lede">Can an AI agent use this CLI/MCP tool to trade autonomously? 18 checks across 4 sections. Real trades with ~$1–2.</p>
-          ${renderGroups(cliGroups)}
-          <button class="m-show-more" data-show-more>Show details</button>
-          <div class="t-methodology-scale">${cliScale}</div>
-        </section>
-        <section class="t-methodology-section">
-          <div class="t-detail-h">skill test</div>
-          <p class="t-methodology-lede">Can an AI agent complete a full trade cycle using only a SKILL.md file and wallet credentials? 8 milestones, real trades with ~$1.</p>
-          ${renderGroups(skillGroups)}
-          <button class="m-show-more" data-show-more>Show details</button>
-          <div class="t-methodology-scale">${skillScale}</div>
-        </section>
-        <section class="t-methodology-section">
-          <div class="t-detail-h">framework assessment</div>
-          <p class="t-methodology-lede">How mature is this agentic framework? 5 categories rated on a maturity scale, not a numeric score.</p>
-          ${renderGroups(fwGroups)}
-          <button class="m-show-more" data-show-more>Show details</button>
-          <div class="t-methodology-scale">${fwScale}</div>
-        </section>
-      </div>
-    </details>
-  `;
-
-  host.querySelectorAll('[data-show-more]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const section = btn.closest('.t-methodology-section');
-      if (!section) return;
-      section.querySelectorAll('.m-why').forEach(el => el.classList.toggle('visible'));
-      btn.textContent = btn.textContent === 'Show details' ? 'Hide details' : 'Show details';
-    });
-  });
-}
-
 export function getTestablePMs() {
   return window.DATA.filter(pm =>
     (pm.category === 'Decentralized' || pm.category === 'Play Money') &&
@@ -168,7 +78,6 @@ export function pmToolsByCol(pm) {
 export function renderTesting() {
   const AA_RESULTS = window.AA_RESULTS;
   const TEST_RESULTS = window.TEST_RESULTS;
-  renderMethodologyPanel();
   const pms = getTestablePMs();
 
   const tcats = ['Decentralized', 'Play Money'];
@@ -254,7 +163,7 @@ export function renderTesting() {
     <td class="t-chev">▶</td>
     <td>
       <div class="t-pm">
-        <div class="t-pm-glyph">${initial}</div>
+        ${pmGlyphHtml(pm)}
         <div>
           <div class="t-pm-name">${esc(pm.name)}</div>
           <div class="t-pm-meta">${esc((pm.website || '').replace(/^https?:\/\//, '').replace(/\/$/, ''))}</div>

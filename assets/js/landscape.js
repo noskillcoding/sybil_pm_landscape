@@ -1,7 +1,7 @@
 // assets/js/landscape.js
 
 import { state } from './state.js';
-import { esc, toolPillClass, toolPillLabel } from './helpers.js';
+import { esc, toolPillClass, toolPillLabel, pmGlyphHtml } from './helpers.js';
 import { Sort } from './sort.js';
 import { Router } from './router.js';
 
@@ -112,7 +112,7 @@ export function render() {
     <td class="t-chev">▶</td>
     <td>
       <div class="t-pm">
-        <div class="t-pm-glyph">${initial}</div>
+        ${pmGlyphHtml(pm)}
         <div>
           <div class="t-pm-name">${esc(pm.name)}</div>
           <div class="t-pm-meta">${esc(metaLine)}</div>

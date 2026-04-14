@@ -4,6 +4,7 @@ import { state } from './state.js';
 import { Sort } from './sort.js';
 import { render } from './landscape.js';
 import { renderTesting } from './testing.js';
+import { renderMethodology } from './methodology.js';
 
 export const Router = {
   parse() {
@@ -13,8 +14,9 @@ export const Router = {
     const view = segments[0] || 'landscape';
     const pmSlug = segments[1] || null;
     const params = new URLSearchParams(queryPart || '');
+    const validView = (view === 'testing' || view === 'landscape' || view === 'methodology') ? view : 'landscape';
     return {
-      view: (view === 'testing') ? 'testing' : 'landscape',
+      view: validView,
       pm: pmSlug,
       cat: params.get('cat') || null,
       has: params.get('has') || null,
@@ -49,12 +51,17 @@ export const Router = {
     Sort.state.key = s.sort;
     Sort.state.dir = s.dir;
     const targetView = s.view;
+    const renderFor = (v) => {
+      if (v === 'methodology') renderMethodology();
+      else if (v === 'landscape') render();
+      else renderTesting();
+    };
     if (state.currentView !== targetView) {
       const tab = document.querySelector(`.t-tab[data-view="${targetView}"]`);
       if (tab) tab.click();
-      else (targetView === 'landscape' ? render() : renderTesting());
+      else renderFor(targetView);
     } else {
-      (targetView === 'landscape' ? render() : renderTesting());
+      renderFor(targetView);
     }
     if (s.pm) setTimeout(() => this.scrollToAndExpand(s.pm), 0);
   },

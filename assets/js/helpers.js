@@ -6,6 +6,25 @@ export function esc(s) {
   return d.innerHTML;
 }
 
+export function pmFaviconUrl(pm) {
+  if (!pm || !pm.website) return null;
+  try {
+    const u = new URL(pm.website);
+    return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+  } catch {
+    return null;
+  }
+}
+
+export function pmGlyphHtml(pm) {
+  const initial = ((pm && pm.name && pm.name[0]) || '?').toUpperCase();
+  const fav = pmFaviconUrl(pm);
+  return `<div class="t-pm-glyph">
+    <span class="t-pm-glyph-letter mono">${esc(initial)}</span>
+    ${fav ? `<img class="t-pm-glyph-img" src="${esc(fav)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : ''}
+  </div>`;
+}
+
 export function gradeClass(grade) {
   if (!grade) return 't-grade t-grade-na';
   const g = grade.toLowerCase();
@@ -32,7 +51,6 @@ export function toolPillClass(type) {
 export function toolPillLabel(type) {
   const t = (type || '').toLowerCase();
   if (t === 'websocket') return 'WS';
-  if (t === 'framework') return 'FW';
   return (type || '').toUpperCase();
 }
 
